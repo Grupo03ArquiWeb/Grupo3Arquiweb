@@ -6,21 +6,13 @@ import java.time.LocalDate;
 
 public class ZonaRiesgoDTO {
     private int idZonaRiesgo;
-
     private String nombreZonaRiesgo;
-
     private String descripcionZonaRiesgo;
-
     private NivelRiesgo nivelRiesgo;
-
     private String geomZonaRiesgo;
-
     private String riesgoporHora;
-
     private boolean activoZonaRiesgo;
-
     private LocalDate createdAtZonaRiesgo;
-
     private LocalDate updateAtZonaRiesgo;
 
     public int getIdZonaRiesgo() {
@@ -30,7 +22,7 @@ public class ZonaRiesgoDTO {
     public void setIdZonaRiesgo(int idZonaRiesgo) {
         this.idZonaRiesgo = idZonaRiesgo;
     }
-
+    
     public String getNombreZonaRiesgo() {
         return nombreZonaRiesgo;
     }
@@ -42,7 +34,6 @@ public class ZonaRiesgoDTO {
     public String getDescripcionZonaRiesgo() {
         return descripcionZonaRiesgo;
     }
-
     public void setDescripcionZonaRiesgo(String descripcionZonaRiesgo) {
         this.descripcionZonaRiesgo = descripcionZonaRiesgo;
     }
@@ -86,7 +77,6 @@ public class ZonaRiesgoDTO {
     public void setCreatedAtZonaRiesgo(LocalDate createdAtZonaRiesgo) {
         this.createdAtZonaRiesgo = createdAtZonaRiesgo;
     }
-
     public LocalDate getUpdateAtZonaRiesgo() {
         return updateAtZonaRiesgo;
     }
