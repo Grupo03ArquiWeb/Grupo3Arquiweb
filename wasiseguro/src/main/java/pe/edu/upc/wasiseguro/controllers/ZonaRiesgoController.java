@@ -7,18 +7,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pe.edu.upc.wasiseguro.dtos.ZonaRiesgoDTO;
-import pe.edu.upc.wasiseguro.serviceinterface.IZonaRiesgoService;
+import pe.edu.upc.wasiseguro.servicesinterfaces.IZonaRiesgoService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("ZonaRiesgo")
+@RequestMapping("/api/ZonaRiesgo")
 public class ZonaRiesgoController {
     @Autowired
     private IZonaRiesgoService zS;
 
-    @GetMapping
+    @GetMapping("listar")
     public ResponseEntity<List<ZonaRiesgoDTO>>listar(){
         ModelMapper z= new ModelMapper();
         List<ZonaRiesgoDTO>listaZonas =zS.list().stream()

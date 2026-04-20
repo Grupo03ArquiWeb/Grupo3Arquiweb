@@ -1,11 +1,9 @@
 package pe.edu.upc.wasiseguro.repositories;
 
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import pe.edu.upc.wasiseguro.entities.Usuario;
+import pe.edu.upc.wasiseguro.entities.Alerta;
 
 @Repository
-public interface IUsuarioRepository extends JpaRepository<Usuario, Integer> {
-
+public interface IAlertaRepository extends JpaRepository<Alerta,Integer> {
 }
