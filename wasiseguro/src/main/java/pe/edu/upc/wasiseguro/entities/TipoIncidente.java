@@ -3,27 +3,29 @@ package pe.edu.upc.wasiseguro.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "rol")
-public class Rol {
+@Table(name = "tipo_incidente")
+public class TipoIncidente {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "nombre", length = 50, nullable = false, unique = true)
+    @Column(name = "nombre", length = 80, nullable = false, unique = true)
     private String nombre;
 
-    @Column(name = "descripcion", columnDefinition = "TEXT")
-    private String descripcion;
+    @Column(name = "icono_url")
+    private String iconoUrl;
 
     @Column(name = "activo", nullable = false)
-    private boolean activo = true;
+    private boolean activo;
 
-    public Rol() {}
+    public TipoIncidente() {
+    }
 
-    public Rol(int id, String nombre, String descripcion, boolean activo) {
+    public TipoIncidente(int id, String nombre, String iconoUrl, boolean activo) {
         this.id = id;
         this.nombre = nombre;
-        this.descripcion = descripcion;
+        this.iconoUrl = iconoUrl;
         this.activo = activo;
     }
 
@@ -43,12 +45,12 @@ public class Rol {
         this.nombre = nombre;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getIconoUrl() {
+        return iconoUrl;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setIconoUrl(String iconoUrl) {
+        this.iconoUrl = iconoUrl;
     }
 
     public boolean isActivo() {

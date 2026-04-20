@@ -8,13 +8,12 @@ public class NivelRiesgo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idNivelRiesgo;
-    @Column(name = "nameNivelRiesgo", length = 20, nullable = false)
+    @Column(name = "nameNivelRiesgo", length = 30, nullable = false, unique = true)
     private String nameNivelRiesgo;
-    @Column(name = "colorHexNivelRiesgo", length = 20, nullable = false)
+    @Column(name = "colorHexNivelRiesgo", length = 7, nullable = false)
     private String colorHexNivelRiesgo;
-    @Column(name = "ordenNivelRiesgo", length = 20, nullable = false)
+    @Column(name = "ordenNivelRiesgo", nullable = false)
     private int ordenNivelRiesgo;
-
 
     public NivelRiesgo() {
     }
