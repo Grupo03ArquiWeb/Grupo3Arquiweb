@@ -1,12 +1,10 @@
 package pe.edu.upc.wasiseguro.dtos;
 
-
-public class UsuarioCreateDTO {
+public class UsuarioUpdateDTO {
     private String nombre;
     private String apellido;
     private String email;
     private String telefono;
-    private String password;
     private int idRol;
 
 
@@ -40,14 +38,6 @@ public class UsuarioCreateDTO {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public int getIdRol() {

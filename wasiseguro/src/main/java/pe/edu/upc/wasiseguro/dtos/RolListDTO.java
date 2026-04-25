@@ -1,10 +1,10 @@
 package pe.edu.upc.wasiseguro.dtos;
 
-public class RolDTO {
+public class RolListDTO {
     private int id;
     private String nombre;
     private String descripcion;
-    private boolean activo = true;
+    private boolean activo;
 
     public int getId() {
         return id;

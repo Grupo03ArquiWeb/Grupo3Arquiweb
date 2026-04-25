@@ -27,7 +27,7 @@ public class CalificacionRuta {
     private String comentario;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     public CalificacionRuta() {
     }

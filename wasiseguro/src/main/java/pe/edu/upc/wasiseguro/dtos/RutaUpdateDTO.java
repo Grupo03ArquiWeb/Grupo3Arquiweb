@@ -1,14 +1,11 @@
 package pe.edu.upc.wasiseguro.dtos;
 
-import pe.edu.upc.wasiseguro.entities.Usuario;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class RutaDTO {
-    private UUID id;
-    private Usuario usuario;
+public class RutaUpdateDTO {
+    private UUID idUsuario;
     private double origenLat;
     private double origenLng;
     private double destinoLat;
@@ -17,25 +14,16 @@ public class RutaDTO {
     private String nombreDestino;
     private BigDecimal distanciaKm;
     private BigDecimal duracionMin;
-    private String nivelRiesgo;
+    private int idNivelRiesgo;
     private String geojsonTrayecto;
     private boolean esPublica;
-    private LocalDateTime createdAt;
 
-    public UUID getId() {
-        return id;
+    public UUID getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setIdUsuario(UUID idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public double getOrigenLat() {
@@ -102,12 +90,12 @@ public class RutaDTO {
         this.duracionMin = duracionMin;
     }
 
-    public String getNivelRiesgo() {
-        return nivelRiesgo;
+    public int getIdNivelRiesgo() {
+        return idNivelRiesgo;
     }
 
-    public void setNivelRiesgo(String nivelRiesgo) {
-        this.nivelRiesgo = nivelRiesgo;
+    public void setIdNivelRiesgo(int idNivelRiesgo) {
+        this.idNivelRiesgo = idNivelRiesgo;
     }
 
     public String getGeojsonTrayecto() {
@@ -126,11 +114,4 @@ public class RutaDTO {
         this.esPublica = esPublica;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

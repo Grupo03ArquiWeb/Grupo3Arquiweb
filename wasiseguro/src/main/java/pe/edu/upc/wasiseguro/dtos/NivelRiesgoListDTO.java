@@ -1,6 +1,6 @@
 package pe.edu.upc.wasiseguro.dtos;
 
-public class NivelRiesgoDTO {
+public class NivelRiesgoListDTO {
 
     private int idNivelRiesgo;
     private String nameNivelRiesgo;

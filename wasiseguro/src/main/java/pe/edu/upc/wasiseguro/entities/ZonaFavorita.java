@@ -26,7 +26,7 @@ public class ZonaFavorita {
     private double longitud;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     public ZonaFavorita() {
     }

@@ -1,80 +1,24 @@
-package pe.edu.upc.wasiseguro.entities;
-
-import jakarta.persistence.*;
+package pe.edu.upc.wasiseguro.dtos;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity
-@Table(name = "ruta")
-public class Ruta {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(updatable = false, nullable = false)
+public class RutaListDTO {
     private UUID id;
-
-    @ManyToOne
-    @JoinColumn(name = "id_usuario")
-    private Usuario usuario;
-
-    @Column(name = "origen_lat", nullable = false)
+    private int idUsuario;
     private double origenLat;
-
-    @Column(name = "origen_lng", nullable = false)
     private double origenLng;
-
-    @Column(name = "destino_lat", nullable = false)
     private double destinoLat;
-
-    @Column(name = "destino_lng", nullable = false)
     private double destinoLng;
-
-    @Column(name = "nombre_origen", length = 200)
     private String nombreOrigen;
-
-    @Column(name = "nombre_destino", length = 200)
     private String nombreDestino;
-
-    @Column(name = "distancia_km")
     private BigDecimal distanciaKm;
-
-    @Column(name = "duracion_min")
     private BigDecimal duracionMin;
-
-    @OneToOne
-    @JoinColumn(name = "nivel_riesgo")
-    private NivelRiesgo nivelRiesgo;
-
-    @Column(name = "geojson_trayecto", columnDefinition = "jsonb")
+    private int idNivelRiesgo;
     private String geojsonTrayecto;
-
-    @Column(name = "es_publica", nullable = false)
     private boolean esPublica;
-
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    public Ruta() {
-    }
-
-    public Ruta(UUID id, Usuario usuario, double origenLat, double origenLng, double destinoLat, double destinoLng, String nombreOrigen, String nombreDestino, BigDecimal distanciaKm, BigDecimal duracionMin, NivelRiesgo nivelRiesgo, String geojsonTrayecto, boolean esPublica, LocalDateTime createdAt) {
-        this.id = id;
-        this.usuario = usuario;
-        this.origenLat = origenLat;
-        this.origenLng = origenLng;
-        this.destinoLat = destinoLat;
-        this.destinoLng = destinoLng;
-        this.nombreOrigen = nombreOrigen;
-        this.nombreDestino = nombreDestino;
-        this.distanciaKm = distanciaKm;
-        this.duracionMin = duracionMin;
-        this.nivelRiesgo = nivelRiesgo;
-        this.geojsonTrayecto = geojsonTrayecto;
-        this.esPublica = esPublica;
-        this.createdAt = createdAt;
-    }
+    private LocalDateTime createdAt;
 
     public UUID getId() {
         return id;
@@ -84,12 +28,13 @@ public class Ruta {
         this.id = id;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public double getOrigenLat() {
@@ -156,12 +101,12 @@ public class Ruta {
         this.duracionMin = duracionMin;
     }
 
-    public NivelRiesgo getNivelRiesgo() {
-        return nivelRiesgo;
+    public int getIdNivelRiesgo() {
+        return idNivelRiesgo;
     }
 
-    public void setNivelRiesgo(NivelRiesgo nivelRiesgo) {
-        this.nivelRiesgo = nivelRiesgo;
+    public void setIdNivelRiesgo(int idNivelRiesgo) {
+        this.idNivelRiesgo = idNivelRiesgo;
     }
 
     public String getGeojsonTrayecto() {

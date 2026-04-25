@@ -29,7 +29,7 @@ public class PlanSuscripcion {
     private boolean activo;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     public PlanSuscripcion() {
     }

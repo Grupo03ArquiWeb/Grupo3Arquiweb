@@ -3,16 +3,17 @@ package pe.edu.upc.wasiseguro.dtos;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-public class UsuarioDTO {
+public class UsuarioListDTO {
     private UUID id;
     private String nombre;
     private String apellido;
     private String email;
     private String telefono;
     private String fotoPerfil;
-    private String rolNombre;
-    private boolean activo;
     private boolean emailVerificado;
+    private int idRol;
+    private UUID contactoConfianza;
+    private boolean activo;
     private OffsetDateTime createdAt;
 
     public UUID getId() {
@@ -63,12 +64,28 @@ public class UsuarioDTO {
         this.fotoPerfil = fotoPerfil;
     }
 
-    public String getRolNombre() {
-        return rolNombre;
+    public boolean isEmailVerificado() {
+        return emailVerificado;
     }
 
-    public void setRolNombre(String rolNombre) {
-        this.rolNombre = rolNombre;
+    public void setEmailVerificado(boolean emailVerificado) {
+        this.emailVerificado = emailVerificado;
+    }
+
+    public int getIdRol() {
+        return idRol;
+    }
+
+    public void setIdRol(int idRol) {
+        this.idRol = idRol;
+    }
+
+    public UUID getContactoConfianza() {
+        return contactoConfianza;
+    }
+
+    public void setContactoConfianza(UUID contactoConfianza) {
+        this.contactoConfianza = contactoConfianza;
     }
 
     public boolean isActivo() {
@@ -77,14 +94,6 @@ public class UsuarioDTO {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
-    }
-
-    public boolean isEmailVerificado() {
-        return emailVerificado;
-    }
-
-    public void setEmailVerificado(boolean emailVerificado) {
-        this.emailVerificado = emailVerificado;
     }
 
     public OffsetDateTime getCreatedAt() {

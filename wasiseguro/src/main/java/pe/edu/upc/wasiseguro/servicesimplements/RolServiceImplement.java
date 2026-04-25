@@ -7,6 +7,7 @@ import pe.edu.upc.wasiseguro.repositories.IRolRepository;
 import pe.edu.upc.wasiseguro.servicesinterfaces.IRolService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RolServiceImplement implements IRolService {
@@ -21,5 +22,20 @@ public class RolServiceImplement implements IRolService {
     @Override
     public Rol insert(Rol rol) {
         return rolR.save(rol);
+    }
+
+    @Override
+    public Optional<Rol> listId(int id) {
+        return rolR.findById(id);
+    }
+
+    @Override
+    public void update(Rol r)  {
+        rolR.save(r);
+    }
+
+    @Override
+    public void delete(int id)  {
+        rolR.deleteById(id);
     }
 }

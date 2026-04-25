@@ -16,7 +16,7 @@ public class Rol {
     private String descripcion;
 
     @Column(name = "activo", nullable = false)
-    private boolean activo = true;
+    private boolean activo;
 
     public Rol() {}
 

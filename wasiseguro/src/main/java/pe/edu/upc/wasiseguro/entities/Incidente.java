@@ -2,6 +2,7 @@ package pe.edu.upc.wasiseguro.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -51,7 +52,7 @@ public class Incidente {
     private int votosInvalido;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     public Incidente() {
     }

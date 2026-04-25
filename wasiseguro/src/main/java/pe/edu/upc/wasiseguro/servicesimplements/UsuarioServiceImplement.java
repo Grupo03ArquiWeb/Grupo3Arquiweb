@@ -2,12 +2,13 @@ package pe.edu.upc.wasiseguro.servicesimplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pe.edu.upc.wasiseguro.entities.Rol;
 import pe.edu.upc.wasiseguro.entities.Usuario;
 import pe.edu.upc.wasiseguro.repositories.IUsuarioRepository;
 import pe.edu.upc.wasiseguro.servicesinterfaces.IUsuarioService;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UsuarioServiceImplement implements IUsuarioService {
@@ -21,9 +22,21 @@ public class UsuarioServiceImplement implements IUsuarioService {
 
     @Override
     public Usuario insert(Usuario user) {
-        Rol rolDefault = new Rol();
-        rolDefault.setId(1);
-        user.setRol(rolDefault);
         return userR.save(user);
+    }
+
+    @Override
+    public Optional<Usuario> listId(UUID id) {
+        return userR.findById(id);
+    }
+
+    @Override
+    public void update(Usuario u) {
+        userR.save(u);
+    }
+
+    @Override
+    public void delete(UUID id) {
+        userR.deleteById(id);
     }
 }

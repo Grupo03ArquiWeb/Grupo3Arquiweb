@@ -2,6 +2,7 @@ package pe.edu.upc.wasiseguro.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -48,7 +49,7 @@ public class Alerta {
     private boolean activa;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "expira_en")
     private LocalDateTime expiraEn;
