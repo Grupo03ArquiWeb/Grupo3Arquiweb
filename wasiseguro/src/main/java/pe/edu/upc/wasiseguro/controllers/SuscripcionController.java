@@ -13,6 +13,8 @@ import pe.edu.upc.wasiseguro.entities.Usuario;
 import pe.edu.upc.wasiseguro.repositories.IPlanSuscripcionRepository;
 import pe.edu.upc.wasiseguro.repositories.IUsuarioRepository;
 import pe.edu.upc.wasiseguro.servicesinterfaces.ISuscripcionService;
+import pe.edu.upc.wasiseguro.dtos.SuscripcionPorEstadoDTO;
+import pe.edu.upc.wasiseguro.dtos.SuscripcionPorPlanDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -121,5 +123,15 @@ public class SuscripcionController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Suscripcion no encontrada");
         }
+    }
+
+    @GetMapping("/cantidad-por-estado")
+    public ResponseEntity<List<SuscripcionPorEstadoDTO>> cantidadPorEstado() {
+        return ResponseEntity.ok(sS.cantidadSuscripcionesPorEstado());
+    }
+
+    @GetMapping("/cantidad-por-plan")
+    public ResponseEntity<List<SuscripcionPorPlanDTO>> cantidadPorPlan() {
+        return ResponseEntity.ok(sS.cantidadSuscripcionesPorPlan());
     }
 }
