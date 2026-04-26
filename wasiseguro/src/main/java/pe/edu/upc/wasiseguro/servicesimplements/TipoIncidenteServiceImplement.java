@@ -39,4 +39,14 @@ public class TipoIncidenteServiceImplement implements ITipoIncidenteService {
     public void delete(int id) {
         tR.deleteById(id);
     }
+
+    @Override
+    public List<TipoIncidente> buscarPorNombre(String nombre) {
+        return tR.findByNombreContainingIgnoreCase(nombre);
+    }
+
+    @Override
+    public List<TipoIncidente> listarActivos() {
+        return tR.findByActivoTrue();
+    }
 }

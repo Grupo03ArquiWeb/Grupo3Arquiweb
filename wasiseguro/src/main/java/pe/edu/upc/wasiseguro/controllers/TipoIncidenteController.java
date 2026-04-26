@@ -68,4 +68,22 @@ public class TipoIncidenteController {
                     .body("TipoIncidente no encontrado");
         }
     }
+
+    @GetMapping("/buscarpornombre/{nombre}")
+    public ResponseEntity<List<TipoIncidenteDTO>> buscarPorNombre(@PathVariable String nombre) {
+        ModelMapper m = new ModelMapper();
+        List<TipoIncidenteDTO> lista = tS.buscarPorNombre(nombre).stream()
+                .map(y -> m.map(y, TipoIncidenteDTO.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/listaractivos")
+    public ResponseEntity<List<TipoIncidenteDTO>> listarActivos() {
+        ModelMapper m = new ModelMapper();
+        List<TipoIncidenteDTO> lista = tS.listarActivos().stream()
+                .map(y -> m.map(y, TipoIncidenteDTO.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(lista);
+    }
 }

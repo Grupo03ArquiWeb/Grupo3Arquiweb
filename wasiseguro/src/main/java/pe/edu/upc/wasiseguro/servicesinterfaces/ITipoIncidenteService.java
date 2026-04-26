@@ -11,4 +11,7 @@ public interface ITipoIncidenteService {
     public Optional<TipoIncidente> listId(int id);
     public void update(TipoIncidente ti);
     public void delete(int id);
+
+    public List<TipoIncidente> buscarPorNombre(String nombre);
+    public List<TipoIncidente> listarActivos();
 }
