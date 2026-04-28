@@ -1,18 +1,13 @@
 package pe.edu.upc.wasiseguro.dtos;
 
-import pe.edu.upc.wasiseguro.entities.Incidente;
-import pe.edu.upc.wasiseguro.entities.Usuario;
-import pe.edu.upc.wasiseguro.entities.ZonaRiesgo;
-
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 public class AlertaDTO {
-
     private UUID id;
-    private Usuario usuario;
-    private Incidente incidente;
-    private ZonaRiesgo zonaRiesgo;
+    private UUID idUsuario;
+    private UUID idIncidente;
+    private int idZona;
     private String titulo;
     private String mensaje;
     private Double latitud;
@@ -20,110 +15,47 @@ public class AlertaDTO {
     private int radioMetros;
     private boolean leida;
     private boolean activa;
-    private LocalDateTime createdAt;
-    private LocalDateTime expiraEn;
+    private OffsetDateTime createdAt;
+    private OffsetDateTime expiraEn;
 
-    public UUID getId() {
-        return id;
-    }
+    public AlertaDTO() {}
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
+    public UUID getIdUsuario() { return idUsuario; }
+    public void setIdUsuario(UUID idUsuario) { this.idUsuario = idUsuario; }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
+    public UUID getIdIncidente() { return idIncidente; }
+    public void setIdIncidente(UUID idIncidente) { this.idIncidente = idIncidente; }
 
-    public Incidente getIncidente() {
-        return incidente;
-    }
+    public int getIdZona() { return idZona; }
+    public void setIdZona(int idZona) { this.idZona = idZona; }
 
-    public void setIncidente(Incidente incidente) {
-        this.incidente = incidente;
-    }
+    public String getTitulo() { return titulo; }
+    public void setTitulo(String titulo) { this.titulo = titulo; }
 
-    public ZonaRiesgo getZonaRiesgo() {
-        return zonaRiesgo;
-    }
+    public String getMensaje() { return mensaje; }
+    public void setMensaje(String mensaje) { this.mensaje = mensaje; }
 
-    public void setZonaRiesgo(ZonaRiesgo zonaRiesgo) {
-        this.zonaRiesgo = zonaRiesgo;
-    }
+    public Double getLatitud() { return latitud; }
+    public void setLatitud(Double latitud) { this.latitud = latitud; }
 
-    public String getTitulo() {
-        return titulo;
-    }
+    public Double getLongitud() { return longitud; }
+    public void setLongitud(Double longitud) { this.longitud = longitud; }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
+    public int getRadioMetros() { return radioMetros; }
+    public void setRadioMetros(int radioMetros) { this.radioMetros = radioMetros; }
 
-    public String getMensaje() {
-        return mensaje;
-    }
+    public boolean isLeida() { return leida; }
+    public void setLeida(boolean leida) { this.leida = leida; }
 
-    public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
-    }
+    public boolean isActiva() { return activa; }
+    public void setActiva(boolean activa) { this.activa = activa; }
 
-    public Double getLatitud() {
-        return latitud;
-    }
+    public OffsetDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
 
-    public void setLatitud(Double latitud) {
-        this.latitud = latitud;
-    }
-
-    public Double getLongitud() {
-        return longitud;
-    }
-
-    public void setLongitud(Double longitud) {
-        this.longitud = longitud;
-    }
-
-    public int getRadioMetros() {
-        return radioMetros;
-    }
-
-    public void setRadioMetros(int radioMetros) {
-        this.radioMetros = radioMetros;
-    }
-
-    public boolean isLeida() {
-        return leida;
-    }
-
-    public void setLeida(boolean leida) {
-        this.leida = leida;
-    }
-
-    public boolean isActiva() {
-        return activa;
-    }
-
-    public void setActiva(boolean activa) {
-        this.activa = activa;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getExpiraEn() {
-        return expiraEn;
-    }
-
-    public void setExpiraEn(LocalDateTime expiraEn) {
-        this.expiraEn = expiraEn;
-    }
+    public OffsetDateTime getExpiraEn() { return expiraEn; }
+    public void setExpiraEn(OffsetDateTime expiraEn) { this.expiraEn = expiraEn; }
 }

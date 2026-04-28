@@ -38,4 +38,19 @@ public class ZonaRiesgoServiceImplement implements IZonaRiesgoService {
     public void delete(int id)   {
         zR.deleteById(id);
     }
+
+    @Override
+    public List<ZonaRiesgo> listarActivas() {
+        return zR.findByActivoZonaRiesgoTrue();
+    }
+
+    @Override
+    public List<String[]> cantidadZonasPorNivel() {
+        return zR.cantidadZonasPorNivel();
+    }
+
+    @Override
+    public List<String[]> zonasActivasOrdenadasPorRiesgoHora() {
+        return zR.zonasActivasOrdenadasPorRiesgoHora();
+    }
 }

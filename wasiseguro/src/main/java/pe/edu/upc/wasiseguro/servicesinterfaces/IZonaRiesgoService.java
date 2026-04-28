@@ -11,5 +11,9 @@ public interface IZonaRiesgoService {
     public Optional<ZonaRiesgo> listId(int id);
     public void update(ZonaRiesgo zr);
     public void delete(int id);
+    List<ZonaRiesgo> listarActivas();
+    List<String[]> cantidadZonasPorNivel();
+    List<String[]> zonasActivasOrdenadasPorRiesgoHora();
+
 
 }

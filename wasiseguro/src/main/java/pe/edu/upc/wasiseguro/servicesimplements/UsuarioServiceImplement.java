@@ -39,4 +39,13 @@ public class UsuarioServiceImplement implements IUsuarioService {
     public void delete(UUID id) {
         userR.deleteById(id);
     }
+
+    @Override
+    public List<Usuario> findByNombre(String nombre) { return userR.findByNombreContainingIgnoreCase(nombre); }
+
+    @Override
+    public List<Usuario> buscarPorRol(String nombreRol) { return userR.buscarUsuariosPorRol(nombreRol); }
+
+    @Override
+    public List<Usuario> buscarPorDominio(String dominio) { return userR.buscarUsuariosPorDominioEmail(dominio); }
 }
