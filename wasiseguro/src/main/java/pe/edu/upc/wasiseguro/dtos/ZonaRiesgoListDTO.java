@@ -15,21 +15,6 @@ public class ZonaRiesgoListDTO {
     private LocalDate createdAtZonaRiesgo;
     private LocalDate updateAtZonaRiesgo;
 
-    public ZonaRiesgoListDTO() {
-    }
-
-    public ZonaRiesgoListDTO(int idZonaRiesgo, String nombreZonaRiesgo, String descripcionZonaRiesgo, int idNivelRiesgo, String geomZonaRiesgo, String riesgoporHora, boolean activoZonaRiesgo, LocalDate createdAtZonaRiesgo, LocalDate updateAtZonaRiesgo) {
-        this.idZonaRiesgo = idZonaRiesgo;
-        this.nombreZonaRiesgo = nombreZonaRiesgo;
-        this.descripcionZonaRiesgo = descripcionZonaRiesgo;
-        this.idNivelRiesgo = idNivelRiesgo;
-        this.geomZonaRiesgo = geomZonaRiesgo;
-        this.riesgoporHora = riesgoporHora;
-        this.activoZonaRiesgo = activoZonaRiesgo;
-        this.createdAtZonaRiesgo = createdAtZonaRiesgo;
-        this.updateAtZonaRiesgo = updateAtZonaRiesgo;
-    }
-
     public int getIdZonaRiesgo() {
         return idZonaRiesgo;
     }

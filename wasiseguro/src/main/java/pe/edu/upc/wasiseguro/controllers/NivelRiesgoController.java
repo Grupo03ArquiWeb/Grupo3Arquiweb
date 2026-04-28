@@ -52,13 +52,26 @@ public class NivelRiesgoController {
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminar(@PathVariable int id) {
-        Optional<NivelRiesgo> user = nS.listId(id);
-        if (user.isPresent()) {
+        Optional<NivelRiesgo> nivel = nS.listId(id);
+        if (nivel.isPresent()) {
             nS.delete(id);
             return ResponseEntity.ok("NivelRiesgo eliminado exitosamente");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("NivelRiesgo no encontrado");
         }
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<?> listarId(@PathVariable int id) {
+        Optional<NivelRiesgo> nivelRiesgo = nS.listId(id);
+
+        if (nivelRiesgo == null) {
+            return ResponseEntity.badRequest().body("No existe el nivel de riesgo con id: " + id);
+        }
+
+        ModelMapper m = new ModelMapper();
+        NivelRiesgoListDTO dto = m.map(nivelRiesgo, NivelRiesgoListDTO.class);
+
+        return ResponseEntity.ok(dto);
     }
 }

@@ -1,79 +1,57 @@
 package pe.edu.upc.wasiseguro.dtos;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 public class IncidenteDTO {
     private UUID id;
-    private String tipoNombre;
+    private UUID idUsuario;
+    private int idTipo;
+    private int idZona;
     private String descripcion;
-    private double latitud;
-    private double longitud;
+    private Double latitud;
+    private Double longitud;
     private String fotoUrl;
-    private LocalDateTime fechaOcurrido;
+    private OffsetDateTime fechaOcurrido;
     private String estado;
+    private int votosValido;
+    private int votosInvalido;
 
-    public UUID getId() {
-        return id;
-    }
+    public IncidenteDTO() {}
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
 
-    public String getTipoNombre() {
-        return tipoNombre;
-    }
+    public UUID getIdUsuario() { return idUsuario; }
+    public void setIdUsuario(UUID idUsuario) { this.idUsuario = idUsuario; }
 
-    public void setTipoNombre(String tipoNombre) {
-        this.tipoNombre = tipoNombre;
-    }
+    public int getIdTipo() { return idTipo; }
+    public void setIdTipo(int idTipo) { this.idTipo = idTipo; }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
+    public int getIdZona() { return idZona; }
+    public void setIdZona(int idZona) { this.idZona = idZona; }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+    public String getDescripcion() { return descripcion; }
+    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-    public double getLatitud() {
-        return latitud;
-    }
+    public Double getLatitud() { return latitud; }
+    public void setLatitud(Double latitud) { this.latitud = latitud; }
 
-    public void setLatitud(double latitud) {
-        this.latitud = latitud;
-    }
+    public Double getLongitud() { return longitud; }
+    public void setLongitud(Double longitud) { this.longitud = longitud; }
 
-    public double getLongitud() {
-        return longitud;
-    }
+    public String getFotoUrl() { return fotoUrl; }
+    public void setFotoUrl(String fotoUrl) { this.fotoUrl = fotoUrl; }
 
-    public void setLongitud(double longitud) {
-        this.longitud = longitud;
-    }
+    public OffsetDateTime getFechaOcurrido() { return fechaOcurrido; }
+    public void setFechaOcurrido(OffsetDateTime fechaOcurrido) { this.fechaOcurrido = fechaOcurrido; }
 
-    public String getFotoUrl() {
-        return fotoUrl;
-    }
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
 
-    public void setFotoUrl(String fotoUrl) {
-        this.fotoUrl = fotoUrl;
-    }
+    public int getVotosValido() { return votosValido; }
+    public void setVotosValido(int votosValido) { this.votosValido = votosValido; }
 
-    public LocalDateTime getFechaOcurrido() {
-        return fechaOcurrido;
-    }
-
-    public void setFechaOcurrido(LocalDateTime fechaOcurrido) {
-        this.fechaOcurrido = fechaOcurrido;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
+    public int getVotosInvalido() { return votosInvalido; }
+    public void setVotosInvalido(int votosInvalido) { this.votosInvalido = votosInvalido; }
 }

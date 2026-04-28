@@ -11,4 +11,7 @@ public interface IUsuarioService {
     public Optional<Usuario> listId(UUID id);
     public void update(Usuario u);
     public void delete(UUID id);
+    public List<Usuario> findByNombre(String nombre);
+    public List<Usuario> buscarPorRol(String nombreRol);
+    public List<Usuario> buscarPorDominio(String dominio);
 }

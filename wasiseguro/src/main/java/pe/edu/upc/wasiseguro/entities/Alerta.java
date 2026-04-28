@@ -1,18 +1,14 @@
 package pe.edu.upc.wasiseguro.entities;
 
 import jakarta.persistence.*;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "alerta")
 public class Alerta {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(updatable = false, nullable = false)
     private UUID id;
 
     @ManyToOne
@@ -30,7 +26,7 @@ public class Alerta {
     @Column(name = "titulo", length = 200, nullable = false)
     private String titulo;
 
-    @Column(name = "mensaje", nullable = false)
+    @Column(name = "mensaje", columnDefinition = "VARCHAR(MAX)", nullable = false)
     private String mensaje;
 
     @Column(name = "latitud")
@@ -40,140 +36,58 @@ public class Alerta {
     private Double longitud;
 
     @Column(name = "radio_metros", nullable = false)
-    private int radioMetros;
+    private int radioMetros = 500;
 
     @Column(name = "leida", nullable = false)
-    private boolean leida;
+    private boolean leida = false;
 
     @Column(name = "activa", nullable = false)
-    private boolean activa;
+    private boolean activa = true;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private OffsetDateTime createdAt = OffsetDateTime.now();
 
     @Column(name = "expira_en")
-    private LocalDateTime expiraEn;
+    private OffsetDateTime expiraEn;
 
-    public Alerta() {
-    }
+    public Alerta() {}
 
-    public Alerta(UUID id, Usuario usuario, Incidente incidente, ZonaRiesgo zonaRiesgo, String titulo, String mensaje, Double latitud, Double longitud, int radioMetros, boolean leida, boolean activa, LocalDateTime createdAt, LocalDateTime expiraEn) {
-        this.id = id;
-        this.usuario = usuario;
-        this.incidente = incidente;
-        this.zonaRiesgo = zonaRiesgo;
-        this.titulo = titulo;
-        this.mensaje = mensaje;
-        this.latitud = latitud;
-        this.longitud = longitud;
-        this.radioMetros = radioMetros;
-        this.leida = leida;
-        this.activa = activa;
-        this.createdAt = createdAt;
-        this.expiraEn = expiraEn;
-    }
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
 
-    public UUID getId() {
-        return id;
-    }
+    public Usuario getUsuario() { return usuario; }
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+    public Incidente getIncidente() { return incidente; }
+    public void setIncidente(Incidente incidente) { this.incidente = incidente; }
 
-    public Usuario getUsuario() {
-        return usuario;
-    }
+    public ZonaRiesgo getZonaRiesgo() { return zonaRiesgo; }
+    public void setZonaRiesgo(ZonaRiesgo zonaRiesgo) { this.zonaRiesgo = zonaRiesgo; }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
+    public String getTitulo() { return titulo; }
+    public void setTitulo(String titulo) { this.titulo = titulo; }
 
-    public Incidente getIncidente() {
-        return incidente;
-    }
+    public String getMensaje() { return mensaje; }
+    public void setMensaje(String mensaje) { this.mensaje = mensaje; }
 
-    public void setIncidente(Incidente incidente) {
-        this.incidente = incidente;
-    }
+    public Double getLatitud() { return latitud; }
+    public void setLatitud(Double latitud) { this.latitud = latitud; }
 
-    public ZonaRiesgo getZonaRiesgo() {
-        return zonaRiesgo;
-    }
+    public Double getLongitud() { return longitud; }
+    public void setLongitud(Double longitud) { this.longitud = longitud; }
 
-    public void setZonaRiesgo(ZonaRiesgo zonaRiesgo) {
-        this.zonaRiesgo = zonaRiesgo;
-    }
+    public int getRadioMetros() { return radioMetros; }
+    public void setRadioMetros(int radioMetros) { this.radioMetros = radioMetros; }
 
-    public String getTitulo() {
-        return titulo;
-    }
+    public boolean isLeida() { return leida; }
+    public void setLeida(boolean leida) { this.leida = leida; }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
+    public boolean isActiva() { return activa; }
+    public void setActiva(boolean activa) { this.activa = activa; }
 
-    public String getMensaje() {
-        return mensaje;
-    }
+    public OffsetDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
 
-    public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
-    }
-
-    public Double getLatitud() {
-        return latitud;
-    }
-
-    public void setLatitud(Double latitud) {
-        this.latitud = latitud;
-    }
-
-    public Double getLongitud() {
-        return longitud;
-    }
-
-    public void setLongitud(Double longitud) {
-        this.longitud = longitud;
-    }
-
-    public int getRadioMetros() {
-        return radioMetros;
-    }
-
-    public void setRadioMetros(int radioMetros) {
-        this.radioMetros = radioMetros;
-    }
-
-    public boolean isLeida() {
-        return leida;
-    }
-
-    public void setLeida(boolean leida) {
-        this.leida = leida;
-    }
-
-    public boolean isActiva() {
-        return activa;
-    }
-
-    public void setActiva(boolean activa) {
-        this.activa = activa;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getExpiraEn() {
-        return expiraEn;
-    }
-
-    public void setExpiraEn(LocalDateTime expiraEn) {
-        this.expiraEn = expiraEn;
-    }
+    public OffsetDateTime getExpiraEn() { return expiraEn; }
+    public void setExpiraEn(OffsetDateTime expiraEn) { this.expiraEn = expiraEn; }
 }

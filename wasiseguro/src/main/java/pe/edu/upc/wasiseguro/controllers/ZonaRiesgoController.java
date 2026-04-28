@@ -73,13 +73,55 @@ public class ZonaRiesgoController {
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminar(@PathVariable int id) {
-        Optional<ZonaRiesgo> user = zS.listId(id);
-        if (user.isPresent()) {
+        Optional<ZonaRiesgo> zona = zS.listId(id);
+        if (zona.isPresent()) {
             zS.delete(id);
             return ResponseEntity.ok("Zona de Riesgo eliminado exitosamente");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Zona de Riesgo no encontrado");
         }
+    }
+    @GetMapping("/id/{id}")
+    public ResponseEntity<?> listarId(@PathVariable int id) {
+        Optional<ZonaRiesgo> zonaRiesgo = zS.listId(id);
+
+        if (zonaRiesgo == null) {
+            return ResponseEntity.badRequest().body("No existe la zona de riesgo con id: " + id);
+        }
+
+        ModelMapper z = new ModelMapper();
+        ZonaRiesgoListDTO dto = z.map(zonaRiesgo, ZonaRiesgoListDTO.class);
+
+        return ResponseEntity.ok(dto);
+    }
+    //Query
+    @GetMapping("/activas")
+    public ResponseEntity<?> listarActivas() {
+        ModelMapper z = new ModelMapper();
+
+        List<ZonaRiesgoListDTO> listaZonas = zS.listarActivas().stream()
+                .map(y -> z.map(y, ZonaRiesgoListDTO.class))
+                .collect(Collectors.toList());
+
+        if (listaZonas.isEmpty()) {
+            return ResponseEntity.badRequest().body("No existen zonas de riesgo activas");
+        }
+
+        return ResponseEntity.ok(listaZonas);
+    }
+    @GetMapping("/reporte/niveles")
+    public ResponseEntity<?> reporteNiveles() {
+        return ResponseEntity.ok(zS.cantidadZonasPorNivel());
+    }
+    @GetMapping("/reporte/zonas-activas-hora")
+    public ResponseEntity<?> zonasActivasOrdenadasPorRiesgoHora() {
+        List<String[]> lista = zS.zonasActivasOrdenadasPorRiesgoHora();
+
+        if (lista.isEmpty()) {
+            return ResponseEntity.badRequest().body("No existen zonas activas registradas");
+        }
+
+        return ResponseEntity.ok(lista);
     }
 }

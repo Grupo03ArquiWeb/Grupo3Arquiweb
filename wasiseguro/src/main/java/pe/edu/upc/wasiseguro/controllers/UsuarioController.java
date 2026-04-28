@@ -89,5 +89,28 @@ public class UsuarioController {
                     .body("Usuario no encontrado");
         }
     }
+    @GetMapping("/buscarnombre")
+    public List<UsuarioListDTO> buscarNombre(@RequestParam String n) {
+        return userS.findByNombre(n).stream().map(y -> {
+            ModelMapper m = new ModelMapper();
+            return m.map(y, UsuarioListDTO.class);
+        }).collect(Collectors.toList());
+    }
+
+    @GetMapping("/buscarporrol")
+    public List<UsuarioListDTO> buscarPorRol(@RequestParam String r) {
+        return userS.buscarPorRol(r).stream().map(y -> {
+            ModelMapper m = new ModelMapper();
+            return m.map(y, UsuarioListDTO.class);
+        }).collect(Collectors.toList());
+    }
+
+    @GetMapping("/buscarpordominio")
+    public List<UsuarioListDTO> buscarPorDominio(@RequestParam String d) {
+        return userS.buscarPorDominio(d).stream().map(y -> {
+            ModelMapper m = new ModelMapper();
+            return m.map(y, UsuarioListDTO.class);
+        }).collect(Collectors.toList());
+    }
 
 }
