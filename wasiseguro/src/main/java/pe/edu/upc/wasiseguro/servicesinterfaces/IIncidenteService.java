@@ -14,4 +14,5 @@ public interface IIncidenteService {
     public List<Incidente> buscarPorTipo(String nombreTipo);
     public List<Incidente> buscarPopulares(int minVotos);
     public List<IncidenteCantidadDTO> reporteCantidades();
+    public List<IncidenteCantidadDTO> reportePorUsuario();
 }
