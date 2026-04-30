@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.http.HttpMethod;
 
 @Configuration
 @EnableWebSecurity
@@ -59,19 +60,24 @@ public class WebSecurityConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers("/login",
-                                "/api/usuario/crear",
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html").permitAll()
+                        .requestMatchers("/login", "/api/rol/**", "/api/usuario/crear", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/incidentes/eliminar/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/alertas/eliminar/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(
+                                "/api/incidentes/crear",
+                                "/api/incidentes/listar",
+                                "/api/incidentes/reporte-cantidades",
+                                "/api/incidentes/buscartipo",
+                                "/api/incidentes/buscarestado"
+                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        .requestMatchers("/api/alertas/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        .requestMatchers("/api/zonas-favoritas/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(AbstractHttpConfigurer::disable)
                 .exceptionHandling(e -> e.authenticationEntryPoint(jwtAuthenticationEntryPoint))
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }

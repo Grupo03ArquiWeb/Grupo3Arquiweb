@@ -19,7 +19,7 @@ public class Incidente {
     @JoinColumn(name = "id_tipo", nullable = false)
     private TipoIncidente tipoIncidente;
 
-    @Column(name = "descripcion", columnDefinition = "VARCHAR(MAX)")
+    @Column(name = "descripcion", length = 500)
     private String descripcion;
 
     @Column(name = "latitud", nullable = false)
@@ -28,7 +28,7 @@ public class Incidente {
     @Column(name = "longitud", nullable = false)
     private Double longitud;
 
-    @Column(name = "foto_url", columnDefinition = "VARCHAR(MAX)")
+    @Column(name = "foto_url", length = 500)
     private String fotoUrl;
 
     @Column(name = "fecha_ocurrido", nullable = false)

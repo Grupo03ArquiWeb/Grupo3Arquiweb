@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import pe.edu.upc.wasiseguro.dtos.IncidenteCantidadDTO;
 import pe.edu.upc.wasiseguro.entities.Incidente;
 
 import java.util.List;
@@ -20,4 +21,8 @@ public interface IIncidenteRepository extends JpaRepository<Incidente, UUID> {
 
     @Query("SELECT i FROM Incidente i WHERE i.votosValido > :minVotos")
     List<Incidente> buscarIncidentesMuyReportados(@Param("minVotos") int minVotos);
+
+    @Query("SELECT new pe.edu.upc.wasiseguro.dtos.IncidenteCantidadDTO(i.tipoIncidente.nombre, COUNT(i)) " +
+            "FROM Incidente i GROUP BY i.tipoIncidente.nombre")
+    List<IncidenteCantidadDTO> countIncidentesByType();
 }
