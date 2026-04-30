@@ -12,28 +12,20 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(updatable = false, nullable = false)
     private UUID id;
-
     @Column(name = "nombre", length = 100, nullable = false)
     private String nombre;
-
     @Column(name = "apellido", length = 100, nullable = false)
     private String apellido;
-
     @Column(name = "email", length = 254, nullable = false, unique = true)
     private String email;
-
     @Column(name = "telefono", length = 20)
     private String telefono;
-
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
-
     @Column(name = "foto_perfil_url")
     private String fotoPerfil;
-
     @Column(name = "email_verificado", nullable = false)
     private boolean emailVerificado = false;
-
     @ManyToOne
     @JoinColumn(name = "id_rol", nullable = false)
     private Rol rol;
