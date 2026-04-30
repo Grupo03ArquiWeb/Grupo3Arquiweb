@@ -4,6 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import pe.edu.upc.wasiseguro.entities.EventoPanico;
 
+import java.util.UUID;
+
 @Repository
-public interface IEventoPanicoRepository extends JpaRepository<EventoPanico,Integer> {
+public interface IEventoPanicoRepository extends JpaRepository<EventoPanico, UUID> {
+    boolean existsById(UUID id);
 }

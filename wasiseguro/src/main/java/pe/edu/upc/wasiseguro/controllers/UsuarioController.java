@@ -38,7 +38,6 @@ public class UsuarioController {
     private PasswordEncoder passwordEncoder;
 
     @GetMapping("listar")
-
     public ResponseEntity<List<UsuarioListDTO>> listar(){
         ModelMapper m= new ModelMapper();
         List<UsuarioListDTO>listaUsers=userS.list().stream()
