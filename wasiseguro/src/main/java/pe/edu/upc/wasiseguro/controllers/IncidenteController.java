@@ -55,4 +55,8 @@ public class IncidenteController {
     public List<IncidenteCantidadDTO> obtenerReporte() {
         return iS.reporteCantidades();
     }
+    @GetMapping("/reporte-usuarios")
+    public List<IncidenteCantidadDTO> reportePorUsuarios() {
+        return iS.reportePorUsuario(); // (Asegúrate de conectarlo en tu Service)
+    }
 }

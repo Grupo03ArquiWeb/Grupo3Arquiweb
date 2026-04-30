@@ -37,4 +37,9 @@ public class IncidenteServiceImplement implements IIncidenteService {
     public List<IncidenteCantidadDTO> reporteCantidades() {
         return iR.countIncidentesByType();
     }
+
+    @Override
+    public List<IncidenteCantidadDTO> reportePorUsuario() {
+        return iR.reportePorUsuario(); // Asegúrate de que tu variable del repository se llame iR
+    }
 }

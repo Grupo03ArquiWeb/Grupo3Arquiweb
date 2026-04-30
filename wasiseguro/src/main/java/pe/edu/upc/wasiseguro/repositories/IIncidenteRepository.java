@@ -25,4 +25,9 @@ public interface IIncidenteRepository extends JpaRepository<Incidente, UUID> {
     @Query("SELECT new pe.edu.upc.wasiseguro.dtos.IncidenteCantidadDTO(i.tipoIncidente.nombre, COUNT(i)) " +
             "FROM Incidente i GROUP BY i.tipoIncidente.nombre")
     List<IncidenteCantidadDTO> countIncidentesByType();
+
+    @Query("SELECT new pe.edu.upc.wasiseguro.dtos.IncidenteCantidadDTO(i.usuario.nombre, COUNT(i)) " +
+            "FROM Incidente i " +
+            "GROUP BY i.usuario.nombre")
+    List<IncidenteCantidadDTO> reportePorUsuario();
 }
