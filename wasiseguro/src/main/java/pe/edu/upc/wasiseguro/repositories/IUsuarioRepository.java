@@ -12,6 +12,9 @@ import java.util.UUID;
 
 @Repository
 public interface IUsuarioRepository extends JpaRepository<Usuario, UUID> {
+
+    Usuario findByEmail(String email);
+    boolean existsByEmail(String email);
     List<Usuario> findByNombreContainingIgnoreCase(String nombre);
 
     @Query("SELECT u FROM Usuario u WHERE u.rol.nombre = :nombreRol")
@@ -19,4 +22,5 @@ public interface IUsuarioRepository extends JpaRepository<Usuario, UUID> {
 
     @Query("SELECT u FROM Usuario u WHERE u.email LIKE %:dominioEmail%")
     List<Usuario> buscarUsuariosPorDominioEmail(@Param("dominioEmail") String dominioEmail);
+
 }

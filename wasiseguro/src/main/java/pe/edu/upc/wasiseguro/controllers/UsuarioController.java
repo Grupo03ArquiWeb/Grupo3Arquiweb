@@ -4,6 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.wasiseguro.dtos.UsuarioCreateDTO;
 import pe.edu.upc.wasiseguro.dtos.UsuarioListDTO;
@@ -11,6 +13,7 @@ import pe.edu.upc.wasiseguro.dtos.UsuarioUpdateDTO;
 import pe.edu.upc.wasiseguro.entities.Rol;
 import pe.edu.upc.wasiseguro.entities.Usuario;
 import pe.edu.upc.wasiseguro.repositories.IRolRepository;
+import pe.edu.upc.wasiseguro.repositories.IUsuarioRepository;
 import pe.edu.upc.wasiseguro.servicesinterfaces.IUsuarioService;
 
 import java.util.List;
@@ -26,9 +29,16 @@ public class UsuarioController {
     private IUsuarioService userS;
 
     @Autowired
+    private IUsuarioRepository userR;
+
+    @Autowired
     private IRolRepository rolR;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping("listar")
+
     public ResponseEntity<List<UsuarioListDTO>> listar(){
         ModelMapper m= new ModelMapper();
         List<UsuarioListDTO>listaUsers=userS.list().stream()
@@ -38,20 +48,30 @@ public class UsuarioController {
     }
     @PostMapping("/crear")
     public ResponseEntity<?> registrar(@RequestBody UsuarioCreateDTO dto){
+        if (userR.existsByEmail(dto.getEmail())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("El email ya está registrado");
+        }
+
         Optional<Rol> rolOpt = rolR.findById(dto.getIdRol());
         if (rolOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Rol no encontrado");
         }
+
         Usuario user = new Usuario();
         user.setNombre(dto.getNombre());
         user.setApellido(dto.getApellido());
         user.setEmail(dto.getEmail());
         user.setTelefono(dto.getTelefono());
-        user.setPasswordHash(dto.getPassword());
+
+        user.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
         user.setRol(rolOpt.get());
 
+        user.setEmailVerificado(true);
+
         Usuario saved = userS.insert(user);
+
         ModelMapper m = new ModelMapper();
         UsuarioListDTO response = m.map(saved, UsuarioListDTO.class);
         response.setIdRol(saved.getRol().getId());
