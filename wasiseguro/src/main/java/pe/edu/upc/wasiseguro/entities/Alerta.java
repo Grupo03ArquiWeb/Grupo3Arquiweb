@@ -26,7 +26,7 @@ public class Alerta {
     @Column(name = "titulo", length = 200, nullable = false)
     private String titulo;
 
-    @Column(name = "mensaje", columnDefinition = "VARCHAR(MAX)", nullable = false)
+    @Column(name = "mensaje", length = 1000, nullable = false)
     private String mensaje;
 
     @Column(name = "latitud")
