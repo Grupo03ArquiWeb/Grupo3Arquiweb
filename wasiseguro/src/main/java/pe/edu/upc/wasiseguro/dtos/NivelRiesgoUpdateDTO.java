@@ -1,29 +1,9 @@
 package pe.edu.upc.wasiseguro.dtos;
 
-public class NivelRiesgoListDTO {
-<<<<<<< HEAD
-    
-    private int idNivelRiesgo;
-
-    private String nameNivelRiesgo;
-
-    private String colorHexNivelRiesgo;
-
-=======
-
-    private int idNivelRiesgo;
+public class NivelRiesgoUpdateDTO {
     private String nameNivelRiesgo;
     private String colorHexNivelRiesgo;
->>>>>>> main
     private int ordenNivelRiesgo;
-
-    public int getIdNivelRiesgo() {
-        return idNivelRiesgo;
-    }
-
-    public void setIdNivelRiesgo(int idNivelRiesgo) {
-        this.idNivelRiesgo = idNivelRiesgo;
-    }
 
     public String getNameNivelRiesgo() {
         return nameNivelRiesgo;

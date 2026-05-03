@@ -1,55 +1,19 @@
-package pe.edu.upc.wasiseguro.entities;
+package pe.edu.upc.wasiseguro.dtos;
 
-import jakarta.persistence.*;
+import pe.edu.upc.wasiseguro.entities.NivelRiesgo;
 
 import java.time.LocalDate;
-<<<<<<< HEAD
-=======
-import java.time.LocalDateTime;
->>>>>>> main
 
-@Entity
-@Table(name = "ZonaRiesgo")
-public class ZonaRiesgo {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ZonaRiesgoListDTO {
     private int idZonaRiesgo;
-    @Column(name = "nombreZonaRiesgo", length = 20, nullable = false)
     private String nombreZonaRiesgo;
-    @Column(name = "descripcionZonaRiesgo", length = 20, nullable = false)
     private String descripcionZonaRiesgo;
-    @ManyToOne
-    @JoinColumn(name = "idNivelRiesgo", nullable = false)
-    private NivelRiesgo nivelRiesgo;
-    @Column(name = "geomZonaRiesgo", length = 20, nullable = false)
+    private int  idNivelRiesgo;
     private String geomZonaRiesgo;
-    @Column(name = "riesgoporHora", length = 20, nullable = false)
     private String riesgoporHora;
-    @Column(name = "acttvidadZonaRiesgo", nullable = false)
     private boolean activoZonaRiesgo;
-    @Column(name = "createdZonaRiesgo", nullable = false)
-<<<<<<< HEAD
     private LocalDate createdAtZonaRiesgo;
-=======
-    private LocalDate createdAtZonaRiesgo = LocalDate.now();
->>>>>>> main
-    @Column(name = "updateZonaRiesgo",  nullable = false)
     private LocalDate updateAtZonaRiesgo;
-
-    public ZonaRiesgo() {
-    }
-
-    public ZonaRiesgo(int idZonaRiesgo, String nombreZonaRiesgo, String descripcionZonaRiesgo, NivelRiesgo nivelRiesgo, String geomZonaRiesgo, String riesgoporHora, boolean activoZonaRiesgo, LocalDate createdAtZonaRiesgo, LocalDate updateAtZonaRiesgo) {
-        this.idZonaRiesgo = idZonaRiesgo;
-        this.nombreZonaRiesgo = nombreZonaRiesgo;
-        this.descripcionZonaRiesgo = descripcionZonaRiesgo;
-        this.nivelRiesgo = nivelRiesgo;
-        this.geomZonaRiesgo = geomZonaRiesgo;
-        this.riesgoporHora = riesgoporHora;
-        this.activoZonaRiesgo = activoZonaRiesgo;
-        this.createdAtZonaRiesgo = createdAtZonaRiesgo;
-        this.updateAtZonaRiesgo = updateAtZonaRiesgo;
-    }
 
     public int getIdZonaRiesgo() {
         return idZonaRiesgo;
@@ -75,12 +39,12 @@ public class ZonaRiesgo {
         this.descripcionZonaRiesgo = descripcionZonaRiesgo;
     }
 
-    public NivelRiesgo getNivelRiesgo() {
-        return nivelRiesgo;
+    public int getIdNivelRiesgo() {
+        return idNivelRiesgo;
     }
 
-    public void setNivelRiesgo(NivelRiesgo nivelRiesgo) {
-        this.nivelRiesgo = nivelRiesgo;
+    public void setIdNivelRiesgo(int idNivelRiesgo) {
+        this.idNivelRiesgo = idNivelRiesgo;
     }
 
     public String getGeomZonaRiesgo() {
