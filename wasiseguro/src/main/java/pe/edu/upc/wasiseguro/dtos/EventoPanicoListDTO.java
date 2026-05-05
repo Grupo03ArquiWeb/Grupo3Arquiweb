@@ -3,11 +3,13 @@ package pe.edu.upc.wasiseguro.dtos;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class EventoPanicoDTO {
+public class EventoPanicoListDTO {
     private UUID id;
+    private UUID idUsuario;
     private double latitud;
     private double longitud;
     private String mensajeExtra;
+    private boolean atendido;
     private LocalDateTime createdAt;
 
     public UUID getId() {
@@ -16,6 +18,14 @@ public class EventoPanicoDTO {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public UUID getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(UUID idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public double getLatitud() {
@@ -40,6 +50,14 @@ public class EventoPanicoDTO {
 
     public void setMensajeExtra(String mensajeExtra) {
         this.mensajeExtra = mensajeExtra;
+    }
+
+    public boolean isAtendido() {
+        return atendido;
+    }
+
+    public void setAtendido(boolean atendido) {
+        this.atendido = atendido;
     }
 
     public LocalDateTime getCreatedAt() {

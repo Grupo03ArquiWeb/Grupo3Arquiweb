@@ -12,6 +12,7 @@ import pe.edu.upc.wasiseguro.entities.Rol;
 import pe.edu.upc.wasiseguro.servicesinterfaces.IRolService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -61,5 +62,30 @@ public class RolController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Rol no encontrado");
         }
+    }
+    // Filtro 1
+    @GetMapping("/buscarnombre")
+    public ResponseEntity<List<RolListDTO>> buscarPorNombre(@RequestParam String n) {
+        ModelMapper m = new ModelMapper();
+        List<RolListDTO> resultado = rolS.buscarPorNombre(n).stream()
+                .map(r -> m.map(r, RolListDTO.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(resultado);
+    }
+
+    // Filtro 2
+    @GetMapping("/buscarporactivo")
+    public ResponseEntity<List<RolListDTO>> buscarPorActivo(@RequestParam boolean activo) {
+        ModelMapper m = new ModelMapper();
+        List<RolListDTO> resultado = rolS.buscarPorActivo(activo).stream()
+                .map(r -> m.map(r, RolListDTO.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(resultado);
+    }
+
+    // Query
+    @GetMapping("/usuariosporol")
+    public ResponseEntity<List<Map<String, Object>>> usuariosPorRol() {
+        return ResponseEntity.ok(rolS.contarUsuariosActivosPorRol());
     }
 }

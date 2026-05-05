@@ -11,7 +11,11 @@ public interface IUsuarioService {
     public Optional<Usuario> listId(UUID id);
     public void update(Usuario u);
     public void delete(UUID id);
-    public List<Usuario> findByNombre(String nombre);
-    public List<Usuario> buscarPorRol(String nombreRol);
-    public List<Usuario> buscarPorDominio(String dominio);
+    // Filtros
+    List<Usuario> findByNombre(String nombre);
+    List<Usuario> buscarPorRol(String nombreRol);
+    List<Usuario> buscarPorDominio(String dominio);
+
+    // Query
+    List<Usuario> buscarUsuariosInactivos(int dias);
 }
