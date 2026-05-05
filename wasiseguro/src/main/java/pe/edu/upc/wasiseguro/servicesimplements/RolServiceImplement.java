@@ -6,7 +6,9 @@ import pe.edu.upc.wasiseguro.entities.Rol;
 import pe.edu.upc.wasiseguro.repositories.IRolRepository;
 import pe.edu.upc.wasiseguro.servicesinterfaces.IRolService;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -37,5 +39,26 @@ public class RolServiceImplement implements IRolService {
     @Override
     public void delete(int id)  {
         rolR.deleteById(id);
+    }
+    @Override
+    public List<Rol> buscarPorNombre(String nombre) {
+        return rolR.findByNombreContainingIgnoreCase(nombre);
+    }
+
+    @Override
+    public List<Rol> buscarPorActivo(boolean activo) {
+        return rolR.findByActivo(activo);
+    }
+
+    @Override
+    public List<Map<String, Object>> contarUsuariosActivosPorRol() {
+        return rolR.contarUsuariosActivosPorRol().stream()
+                .map(row -> {
+                    Map<String, Object> map = new LinkedHashMap<>();
+                    map.put("rol", row[0]);
+                    map.put("totalUsuariosActivos", row[1]);
+                    return map;
+                })
+                .toList();
     }
 }

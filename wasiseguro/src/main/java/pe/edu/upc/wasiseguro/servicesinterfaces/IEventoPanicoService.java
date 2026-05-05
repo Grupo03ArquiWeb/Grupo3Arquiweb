@@ -12,4 +12,8 @@ public interface IEventoPanicoService {
     public Optional<EventoPanico> listId(UUID id);
     public void update(EventoPanico ep);
     public void delete(UUID id);
+
+    // Filtros
+    List<EventoPanico> buscarPorAtendido(boolean atendido);
+    List<EventoPanico> buscarPorUsuario(UUID idUsuario);
 }

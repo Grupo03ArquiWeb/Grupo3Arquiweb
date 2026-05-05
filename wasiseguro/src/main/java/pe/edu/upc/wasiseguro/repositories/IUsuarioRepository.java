@@ -13,6 +13,7 @@ import java.util.UUID;
 @Repository
 public interface IUsuarioRepository extends JpaRepository<Usuario, UUID> {
 
+    // Filtros
     Usuario findByEmail(String email);
     boolean existsByEmail(String email);
     List<Usuario> findByNombreContainingIgnoreCase(String nombre);
@@ -23,4 +24,12 @@ public interface IUsuarioRepository extends JpaRepository<Usuario, UUID> {
     @Query("SELECT u FROM Usuario u WHERE u.email LIKE %:dominioEmail%")
     List<Usuario> buscarUsuariosPorDominioEmail(@Param("dominioEmail") String dominioEmail);
 
+    // Query
+    @Query("""
+        SELECT u FROM Usuario u
+        WHERE u.activo = true
+          AND u.updatedAt < CURRENT_TIMESTAMP - :dias * 1 DAY
+        ORDER BY u.updatedAt ASC
+    """)
+    List<Usuario> buscarUsuariosInactivos(@Param("dias") int dias);
 }

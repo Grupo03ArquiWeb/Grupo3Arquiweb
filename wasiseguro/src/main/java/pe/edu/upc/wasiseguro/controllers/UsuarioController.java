@@ -108,6 +108,7 @@ public class UsuarioController {
                     .body("Usuario no encontrado");
         }
     }
+    //Filtro 1
     @GetMapping("/buscarnombre")
     public List<UsuarioListDTO> buscarNombre(@RequestParam String n) {
         return userS.findByNombre(n).stream().map(y -> {
@@ -115,7 +116,7 @@ public class UsuarioController {
             return m.map(y, UsuarioListDTO.class);
         }).collect(Collectors.toList());
     }
-
+    //Filtro 2
     @GetMapping("/buscarporrol")
     public List<UsuarioListDTO> buscarPorRol(@RequestParam String r) {
         return userS.buscarPorRol(r).stream().map(y -> {
@@ -123,13 +124,23 @@ public class UsuarioController {
             return m.map(y, UsuarioListDTO.class);
         }).collect(Collectors.toList());
     }
-
+    //Filtro 3
     @GetMapping("/buscarpordominio")
     public List<UsuarioListDTO> buscarPorDominio(@RequestParam String d) {
         return userS.buscarPorDominio(d).stream().map(y -> {
             ModelMapper m = new ModelMapper();
             return m.map(y, UsuarioListDTO.class);
         }).collect(Collectors.toList());
+    }
+    // Query
+    // GET /api/usuario/inactivos?dias=30
+    @GetMapping("/inactivos")
+    public ResponseEntity<List<UsuarioListDTO>> buscarInactivos(@RequestParam int dias) {
+        ModelMapper m = new ModelMapper();
+        List<UsuarioListDTO> resultado = userS.buscarUsuariosInactivos(dias).stream()
+                .map(y -> m.map(y, UsuarioListDTO.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(resultado);
     }
 
 }

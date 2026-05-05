@@ -59,7 +59,7 @@ public class EventoPanicoController {
                     .body("Evento no encontrado");
         }
         EventoPanico eventP = existente.get();
-        Optional<Usuario> userOpt = userR.findById(dto.getId());
+        Optional<Usuario> userOpt = userR.findById(dto.getIdUsuario());
         if (userOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Usuario no válido");
@@ -81,5 +81,32 @@ public class EventoPanicoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Usuario no encontrado");
         }
+    }
+    // Filtro 1
+    @GetMapping("/buscarporatendido")
+    public ResponseEntity<List<EventoPanicoListDTO>> buscarPorAtendido(@RequestParam boolean atendido) {
+        ModelMapper m = new ModelMapper();
+        List<EventoPanicoListDTO> resultado = epS.buscarPorAtendido(atendido).stream()
+                .map(y -> {
+                    EventoPanicoListDTO dto = m.map(y, EventoPanicoListDTO.class);
+                    dto.setIdUsuario(y.getUsuario().getId());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(resultado);
+    }
+
+    // Filtro 2
+    @GetMapping("/buscarporusuario")
+    public ResponseEntity<List<EventoPanicoListDTO>> buscarPorUsuario(@RequestParam UUID idUsuario) {
+        ModelMapper m = new ModelMapper();
+        List<EventoPanicoListDTO> resultado = epS.buscarPorUsuario(idUsuario).stream()
+                .map(y -> {
+                    EventoPanicoListDTO dto = m.map(y, EventoPanicoListDTO.class);
+                    dto.setIdUsuario(y.getUsuario().getId());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(resultado);
     }
 }
