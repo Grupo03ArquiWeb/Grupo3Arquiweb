@@ -60,24 +60,35 @@ public class WebSecurityConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers("/login", "/api/rol/**", "/api/usuario/crear", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/incidentes/eliminar/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/alertas/eliminar/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/usuario/crear").permitAll()
+                        .requestMatchers("/api/rol/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+
+                        .requestMatchers(HttpMethod.DELETE, "/api/incidentes/eliminar/**").hasAuthority("ROLE_admin")
+                        .requestMatchers(HttpMethod.DELETE, "/api/alertas/eliminar/**").hasAuthority("ROLE_admin")
                         .requestMatchers(
                                 "/api/incidentes/crear",
                                 "/api/incidentes/listar",
                                 "/api/incidentes/reporte-cantidades",
                                 "/api/incidentes/buscartipo",
                                 "/api/incidentes/buscarestado"
-                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
-                        .requestMatchers("/api/alertas/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
-                        .requestMatchers("/api/zonas-favoritas/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        ).hasAnyAuthority("ROLE_admin", "ROLE_user")
+                        .requestMatchers("/api/alertas/**").hasAnyAuthority("ROLE_admin", "ROLE_user")
+                        .requestMatchers("/api/zonas-favoritas/**").hasAnyAuthority("ROLE_admin", "ROLE_user")
+
                         .requestMatchers(HttpMethod.POST, "/api/planSuscripcion/registrar").hasAuthority("ROLE_admin")
                         .requestMatchers(HttpMethod.PUT, "/api/planSuscripcion/actualizar").hasAuthority("ROLE_admin")
                         .requestMatchers(HttpMethod.DELETE, "/api/planSuscripcion/eliminar/**").hasAuthority("ROLE_admin")
                         .requestMatchers(HttpMethod.GET, "/api/planSuscripcion/**").hasAnyAuthority("ROLE_admin", "ROLE_user")
-                        .anyRequest().authenticated()
 
+                        .requestMatchers(HttpMethod.POST, "/api/suscripciones/registrar").hasAuthority("ROLE_admin")
+                        .requestMatchers(HttpMethod.PUT, "/api/suscripciones/actualizar/**").hasAuthority("ROLE_admin")
+                        .requestMatchers(HttpMethod.DELETE, "/api/suscripciones/eliminar/**").hasAuthority("ROLE_admin")
+                        .requestMatchers(HttpMethod.GET, "/api/suscripciones/listar").hasAnyAuthority("ROLE_admin", "ROLE_user")
+                        .requestMatchers(HttpMethod.GET, "/api/suscripciones/cantidad-por-estado").hasAnyAuthority("ROLE_admin", "ROLE_user")
+                        .requestMatchers(HttpMethod.GET, "/api/suscripciones/cantidad-por-plan").hasAnyAuthority("ROLE_admin", "ROLE_user")
+
+                        .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(AbstractHttpConfigurer::disable)

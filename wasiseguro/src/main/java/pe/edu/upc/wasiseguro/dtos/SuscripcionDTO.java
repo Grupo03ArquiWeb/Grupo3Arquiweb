@@ -2,9 +2,13 @@ package pe.edu.upc.wasiseguro.dtos;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class SuscripcionDTO {
     private int id;
+    private UUID idUsuario;
+    private String nombreUsuario;
+    private int idPlan;
     private String planNombre;
     private BigDecimal precioMensual;
     private LocalDate fechaInicio;
@@ -17,6 +21,30 @@ public class SuscripcionDTO {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public UUID getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(UUID idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+
+    public int getIdPlan() {
+        return idPlan;
+    }
+
+    public void setIdPlan(int idPlan) {
+        this.idPlan = idPlan;
     }
 
     public String getPlanNombre() {
@@ -58,5 +86,4 @@ public class SuscripcionDTO {
     public void setEstado(String estado) {
         this.estado = estado;
     }
-
 }
