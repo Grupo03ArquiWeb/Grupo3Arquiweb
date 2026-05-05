@@ -1,4 +1,6 @@
 package pe.edu.upc.wasiseguro.dtos;
 
-public class RutaSeguridadDTO {
+public interface RutaSeguridadDTO {
+    String getNombreDestino();
+    Double getPromedioSeguridad();
 }
