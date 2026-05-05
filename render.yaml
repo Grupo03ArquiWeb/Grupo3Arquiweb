@@ -5,6 +5,9 @@ services:
     repo: https://github.com/Grupo03ArquiWeb/Grupo3Arquiweb
     plan: free
     dockerfilePath: ./Dockerfile
+    buildFilter:
+      paths:
+        - wasiseguro/**
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: production
