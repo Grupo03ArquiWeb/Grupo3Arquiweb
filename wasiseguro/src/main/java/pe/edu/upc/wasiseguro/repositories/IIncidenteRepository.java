@@ -30,4 +30,7 @@ public interface IIncidenteRepository extends JpaRepository<Incidente, UUID> {
             "FROM Incidente i " +
             "GROUP BY i.usuario.nombre")
     List<IncidenteCantidadDTO> reportePorUsuario();
+
+    @Query("SELECT i FROM Incidente i ORDER BY i.fechaOcurrido DESC")
+    List<Incidente> listarTodoOrdenado();
 }
