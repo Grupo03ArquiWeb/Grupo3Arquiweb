@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.wasiseguro.dtos.ZonaFavoritaDTO;
 import pe.edu.upc.wasiseguro.entities.ZonaFavorita;
+import pe.edu.upc.wasiseguro.entities.Usuario;
 import pe.edu.upc.wasiseguro.servicesinterfaces.IZonaFavoritaService;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/zonas-favoritas")
 public class ZonaFavoritaController {
+
     @Autowired
     private IZonaFavoritaService zS;
 
@@ -20,13 +22,37 @@ public class ZonaFavoritaController {
     public void registrar(@RequestBody ZonaFavoritaDTO dto) {
         ModelMapper m = new ModelMapper();
         ZonaFavorita z = m.map(dto, ZonaFavorita.class);
+        if (z.getCreatedAt() == null) {
+            z.setCreatedAt(java.time.LocalDateTime.now());
+        }
+        pe.edu.upc.wasiseguro.entities.Usuario u = new pe.edu.upc.wasiseguro.entities.Usuario();
+        u.setId(dto.getIdUsuario());
+        z.setUsuario(u);
         zS.insert(z);
     }
 
     @GetMapping
     public List<ZonaFavoritaDTO> listar() {
         ModelMapper m = new ModelMapper();
-        return zS.list().stream().map(y -> m.map(y, ZonaFavoritaDTO.class)).collect(Collectors.toList());
+        return zS.list().stream().map(y -> {
+            ZonaFavoritaDTO dto = m.map(y, ZonaFavoritaDTO.class);
+            if (y.getUsuario() != null) {
+                dto.setIdUsuario(y.getUsuario().getId());
+            }
+            return dto;
+        }).collect(Collectors.toList());
+    }
+
+    @PutMapping
+    public void modificar(@RequestBody ZonaFavoritaDTO dto) {
+        ModelMapper m = new ModelMapper();
+        ZonaFavorita z = m.map(dto, ZonaFavorita.class);
+
+        Usuario u = new Usuario();
+        u.setId(dto.getIdUsuario());
+        z.setUsuario(u);
+
+        zS.insert(z);
     }
 
     @DeleteMapping("/{id}")

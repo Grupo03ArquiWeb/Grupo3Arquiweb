@@ -19,7 +19,7 @@ public class IncidenteServiceImplement implements IIncidenteService {
     public void insert(Incidente incidente) { iR.save(incidente); }
 
     @Override
-    public List<Incidente> list() { return iR.findAll(); }
+    public List<Incidente> list() { return iR.listarTodoOrdenado(); }
 
     @Override
     public void delete(UUID idIncidente) { iR.deleteById(idIncidente); }
@@ -40,6 +40,6 @@ public class IncidenteServiceImplement implements IIncidenteService {
 
     @Override
     public List<IncidenteCantidadDTO> reportePorUsuario() {
-        return iR.reportePorUsuario(); // Asegúrate de que tu variable del repository se llame iR
+        return iR.reportePorUsuario();
     }
 }

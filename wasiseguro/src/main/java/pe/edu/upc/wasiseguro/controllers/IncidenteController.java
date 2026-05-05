@@ -1,5 +1,6 @@
 package pe.edu.upc.wasiseguro.controllers;
 
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class IncidenteController {
     private IIncidenteService iS;
 
     @PostMapping("/crear")
-    public void registrar(@RequestBody IncidenteDTO dto) {
+    public void registrar(@Valid @RequestBody IncidenteDTO dto) {
         ModelMapper m = new ModelMapper();
         Incidente i = m.map(dto, Incidente.class);
         iS.insert(i);
@@ -57,6 +58,6 @@ public class IncidenteController {
     }
     @GetMapping("/reporte-usuarios")
     public List<IncidenteCantidadDTO> reportePorUsuarios() {
-        return iS.reportePorUsuario(); // (Asegúrate de conectarlo en tu Service)
+        return iS.reportePorUsuario();
     }
 }

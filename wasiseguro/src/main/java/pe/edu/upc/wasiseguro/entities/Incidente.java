@@ -77,4 +77,10 @@ public class Incidente {
 
     public Integer getVotosInvalido() { return votosInvalido; }
     public void setVotosInvalido(Integer votosInvalido) { this.votosInvalido = votosInvalido; }
+
+    @Column(name = "es_anonimo", nullable = false)
+    private boolean esAnonimo = false;
+    public boolean isEsAnonimo() { return esAnonimo; }
+    public void setEsAnonimo(boolean esAnonimo) { this.esAnonimo = esAnonimo; }
+
 }
