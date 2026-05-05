@@ -21,4 +21,13 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=30s --retries=3 \
   CMD wget --quiet --tries=1 --spider http://localhost:8080/actuator/health || exit 1
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Agregar debug antes de ejecutar
+RUN echo '#!/bin/sh' > /entrypoint.sh && \
+    echo 'echo "=== DEBUG: Environment Variables ==="' >> /entrypoint.sh && \
+    echo 'echo "DATABASE_URL: $DATABASE_URL"' >> /entrypoint.sh && \
+    echo 'echo "SPRING_DATASOURCE_URL: $SPRING_DATASOURCE_URL"' >> /entrypoint.sh && \
+    echo 'echo "====================================="' >> /entrypoint.sh && \
+    echo 'exec java -jar app.jar' >> /entrypoint.sh && \
+    chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
