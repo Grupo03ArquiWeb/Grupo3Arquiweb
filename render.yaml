@@ -11,15 +11,15 @@ services:
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: production
-      - key: DATABASE_URL
+      - key: SPRING_DATASOURCE_URL
         fromDatabase:
           name: wasiseguro-db
           property: connectionString
-      - key: DATABASE_USERNAME
+      - key: SPRING_DATASOURCE_USERNAME
         fromDatabase:
           name: wasiseguro-db
           property: user
-      - key: DATABASE_PASSWORD
+      - key: SPRING_DATASOURCE_PASSWORD
         fromDatabase:
           name: wasiseguro-db
           property: password
