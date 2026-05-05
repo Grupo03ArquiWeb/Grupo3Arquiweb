@@ -3,6 +3,7 @@ package pe.edu.upc.wasiseguro.controllers;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.upc.wasiseguro.dtos.IncidenteCantidadDTO;
 import pe.edu.upc.wasiseguro.dtos.IncidenteDTO;
 import pe.edu.upc.wasiseguro.entities.Incidente;
 import pe.edu.upc.wasiseguro.servicesinterfaces.IIncidenteService;
@@ -12,19 +13,19 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/incidentes")
+@RequestMapping("/api/incidentes")
 public class IncidenteController {
     @Autowired
     private IIncidenteService iS;
 
-    @PostMapping
+    @PostMapping("/crear")
     public void registrar(@RequestBody IncidenteDTO dto) {
         ModelMapper m = new ModelMapper();
         Incidente i = m.map(dto, Incidente.class);
         iS.insert(i);
     }
 
-    @GetMapping
+    @GetMapping("/listar")
     public List<IncidenteDTO> listar() {
         return iS.list().stream().map(y -> {
             ModelMapper m = new ModelMapper();
@@ -32,7 +33,7 @@ public class IncidenteController {
         }).collect(Collectors.toList());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/eliminar/{id}")
     public void eliminar(@PathVariable("id") UUID id) { iS.delete(id); }
 
     @GetMapping("/buscarestado")
@@ -49,5 +50,13 @@ public class IncidenteController {
             ModelMapper m = new ModelMapper();
             return m.map(y, IncidenteDTO.class);
         }).collect(Collectors.toList());
+    }
+    @GetMapping("/reporte-cantidades")
+    public List<IncidenteCantidadDTO> obtenerReporte() {
+        return iS.reporteCantidades();
+    }
+    @GetMapping("/reporte-usuarios")
+    public List<IncidenteCantidadDTO> reportePorUsuarios() {
+        return iS.reportePorUsuario(); // (Asegúrate de conectarlo en tu Service)
     }
 }

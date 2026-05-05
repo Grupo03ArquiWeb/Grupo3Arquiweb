@@ -1,5 +1,6 @@
 package pe.edu.upc.wasiseguro.servicesinterfaces;
 
+import pe.edu.upc.wasiseguro.dtos.IncidenteCantidadDTO;
 import pe.edu.upc.wasiseguro.entities.Incidente;
 
 import java.util.List;
@@ -12,4 +13,6 @@ public interface IIncidenteService {
     public List<Incidente> buscarPorEstado(String estado);
     public List<Incidente> buscarPorTipo(String nombreTipo);
     public List<Incidente> buscarPopulares(int minVotos);
+    public List<IncidenteCantidadDTO> reporteCantidades();
+    public List<IncidenteCantidadDTO> reportePorUsuario();
 }

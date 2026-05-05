@@ -2,6 +2,7 @@ package pe.edu.upc.wasiseguro.servicesimplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.wasiseguro.dtos.IncidenteCantidadDTO;
 import pe.edu.upc.wasiseguro.entities.Incidente;
 import pe.edu.upc.wasiseguro.repositories.IIncidenteRepository;
 import pe.edu.upc.wasiseguro.servicesinterfaces.IIncidenteService;
@@ -31,4 +32,14 @@ public class IncidenteServiceImplement implements IIncidenteService {
 
     @Override
     public List<Incidente> buscarPopulares(int minVotos) { return iR.buscarIncidentesMuyReportados(minVotos); }
+
+    @Override
+    public List<IncidenteCantidadDTO> reporteCantidades() {
+        return iR.countIncidentesByType();
+    }
+
+    @Override
+    public List<IncidenteCantidadDTO> reportePorUsuario() {
+        return iR.reportePorUsuario(); // Asegúrate de que tu variable del repository se llame iR
+    }
 }
