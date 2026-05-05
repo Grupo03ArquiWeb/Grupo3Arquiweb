@@ -3,6 +3,7 @@ package pe.edu.upc.wasiseguro.entities;
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.UUID;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "usuario")
@@ -21,6 +22,7 @@ public class Usuario {
     @Column(name = "telefono", length = 20)
     private String telefono;
     @Column(name = "password_hash", nullable = false)
+    @JsonIgnore
     private String passwordHash;
     @Column(name = "foto_perfil_url")
     private String fotoPerfil;
@@ -30,6 +32,7 @@ public class Usuario {
     @JoinColumn(name = "id_rol", nullable = false)
     private Rol rol;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "es_contacto_confianza")
     private Usuario contactoConfianza;

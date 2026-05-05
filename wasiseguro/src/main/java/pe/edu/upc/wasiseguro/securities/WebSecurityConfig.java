@@ -60,7 +60,7 @@ public class WebSecurityConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers("/login", "/api/rol/**", "/api/usuario/crear", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers("/login", "/api/rol/**", "/api/usuario/crear", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html","/error").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/incidentes/eliminar/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/alertas/eliminar/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(
