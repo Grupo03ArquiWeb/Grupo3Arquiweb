@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public class RutaListDTO {
     private UUID id;
-    private int idUsuario;
+    private UUID idUsuario;
     private double origenLat;
     private double origenLng;
     private double destinoLat;
@@ -29,11 +29,11 @@ public class RutaListDTO {
     }
 
 
-    public int getIdUsuario() {
+    public UUID getIdUsuario() {
         return idUsuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
+    public void setIdUsuario(UUID idUsuario) {
         this.idUsuario = idUsuario;
     }
 

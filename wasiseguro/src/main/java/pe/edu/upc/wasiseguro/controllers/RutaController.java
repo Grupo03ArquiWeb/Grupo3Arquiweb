@@ -91,6 +91,7 @@ public class RutaController {
         ruta.setNivelRiesgo(nrOpt.get());
         ruta.setGeojsonTrayecto(dto.getGeojsonTrayecto());
         ruta.setEsPublica(dto.isEsPublica());
+        ruta.setEsFavorita(dto.isEsFavorita());
 
 
         rutaS.update(ruta);
@@ -106,5 +107,20 @@ public class RutaController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Ruta no encontrada");
         }
+    }
+    @GetMapping("/favoritas")
+    public List<RutasFavoritasDTO> listarFavoritas() {
+        return rutaS.listFavoritas();
+    }
+
+    @GetMapping("/sugerencias-seguras")
+    public ResponseEntity<List<RutaSugeridaDTO>> obtenerSugerenciasSeguras() {
+        List<RutaSugeridaDTO> sugerencias = rutaS.sugerirRutasSeguras();
+        return ResponseEntity.ok(sugerencias);
+    }
+
+    @GetMapping("/listar/usuario/{idUsuario}")
+    public ResponseEntity<List<Ruta>> listarPorUsuario(@PathVariable UUID idUsuario) {
+        return ResponseEntity.ok(rutaS.listByUsuario(idUsuario));
     }
 }
