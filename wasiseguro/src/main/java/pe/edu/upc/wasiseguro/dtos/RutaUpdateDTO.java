@@ -1,6 +1,5 @@
 package pe.edu.upc.wasiseguro.dtos;
 
-
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -17,6 +16,7 @@ public class RutaUpdateDTO {
     private int idNivelRiesgo;
     private String geojsonTrayecto;
     private boolean esPublica;
+    private boolean esFavorita;
 
     public UUID getIdUsuario() {
         return idUsuario;
@@ -114,4 +114,11 @@ public class RutaUpdateDTO {
         this.esPublica = esPublica;
     }
 
+    public boolean isEsFavorita() {
+        return esFavorita;
+    }
+
+    public void setEsFavorita(boolean esFavorita) {
+        this.esFavorita = esFavorita;
+    }
 }
