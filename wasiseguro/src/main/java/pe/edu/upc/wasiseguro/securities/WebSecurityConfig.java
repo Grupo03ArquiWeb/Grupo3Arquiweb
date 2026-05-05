@@ -72,7 +72,12 @@ public class WebSecurityConfig {
                         ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                         .requestMatchers("/api/alertas/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                         .requestMatchers("/api/zonas-favoritas/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        .requestMatchers(HttpMethod.POST, "/api/planSuscripcion/registrar").hasAuthority("ROLE_admin")
+                        .requestMatchers(HttpMethod.PUT, "/api/planSuscripcion/actualizar").hasAuthority("ROLE_admin")
+                        .requestMatchers(HttpMethod.DELETE, "/api/planSuscripcion/eliminar/**").hasAuthority("ROLE_admin")
+                        .requestMatchers(HttpMethod.GET, "/api/planSuscripcion/**").hasAnyAuthority("ROLE_admin", "ROLE_user")
                         .anyRequest().authenticated()
+
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(AbstractHttpConfigurer::disable)
