@@ -8,6 +8,7 @@ import pe.edu.upc.wasiseguro.dtos.IncidenteCantidadDTO;
 import pe.edu.upc.wasiseguro.dtos.IncidenteDTO;
 import pe.edu.upc.wasiseguro.entities.Incidente;
 import pe.edu.upc.wasiseguro.servicesinterfaces.IIncidenteService;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 import java.util.UUID;
@@ -35,7 +36,9 @@ public class IncidenteController {
     }
 
     @DeleteMapping("/eliminar/{id}")
-    public void eliminar(@PathVariable("id") UUID id) { iS.delete(id); }
+    public void eliminar(@PathVariable("id") UUID id) {
+        iS.delete(id);
+    }
 
     @GetMapping("/buscarestado")
     public List<IncidenteDTO> buscarPorEstado(@RequestParam String e) {
@@ -52,12 +55,34 @@ public class IncidenteController {
             return m.map(y, IncidenteDTO.class);
         }).collect(Collectors.toList());
     }
+
     @GetMapping("/reporte-cantidades")
     public List<IncidenteCantidadDTO> obtenerReporte() {
         return iS.reporteCantidades();
     }
+
     @GetMapping("/reporte-usuarios")
     public List<IncidenteCantidadDTO> reportePorUsuarios() {
         return iS.reportePorUsuario();
+    }
+
+    @PutMapping("/modificar")
+    public void modificar(@Valid @RequestBody IncidenteDTO dto, Authentication authentication) {
+        String emailLogueado = authentication.getName();
+        ModelMapper m = new ModelMapper();
+        Incidente i = m.map(dto, Incidente.class);
+        iS.updateOwned(i, emailLogueado);
+    }
+
+    @DeleteMapping("/usuario/eliminar/{id}")
+    public void eliminarPropio(@PathVariable("id") UUID id, Authentication authentication) {
+        String emailLogueado = authentication.getName();
+        iS.deleteOwned(id, emailLogueado);
+    }
+
+    @PatchMapping("/votar/{id}/{esPositivo}")
+    public void votar(@PathVariable("id") UUID id, @PathVariable("esPositivo") boolean esPositivo, Authentication auth) {
+        String emailVotante = auth.getName(); 
+        iS.votar(id, emailVotante, esPositivo);
     }
 }

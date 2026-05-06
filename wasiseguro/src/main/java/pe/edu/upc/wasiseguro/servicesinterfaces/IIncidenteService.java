@@ -15,4 +15,8 @@ public interface IIncidenteService {
     public List<Incidente> buscarPopulares(int minVotos);
     public List<IncidenteCantidadDTO> reporteCantidades();
     public List<IncidenteCantidadDTO> reportePorUsuario();
+    public void deleteOwned(UUID idIncidente, String emailLogueado);
+    public void updateOwned(Incidente incidente, String emailLogueado);
+    public Incidente findById(UUID id);
+    public void votar(UUID idIncidente, String emailVotante, boolean esPositivo);
 }
