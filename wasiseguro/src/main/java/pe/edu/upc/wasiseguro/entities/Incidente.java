@@ -2,6 +2,8 @@ package pe.edu.upc.wasiseguro.entities;
 
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -43,6 +45,14 @@ public class Incidente {
     @Column(name = "votos_invalido", nullable = false)
     private Integer votosInvalido = 0;
 
+    @Column(name = "es_anonimo", nullable = false)
+    private boolean esAnonimo = false;
+
+    @ElementCollection
+    @CollectionTable(name = "incidente_votantes", joinColumns = @JoinColumn(name = "incidente_id"))
+    @Column(name = "usuario_email")
+    private Set<String> usuariosVotantes = new HashSet<>();
+
     public Incidente() {}
 
     public UUID getId() { return id; }
@@ -78,9 +88,9 @@ public class Incidente {
     public Integer getVotosInvalido() { return votosInvalido; }
     public void setVotosInvalido(Integer votosInvalido) { this.votosInvalido = votosInvalido; }
 
-    @Column(name = "es_anonimo", nullable = false)
-    private boolean esAnonimo = false;
     public boolean isEsAnonimo() { return esAnonimo; }
     public void setEsAnonimo(boolean esAnonimo) { this.esAnonimo = esAnonimo; }
 
+    public Set<String> getUsuariosVotantes() { return usuariosVotantes; }
+    public void setUsuariosVotantes(Set<String> usuariosVotantes) { this.usuariosVotantes = usuariosVotantes; }
 }
