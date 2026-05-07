@@ -2,10 +2,14 @@ package pe.edu.upc.wasiseguro.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.wasiseguro.dtos.AlertaDTO;
 import pe.edu.upc.wasiseguro.entities.Alerta;
+import pe.edu.upc.wasiseguro.entities.Usuario;
+import pe.edu.upc.wasiseguro.repositories.IUsuarioRepository; // IMPORTANTE: Faltaba esta importación
 import pe.edu.upc.wasiseguro.servicesinterfaces.IAlertaService;
+import pe.edu.upc.wasiseguro.servicesinterfaces.IIncidenteService;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,8 +18,15 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/alertas")
 public class AlertaController {
+
     @Autowired
     private IAlertaService aS;
+
+    @Autowired
+    private IUsuarioRepository userR;
+
+    @Autowired
+    private IIncidenteService incidenteService;
 
     @PostMapping
     public void registrar(@RequestBody AlertaDTO dto) {
@@ -49,5 +60,13 @@ public class AlertaController {
             ModelMapper m = new ModelMapper();
             return m.map(y, AlertaDTO.class);
         }).collect(Collectors.toList());
+    }
+
+    @GetMapping("/enviar-notificacion/{idUsuario}")
+    public ResponseEntity<String> enviarAlertaTraducida(@PathVariable UUID idUsuario, @RequestParam String zona) {
+        Usuario user = userR.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        String mensajeTraducido = incidenteService.obtenerMensajeTraducido(user, zona);
+        return ResponseEntity.ok(mensajeTraducido);
     }
 }

@@ -3,10 +3,13 @@ package pe.edu.upc.wasiseguro.controllers;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.wasiseguro.dtos.IncidenteCantidadDTO;
 import pe.edu.upc.wasiseguro.dtos.IncidenteDTO;
 import pe.edu.upc.wasiseguro.entities.Incidente;
+import pe.edu.upc.wasiseguro.entities.Usuario;
+import pe.edu.upc.wasiseguro.repositories.IUsuarioRepository;
 import pe.edu.upc.wasiseguro.servicesinterfaces.IIncidenteService;
 import org.springframework.security.core.Authentication;
 
@@ -17,8 +20,12 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/incidentes")
 public class IncidenteController {
+
     @Autowired
     private IIncidenteService iS;
+
+    @Autowired
+    private IUsuarioRepository uR;
 
     @PostMapping("/crear")
     public void registrar(@Valid @RequestBody IncidenteDTO dto) {
@@ -82,7 +89,29 @@ public class IncidenteController {
 
     @PatchMapping("/votar/{id}/{esPositivo}")
     public void votar(@PathVariable("id") UUID id, @PathVariable("esPositivo") boolean esPositivo, Authentication auth) {
-        String emailVotante = auth.getName(); 
+        String emailVotante = auth.getName();
         iS.votar(id, emailVotante, esPositivo);
     }
+
+    @PostMapping("/{id}/comentar")
+    public ResponseEntity<String> publicarComentario(@PathVariable UUID id, @RequestParam String texto, @RequestParam String email) {
+        iS.agregarComentario(id, texto, email);
+        return ResponseEntity.ok("✅ ¡Comentario publicado! Gracias por cuidar a la comunidad.");
+    }
+
+    @GetMapping("/{id}/comentarios")
+    public List<Incidente.ComentarioEmbeddable> verComentarios(@PathVariable UUID id) {
+        return iS.listarComentarios(id);
+    }
+
+    @GetMapping("/obtener-mensaje/{idUsuario}")
+    public ResponseEntity<String> obtenerMensaje(@PathVariable UUID idUsuario, @RequestParam String zona) {
+        Usuario user = uR.findById(idUsuario).orElseThrow();
+        if (!iS.verificarSiEnviarAlerta(user)) {
+            return ResponseEntity.ok("INFO: La alerta no se envió por tu configuración de frecuencia o silencio. (CAC3)");
+        }
+
+        return ResponseEntity.ok(iS.obtenerMensajeTraducido(user, zona));
+    }
+
 }

@@ -142,4 +142,30 @@ public class UsuarioController {
         return ResponseEntity.ok(resultado);
     }
 
+    @PatchMapping("/{id}/cambiar-idioma")
+    public ResponseEntity<String> cambiarIdioma(@PathVariable UUID id, @RequestParam String nuevoIdioma) {
+        Optional<Usuario> userOpt = userS.listId(id);
+        if (userOpt.isPresent()) {
+            Usuario user = userOpt.get();
+            user.setIdioma(nuevoIdioma);
+            userS.update(user);
+            return ResponseEntity.ok("Idioma actualizado a: " + nuevoIdioma);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+    }
+
+    @PatchMapping("/{id}/configurar-alertas")
+    public ResponseEntity<String> configurarAlertas(
+            @PathVariable UUID id,
+            @io.swagger.v3.oas.annotations.Parameter(description = "Opciones: INSTANTE, HORA, DIARIO")
+            @RequestParam String frecuencia,
+            @RequestParam int minutosSilencio) {
+        Usuario u = userR.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        u.setFrecuenciaAlertas(frecuencia.toUpperCase());
+        u.setSilenciadoHasta(java.time.LocalDateTime.now().plusMinutes(minutosSilencio));
+        userR.save(u);
+
+        return ResponseEntity.ok("✅ Preferencias actualizadas.");
+    }
+
 }
