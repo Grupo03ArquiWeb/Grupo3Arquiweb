@@ -61,6 +61,9 @@ public class Ruta {
     @Column(name = "es_favorita")
     private boolean esFavorita = false;
 
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "indicaciones", columnDefinition = "jsonb")
+    private java.util.List<String> indicaciones;
     public Ruta() {
     }
 
@@ -200,5 +203,13 @@ public class Ruta {
 
     public void setEsFavorita(boolean esFavorita) {
         this.esFavorita = esFavorita;
+    }
+
+    public java.util.List<String> getIndicaciones() {
+        return indicaciones;
+    }
+
+    public void setIndicaciones(java.util.List<String> indicaciones) {
+        this.indicaciones = indicaciones;
     }
 }

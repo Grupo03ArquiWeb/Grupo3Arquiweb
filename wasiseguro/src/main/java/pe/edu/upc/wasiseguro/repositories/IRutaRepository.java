@@ -2,6 +2,7 @@ package pe.edu.upc.wasiseguro.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pe.edu.upc.wasiseguro.dtos.RutaSugeridaDTO;
 import pe.edu.upc.wasiseguro.dtos.RutasFavoritasDTO;
@@ -28,4 +29,14 @@ public interface IRutaRepository extends JpaRepository<Ruta, UUID> {
 
     @Query(value = "SELECT * FROM ruta WHERE id_usuario = ?1", nativeQuery = true)
     List<Ruta> findRutasByUsuarioId(UUID idUsuario);
+
+    @Query(value = "SELECT r.id as id, r.nombre_origen as nombreOrigen, r.nombre_destino as nombreDestino, " +
+            "r.geojson_trayecto as geojsonTrayecto, " +
+            "(r.nivel_riesgo = 1) as esSegura, " +
+            "80.0 as seguridadScore " +
+            "FROM ruta r WHERE r.destino_lat = :destLat AND r.destino_lng = :destLng LIMIT 2", nativeQuery = true)
+    List<RutaSugeridaDTO> findAlternativasByDestino(@Param("destLat") double destLat, @Param("destLng") double destLng);
+
+    @Query(value = "SELECT * FROM ruta WHERE destino_lat = ?1 AND destino_lng = ?2", nativeQuery = true)
+    List<Ruta> findRutasEntidadByDestino(double lat, double lng);
 }

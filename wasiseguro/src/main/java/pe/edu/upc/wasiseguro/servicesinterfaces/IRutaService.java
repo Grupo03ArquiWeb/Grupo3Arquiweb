@@ -1,5 +1,6 @@
 package pe.edu.upc.wasiseguro.servicesinterfaces;
 
+import pe.edu.upc.wasiseguro.dtos.RutaComparacionDTO;
 import pe.edu.upc.wasiseguro.dtos.RutaSugeridaDTO;
 import pe.edu.upc.wasiseguro.dtos.RutasFavoritasDTO;
 import pe.edu.upc.wasiseguro.entities.Ruta;
@@ -16,4 +17,6 @@ public interface IRutaService {
     public List<RutasFavoritasDTO> listFavoritas();
     public List<RutaSugeridaDTO> sugerirRutasSeguras();
     List<Ruta> listByUsuario(UUID idUsuario);
+    List<RutaSugeridaDTO> buscarRutasAlternativas(double destLat, double destLng);
+    RutaComparacionDTO compararTiempos(double destLat, double destLng);
 }
