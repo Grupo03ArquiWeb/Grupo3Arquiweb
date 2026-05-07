@@ -15,6 +15,7 @@ public class UsuarioListDTO {
     private UUID contactoConfianza;
     private boolean activo;
     private OffsetDateTime createdAt;
+    private String idioma;
 
     public UUID getId() {
         return id;
@@ -103,4 +104,6 @@ public class UsuarioListDTO {
     public void setCreatedAt(OffsetDateTime createdAt) {
         this.createdAt = createdAt;
     }
+    public String getIdioma() { return idioma; }
+    public void setIdioma(String idioma) { this.idioma = idioma; }
 }

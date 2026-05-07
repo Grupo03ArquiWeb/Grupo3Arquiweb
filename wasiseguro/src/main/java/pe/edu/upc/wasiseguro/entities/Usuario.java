@@ -1,6 +1,8 @@
 package pe.edu.upc.wasiseguro.entities;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -45,6 +47,15 @@ public class Usuario {
 
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt = OffsetDateTime.now();
+
+    @Column(name = "idioma", length = 5, nullable = false)
+    private String idioma = "es";
+
+    @Column(name = "frecuencia_alertas", length = 20)
+    private String frecuenciaAlertas = "INSTANTE";
+
+    @Column(name = "silenciado_hasta")
+    private LocalDateTime silenciadoHasta;
 
     public Usuario() {}
 
@@ -167,4 +178,16 @@ public class Usuario {
     public void setUpdatedAt(OffsetDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public String getIdioma() {
+        return idioma;
+    }
+
+    public void setIdioma(String idioma) {
+        this.idioma = idioma;
+    }
+    public String getFrecuenciaAlertas() { return frecuenciaAlertas; }
+    public void setFrecuenciaAlertas(String frecuenciaAlertas) { this.frecuenciaAlertas = frecuenciaAlertas; }
+    public LocalDateTime getSilenciadoHasta() { return silenciadoHasta; }
+    public void setSilenciadoHasta(LocalDateTime silenciadoHasta) { this.silenciadoHasta = silenciadoHasta; }
 }

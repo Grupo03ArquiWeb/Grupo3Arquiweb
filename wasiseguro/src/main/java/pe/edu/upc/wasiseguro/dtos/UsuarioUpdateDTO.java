@@ -6,6 +6,7 @@ public class UsuarioUpdateDTO {
     private String email;
     private String telefono;
     private int idRol;
+    private String idioma;
 
 
     public String getNombre() {
@@ -47,4 +48,7 @@ public class UsuarioUpdateDTO {
     public void setIdRol(int idRol) {
         this.idRol = idRol;
     }
+
+    public String getIdioma() { return idioma; }
+    public void setIdioma(String idioma) { this.idioma = idioma; }
 }
