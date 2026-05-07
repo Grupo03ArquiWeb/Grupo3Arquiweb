@@ -2,6 +2,7 @@ package pe.edu.upc.wasiseguro.dtos;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public class RutaListDTO {
@@ -19,6 +20,8 @@ public class RutaListDTO {
     private String geojsonTrayecto;
     private boolean esPublica;
     private LocalDateTime createdAt;
+    private boolean esFavorita;
+    private List<String> indicaciones;
 
     public UUID getId() {
         return id;
@@ -27,7 +30,6 @@ public class RutaListDTO {
     public void setId(UUID id) {
         this.id = id;
     }
-
 
     public UUID getIdUsuario() {
         return idUsuario;
@@ -131,5 +133,21 @@ public class RutaListDTO {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public boolean isEsFavorita() {
+        return esFavorita;
+    }
+
+    public void setEsFavorita(boolean esFavorita) {
+        this.esFavorita = esFavorita;
+    }
+
+    public List<String> getIndicaciones() {
+        return indicaciones;
+    }
+
+    public void setIndicaciones(List<String> indicaciones) {
+        this.indicaciones = indicaciones;
     }
 }

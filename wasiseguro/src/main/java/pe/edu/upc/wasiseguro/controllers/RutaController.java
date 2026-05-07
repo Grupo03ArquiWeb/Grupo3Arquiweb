@@ -123,4 +123,22 @@ public class RutaController {
     public ResponseEntity<List<Ruta>> listarPorUsuario(@PathVariable UUID idUsuario) {
         return ResponseEntity.ok(rutaS.listByUsuario(idUsuario));
     }
+
+    @GetMapping("/alternativas")
+    public ResponseEntity<List<RutaSugeridaDTO>> obtenerAlternativas(
+            @RequestParam double destLat,
+            @RequestParam double destLng) {
+        List<RutaSugeridaDTO> lista = rutaS.buscarRutasAlternativas(destLat, destLng);
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/comparar-costo-tiempo")
+    public ResponseEntity<?> compararTiempos(@RequestParam double lat, @RequestParam double lng) {
+        RutaComparacionDTO comparacion = rutaS.compararTiempos(lat, lng);
+        if (comparacion == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Se necesitan al menos 2 rutas para comparar.");
+        }
+        return ResponseEntity.ok(comparacion);
+    }
 }

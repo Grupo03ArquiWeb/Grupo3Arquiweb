@@ -8,4 +8,5 @@ public interface RutaSugeridaDTO {
     String getGeojsonTrayecto();
     Boolean getEsSegura();
     Double getSeguridadScore();
+    java.util.List<String> getIndicaciones();
 }
