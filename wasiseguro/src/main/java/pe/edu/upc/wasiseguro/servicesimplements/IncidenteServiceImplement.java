@@ -46,7 +46,7 @@ public class IncidenteServiceImplement implements IIncidenteService {
         return todos.stream()
                 .collect(Collectors.groupingBy(i -> i.getUsuario().getNombre(), Collectors.counting()))
                 .entrySet().stream()
-                .map(entry -> new IncidenteCantidadDTO(entry.getKey(), entry.getValue()))
+                .map(entry -> new IncidenteCantidadDTO(entry.getKey(), "Ranking de Participación", entry.getValue()))
                 .collect(Collectors.toList());
     }
 
