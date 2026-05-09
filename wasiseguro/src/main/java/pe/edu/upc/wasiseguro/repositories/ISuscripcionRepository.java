@@ -7,11 +7,14 @@ import pe.edu.upc.wasiseguro.dtos.SuscripcionPorEstadoDTO;
 import pe.edu.upc.wasiseguro.dtos.SuscripcionPorPlanDTO;
 import pe.edu.upc.wasiseguro.entities.Suscripcion;
 
+
 import java.util.List;
+
 
 @Repository
 public interface ISuscripcionRepository extends JpaRepository<Suscripcion, Integer> {
 
+    //toma de decisiones
     @Query("SELECT new pe.edu.upc.wasiseguro.dtos.SuscripcionPorEstadoDTO(s.estado, COUNT(s)) " +
             "FROM Suscripcion s GROUP BY s.estado")
     List<SuscripcionPorEstadoDTO> cantidadSuscripcionesPorEstado();
@@ -19,4 +22,6 @@ public interface ISuscripcionRepository extends JpaRepository<Suscripcion, Integ
     @Query("SELECT new pe.edu.upc.wasiseguro.dtos.SuscripcionPorPlanDTO(s.planSuscripcion.nombre, COUNT(s)) " +
             "FROM Suscripcion s GROUP BY s.planSuscripcion.nombre")
     List<SuscripcionPorPlanDTO> cantidadSuscripcionesPorPlan();
+
+
 }

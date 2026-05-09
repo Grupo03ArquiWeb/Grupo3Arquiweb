@@ -14,6 +14,10 @@ import pe.edu.upc.wasiseguro.entities.Usuario;
 import pe.edu.upc.wasiseguro.repositories.IPlanSuscripcionRepository;
 import pe.edu.upc.wasiseguro.repositories.IUsuarioRepository;
 import pe.edu.upc.wasiseguro.servicesinterfaces.ISuscripcionService;
+import org.modelmapper.ModelMapper;
+import java.time.LocalDate;
+import java.util.UUID;
+import pe.edu.upc.wasiseguro.dtos.SuscripcionVigenciaDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -136,5 +140,42 @@ public class SuscripcionController {
     @GetMapping("/cantidad-por-plan")
     public ResponseEntity<List<SuscripcionPorPlanDTO>> cantidadPorPlan() {
         return ResponseEntity.ok(sS.cantidadSuscripcionesPorPlan());
+    }
+
+    @GetMapping("/filtrar")
+    public ResponseEntity<List<SuscripcionDTO>> filtrar(
+            @RequestParam(required = false) UUID idUsuario,
+            @RequestParam(required = false) Integer idPlan,
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) LocalDate fechaInicio,
+            @RequestParam(required = false) LocalDate fechaFin
+    ) {
+        ModelMapper m = new ModelMapper();
+
+        List<SuscripcionDTO> lista = sS.filtrar(idUsuario, idPlan, estado, fechaInicio, fechaFin)
+                .stream()
+                .map(s -> {
+                    SuscripcionDTO dto = m.map(s, SuscripcionDTO.class);
+                    dto.setIdUsuario(s.getUsuario().getId());
+                    dto.setNombreUsuario(s.getUsuario().getNombre());
+                    dto.setIdPlan(s.getPlanSuscripcion().getId());
+                    dto.setPlanNombre(s.getPlanSuscripcion().getNombre());
+                    dto.setPrecioMensual(s.getPlanSuscripcion().getPrecioMensual());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/validar-vigencia/{id}")
+    public ResponseEntity<?> validarVigencia(@PathVariable int id) {
+        SuscripcionVigenciaDTO dto = sS.validarVigencia(id);
+
+        if (dto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Suscripcion no encontrada");
+        }
+
+        return ResponseEntity.ok(dto);
     }
 }

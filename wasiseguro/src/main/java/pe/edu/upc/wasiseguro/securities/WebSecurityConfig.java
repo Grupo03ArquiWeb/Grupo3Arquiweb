@@ -88,6 +88,12 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/suscripciones/cantidad-por-estado").hasAnyAuthority("ROLE_admin", "ROLE_user")
                         .requestMatchers(HttpMethod.GET, "/api/suscripciones/cantidad-por-plan").hasAnyAuthority("ROLE_admin", "ROLE_user")
 
+                        .requestMatchers(HttpMethod.GET, "/api/suscripciones/filtrar").hasAnyAuthority("ROLE_admin", "ROLE_user")
+
+
+                        .requestMatchers(HttpMethod.GET, "/api/suscripciones/validar-vigencia/**").hasAnyAuthority("ROLE_admin", "ROLE_user")
+
+                        
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
