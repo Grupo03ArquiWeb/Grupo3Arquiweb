@@ -15,6 +15,8 @@ public interface IIncidenteRepository extends JpaRepository<Incidente, UUID> {
     List<Incidente> findByTipoIncidenteNombre(String nombreTipo);
     List<Incidente> findByVotosValidoGreaterThan(int minVotos);
 
-    @Query("SELECT new pe.edu.upc.wasiseguro.dtos.IncidenteCantidadDTO(i.tipoIncidente.nombre, COUNT(i)) FROM Incidente i GROUP BY i.tipoIncidente.nombre")
+    @Query("SELECT new pe.edu.upc.wasiseguro.dtos.IncidenteCantidadDTO(i.tipoIncidente.nombre, i.estado, COUNT(i)) " +
+            "FROM Incidente i " +
+            "GROUP BY i.tipoIncidente.nombre, i.estado")
     List<IncidenteCantidadDTO> countIncidentesByType();
 }
