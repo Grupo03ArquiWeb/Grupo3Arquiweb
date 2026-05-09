@@ -4,7 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pe.edu.upc.wasiseguro.entities.ZonaRiesgo;
+
 import java.util.List;
+
 @Repository
 public interface IZonaRiesgoRepository extends JpaRepository<ZonaRiesgo,Integer> {
     List<ZonaRiesgo> findByActivoZonaRiesgoTrue();
@@ -27,5 +29,4 @@ WHERE zr.acttvidad_zona_riesgo = true
 ORDER BY zr.riesgopor_hora ASC
 """, nativeQuery = true)
     List<String[]> zonasActivasOrdenadasPorRiesgoHora();
-
 }

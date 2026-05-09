@@ -2,9 +2,14 @@ package pe.edu.upc.wasiseguro.dtos;
 
 public class NivelRiesgoListDTO {
 
+    
     private int idNivelRiesgo;
+
     private String nameNivelRiesgo;
+
     private String colorHexNivelRiesgo;
+
+
     private int ordenNivelRiesgo;
 
     public int getIdNivelRiesgo() {

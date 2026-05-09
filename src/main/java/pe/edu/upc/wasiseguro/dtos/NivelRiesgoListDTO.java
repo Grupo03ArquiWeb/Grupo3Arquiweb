@@ -1,30 +1,13 @@
-package pe.edu.upc.wasiseguro.entities;
+package pe.edu.upc.wasiseguro.dtos;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "Nivel_Riesgo")
-public class NivelRiesgo {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class NivelRiesgoListDTO {
     private int idNivelRiesgo;
 
-
-    @Column(name = "nameNivelRiesgo", length = 30, nullable = false, unique = true)
     private String nameNivelRiesgo;
-    @Column(name = "colorHexNivelRiesgo", length = 7, nullable = false)
-    private String colorHexNivelRiesgo;
-    @Column(name = "ordenNivelRiesgo", nullable = false)
-    private int ordenNivelRiesgo;
-    public NivelRiesgo() {
-    }
 
-    public NivelRiesgo(int idNivelRiesgo, String nameNivelRiesgo, String colorHexNivelRiesgo, int ordenNivelRiesgo) {
-        this.idNivelRiesgo = idNivelRiesgo;
-        this.nameNivelRiesgo = nameNivelRiesgo;
-        this.colorHexNivelRiesgo = colorHexNivelRiesgo;
-        this.ordenNivelRiesgo = ordenNivelRiesgo;
-    }
+    private String colorHexNivelRiesgo;
+
+    private int ordenNivelRiesgo;
 
     public int getIdNivelRiesgo() {
         return idNivelRiesgo;

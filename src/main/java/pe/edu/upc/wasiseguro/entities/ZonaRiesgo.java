@@ -3,7 +3,6 @@ package pe.edu.upc.wasiseguro.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-
 @Entity
 @Table(name = "ZonaRiesgo")
 public class ZonaRiesgo {
@@ -24,14 +23,11 @@ public class ZonaRiesgo {
     @Column(name = "acttvidadZonaRiesgo", nullable = false)
     private boolean activoZonaRiesgo;
     @Column(name = "createdZonaRiesgo", nullable = false)
-    private LocalDate createdAtZonaRiesgo = LocalDate.now();
-
+    private LocalDate createdAtZonaRiesgo;
     @Column(name = "updateZonaRiesgo",  nullable = false)
     private LocalDate updateAtZonaRiesgo;
-
     public ZonaRiesgo() {
     }
-
     public ZonaRiesgo(int idZonaRiesgo, String nombreZonaRiesgo, String descripcionZonaRiesgo, NivelRiesgo nivelRiesgo, String geomZonaRiesgo, String riesgoporHora, boolean activoZonaRiesgo, LocalDate createdAtZonaRiesgo, LocalDate updateAtZonaRiesgo) {
         this.idZonaRiesgo = idZonaRiesgo;
         this.nombreZonaRiesgo = nombreZonaRiesgo;
@@ -43,7 +39,6 @@ public class ZonaRiesgo {
         this.createdAtZonaRiesgo = createdAtZonaRiesgo;
         this.updateAtZonaRiesgo = updateAtZonaRiesgo;
     }
-
     public int getIdZonaRiesgo() {
         return idZonaRiesgo;
     }

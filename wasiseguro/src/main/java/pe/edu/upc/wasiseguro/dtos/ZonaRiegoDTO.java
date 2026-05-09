@@ -1,48 +1,27 @@
-package pe.edu.upc.wasiseguro.entities;
+package pe.edu.upc.wasiseguro.dtos;
 
-import jakarta.persistence.*;
+import pe.edu.upc.wasiseguro.entities.NivelRiesgo;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "ZonaRiesgo")
-public class ZonaRiesgo {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ZonaRiegoDTO {
     private int idZonaRiesgo;
-    @Column(name = "nombreZonaRiesgo", length = 20, nullable = false)
+
     private String nombreZonaRiesgo;
-    @Column(name = "descripcionZonaRiesgo", length = 20, nullable = false)
+
     private String descripcionZonaRiesgo;
-    @ManyToOne
-    @JoinColumn(name = "idNivelRiesgo", nullable = false)
+
     private NivelRiesgo nivelRiesgo;
-    @Column(name = "geomZonaRiesgo", length = 20, nullable = false)
+
     private String geomZonaRiesgo;
-    @Column(name = "riesgoporHora", length = 20, nullable = false)
+
     private String riesgoporHora;
-    @Column(name = "acttvidadZonaRiesgo", nullable = false)
+
     private boolean activoZonaRiesgo;
-    @Column(name = "createdZonaRiesgo", nullable = false)
-    private LocalDate createdAtZonaRiesgo = LocalDate.now();
 
-    @Column(name = "updateZonaRiesgo",  nullable = false)
+    private LocalDate createdAtZonaRiesgo;
+
     private LocalDate updateAtZonaRiesgo;
-
-    public ZonaRiesgo() {
-    }
-
-    public ZonaRiesgo(int idZonaRiesgo, String nombreZonaRiesgo, String descripcionZonaRiesgo, NivelRiesgo nivelRiesgo, String geomZonaRiesgo, String riesgoporHora, boolean activoZonaRiesgo, LocalDate createdAtZonaRiesgo, LocalDate updateAtZonaRiesgo) {
-        this.idZonaRiesgo = idZonaRiesgo;
-        this.nombreZonaRiesgo = nombreZonaRiesgo;
-        this.descripcionZonaRiesgo = descripcionZonaRiesgo;
-        this.nivelRiesgo = nivelRiesgo;
-        this.geomZonaRiesgo = geomZonaRiesgo;
-        this.riesgoporHora = riesgoporHora;
-        this.activoZonaRiesgo = activoZonaRiesgo;
-        this.createdAtZonaRiesgo = createdAtZonaRiesgo;
-        this.updateAtZonaRiesgo = updateAtZonaRiesgo;
-    }
 
     public int getIdZonaRiesgo() {
         return idZonaRiesgo;

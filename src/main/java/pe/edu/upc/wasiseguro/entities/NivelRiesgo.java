@@ -3,19 +3,18 @@ package pe.edu.upc.wasiseguro.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Nivel_Riesgo")
+@Table(name = "NivelRiesgo")
 public class NivelRiesgo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idNivelRiesgo;
-
-
-    @Column(name = "nameNivelRiesgo", length = 30, nullable = false, unique = true)
+    @Column(name = "nameNivelRiesgo", length = 20, nullable = false)
     private String nameNivelRiesgo;
-    @Column(name = "colorHexNivelRiesgo", length = 7, nullable = false)
+    @Column(name = "colorHexNivelRiesgo", length = 20, nullable = false)
     private String colorHexNivelRiesgo;
-    @Column(name = "ordenNivelRiesgo", nullable = false)
+    @Column(name = "ordenNivelRiesgo", length = 20, nullable = false)
     private int ordenNivelRiesgo;
+
     public NivelRiesgo() {
     }
 
