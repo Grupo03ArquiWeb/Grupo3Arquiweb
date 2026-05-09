@@ -7,6 +7,7 @@ public class PlanSuscripcionDTO {
     private int id;
     private String nombre;
     private String descripcion;
+    private String beneficios;
     private BigDecimal precioMensual;
     private BigDecimal precioAnual;
     private boolean activo;
@@ -34,6 +35,14 @@ public class PlanSuscripcionDTO {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getBeneficios() {
+        return beneficios;
+    }
+
+    public void setBeneficios(String beneficios) {
+        this.beneficios = beneficios;
     }
 
     public BigDecimal getPrecioMensual() {

@@ -1,19 +1,15 @@
 package pe.edu.upc.wasiseguro.dtos;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
-public class SuscripcionDTO {
+public class SuscripcionVigenciaDTO {
     private int id;
-    private UUID idUsuario;
     private String nombreUsuario;
-    private int idPlan;
     private String planNombre;
-    private BigDecimal precioMensual;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
-    private String estado;
+    private String estadoRegistrado;
+    private String vigencia;
 
     public int getId() {
         return id;
@@ -21,14 +17,6 @@ public class SuscripcionDTO {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public UUID getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(UUID idUsuario) {
-        this.idUsuario = idUsuario;
     }
 
     public String getNombreUsuario() {
@@ -39,28 +27,12 @@ public class SuscripcionDTO {
         this.nombreUsuario = nombreUsuario;
     }
 
-    public int getIdPlan() {
-        return idPlan;
-    }
-
-    public void setIdPlan(int idPlan) {
-        this.idPlan = idPlan;
-    }
-
     public String getPlanNombre() {
         return planNombre;
     }
 
     public void setPlanNombre(String planNombre) {
         this.planNombre = planNombre;
-    }
-
-    public BigDecimal getPrecioMensual() {
-        return precioMensual;
-    }
-
-    public void setPrecioMensual(BigDecimal precioMensual) {
-        this.precioMensual = precioMensual;
     }
 
     public LocalDate getFechaInicio() {
@@ -79,11 +51,19 @@ public class SuscripcionDTO {
         this.fechaFin = fechaFin;
     }
 
-    public String getEstado() {
-        return estado;
+    public String getEstadoRegistrado() {
+        return estadoRegistrado;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
+    public void setEstadoRegistrado(String estadoRegistrado) {
+        this.estadoRegistrado = estadoRegistrado;
+    }
+
+    public String getVigencia() {
+        return vigencia;
+    }
+
+    public void setVigencia(String vigencia) {
+        this.vigencia = vigencia;
     }
 }

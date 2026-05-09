@@ -19,6 +19,9 @@ public class PlanSuscripcion {
     @Column(name = "descripcion")
     private String descripcion;
 
+    @Column(name = "beneficios")
+    private String beneficios;
+
     @Column(name = "precio_mensual", nullable = false)
     private BigDecimal precioMensual;
 
@@ -34,10 +37,13 @@ public class PlanSuscripcion {
     public PlanSuscripcion() {
     }
 
-    public PlanSuscripcion(int id, String nombre, String descripcion, BigDecimal precioMensual, BigDecimal precioAnual, boolean activo, LocalDateTime createdAt) {
+    public PlanSuscripcion(int id, String nombre, String descripcion, String beneficios,
+                           BigDecimal precioMensual, BigDecimal precioAnual,
+                           boolean activo, LocalDateTime createdAt) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.beneficios = beneficios;
         this.precioMensual = precioMensual;
         this.precioAnual = precioAnual;
         this.activo = activo;
@@ -66,6 +72,14 @@ public class PlanSuscripcion {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getBeneficios() {
+        return beneficios;
+    }
+
+    public void setBeneficios(String beneficios) {
+        this.beneficios = beneficios;
     }
 
     public BigDecimal getPrecioMensual() {

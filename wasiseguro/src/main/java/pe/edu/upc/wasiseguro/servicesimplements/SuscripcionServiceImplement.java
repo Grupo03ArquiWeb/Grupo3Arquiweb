@@ -7,6 +7,11 @@ import pe.edu.upc.wasiseguro.dtos.SuscripcionPorPlanDTO;
 import pe.edu.upc.wasiseguro.entities.Suscripcion;
 import pe.edu.upc.wasiseguro.repositories.ISuscripcionRepository;
 import pe.edu.upc.wasiseguro.servicesinterfaces.ISuscripcionService;
+import java.time.LocalDate;
+import java.util.UUID;
+import java.util.ArrayList;
+import pe.edu.upc.wasiseguro.dtos.SuscripcionVigenciaDTO;
+import java.time.LocalDate;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,5 +55,70 @@ public class SuscripcionServiceImplement implements ISuscripcionService {
     @Override
     public List<SuscripcionPorPlanDTO> cantidadSuscripcionesPorPlan() {
         return sR.cantidadSuscripcionesPorPlan();
+    }
+
+    @Override
+    public List<Suscripcion> filtrar(UUID idUsuario, Integer idPlan, String estado, LocalDate fechaInicio, LocalDate fechaFin) {
+        List<Suscripcion> lista = sR.findAll();
+        List<Suscripcion> listaFiltrada = new ArrayList<>();
+
+        for (Suscripcion s : lista) {
+            boolean agregar = true;
+
+            if (idUsuario != null && !s.getUsuario().getId().equals(idUsuario)) {
+                agregar = false;
+            }
+
+            if (idPlan != null && s.getPlanSuscripcion().getId() != idPlan) {
+                agregar = false;
+            }
+
+            if (estado != null && !s.getEstado().equalsIgnoreCase(estado)) {
+                agregar = false;
+            }
+
+            if (fechaInicio != null && s.getFechaInicio().isBefore(fechaInicio)) {
+                agregar = false;
+            }
+
+            if (fechaFin != null && s.getFechaFin().isAfter(fechaFin)) {
+                agregar = false;
+            }
+
+            if (agregar) {
+                listaFiltrada.add(s);
+            }
+        }
+
+        return listaFiltrada;
+    }
+
+    @Override
+    public SuscripcionVigenciaDTO validarVigencia(int id) {
+        Optional<Suscripcion> suscripcionOpt = sR.findById(id);
+
+        if (suscripcionOpt.isEmpty()) {
+            return null;
+        }
+
+        Suscripcion s = suscripcionOpt.get();
+        SuscripcionVigenciaDTO dto = new SuscripcionVigenciaDTO();
+
+        dto.setId(s.getId());
+        dto.setNombreUsuario(s.getUsuario().getNombre());
+        dto.setPlanNombre(s.getPlanSuscripcion().getNombre());
+        dto.setFechaInicio(s.getFechaInicio());
+        dto.setFechaFin(s.getFechaFin());
+        dto.setEstadoRegistrado(s.getEstado());
+
+        LocalDate hoy = LocalDate.now();
+
+        if (hoy.isAfter(s.getFechaFin())) {
+            dto.setVigencia("vencida");
+        } else {
+            dto.setVigencia("activa");
+        }
+
+        return dto;
     }
 }
