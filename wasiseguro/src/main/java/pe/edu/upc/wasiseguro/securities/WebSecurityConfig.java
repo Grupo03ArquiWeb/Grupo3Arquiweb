@@ -72,7 +72,7 @@ public class WebSecurityConfig {
                         ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                         .requestMatchers("/api/alertas/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                         .requestMatchers("/api/zonas-favoritas/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(AbstractHttpConfigurer::disable)

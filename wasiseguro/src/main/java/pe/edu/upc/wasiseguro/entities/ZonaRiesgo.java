@@ -3,10 +3,6 @@ package pe.edu.upc.wasiseguro.entities;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-<<<<<<< HEAD
-=======
-import java.time.LocalDateTime;
->>>>>>> main
 
 @Entity
 @Table(name = "ZonaRiesgo")
@@ -28,11 +24,8 @@ public class ZonaRiesgo {
     @Column(name = "acttvidadZonaRiesgo", nullable = false)
     private boolean activoZonaRiesgo;
     @Column(name = "createdZonaRiesgo", nullable = false)
-<<<<<<< HEAD
-    private LocalDate createdAtZonaRiesgo;
-=======
     private LocalDate createdAtZonaRiesgo = LocalDate.now();
->>>>>>> main
+
     @Column(name = "updateZonaRiesgo",  nullable = false)
     private LocalDate updateAtZonaRiesgo;
 
