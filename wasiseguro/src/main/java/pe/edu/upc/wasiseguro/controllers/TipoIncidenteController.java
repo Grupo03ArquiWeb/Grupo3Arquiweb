@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.wasiseguro.dtos.TipoIncidenteDTO;
 import pe.edu.upc.wasiseguro.entities.TipoIncidente;
 import pe.edu.upc.wasiseguro.servicesinterfaces.ITipoIncidenteService;
-
+import pe.edu.upc.wasiseguro.dtos.TipoIncidentePorEstadoDTO;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/TipoIncidente")
+@RequestMapping("/api/tipoIncidente")
 public class TipoIncidenteController {
 
     @Autowired
@@ -29,7 +29,7 @@ public class TipoIncidenteController {
         return ResponseEntity.ok(lista);
     }
 
-    @PostMapping("/crear")
+    @PostMapping("/registrar")
     public ResponseEntity<?> registrar(@RequestBody TipoIncidenteDTO dto) {
         ModelMapper m = new ModelMapper();
         TipoIncidente t = m.map(dto, TipoIncidente.class);
@@ -38,9 +38,9 @@ public class TipoIncidenteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    @PutMapping("/actualizar/{id}")
-    public ResponseEntity<String> actualizar(@PathVariable int id, @RequestBody TipoIncidenteDTO dto) {
-        Optional<TipoIncidente> existente = tS.listId(id);
+    @PutMapping("/actualizar")
+    public ResponseEntity<String> actualizar(@RequestBody TipoIncidenteDTO dto) {
+        Optional<TipoIncidente> existente = tS.listId(dto.getId());
 
         if (existente.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -49,6 +49,7 @@ public class TipoIncidenteController {
 
         TipoIncidente tipoIncidente = existente.get();
         tipoIncidente.setNombre(dto.getNombre());
+        tipoIncidente.setDescripcion(dto.getDescripcion());
         tipoIncidente.setIconoUrl(dto.getIconoUrl());
         tipoIncidente.setActivo(dto.isActivo());
 
@@ -56,7 +57,7 @@ public class TipoIncidenteController {
         return ResponseEntity.ok("TipoIncidente actualizado correctamente");
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<String> eliminar(@PathVariable int id) {
         Optional<TipoIncidente> tipo = tS.listId(id);
 
@@ -86,4 +87,10 @@ public class TipoIncidenteController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(lista);
     }
+
+    @GetMapping("/cantidad-por-estado")
+    public ResponseEntity<List<TipoIncidentePorEstadoDTO>> cantidadPorEstado() {
+        return ResponseEntity.ok(tS.cantidadPorEstado());
+    }
+
 }

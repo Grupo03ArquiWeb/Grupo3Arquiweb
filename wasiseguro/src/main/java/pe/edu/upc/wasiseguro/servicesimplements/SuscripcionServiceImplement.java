@@ -12,6 +12,11 @@ import java.util.UUID;
 import java.util.ArrayList;
 import pe.edu.upc.wasiseguro.dtos.SuscripcionVigenciaDTO;
 import java.time.LocalDate;
+import pe.edu.upc.wasiseguro.dtos.VincularPlanDTO;
+import pe.edu.upc.wasiseguro.entities.PlanSuscripcion;
+import pe.edu.upc.wasiseguro.entities.Usuario;
+import pe.edu.upc.wasiseguro.repositories.IPlanSuscripcionRepository;
+import pe.edu.upc.wasiseguro.repositories.IUsuarioRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +51,12 @@ public class SuscripcionServiceImplement implements ISuscripcionService {
     public void delete(int id) {
         sR.deleteById(id);
     }
+
+    @Autowired
+    private IUsuarioRepository uR;
+
+    @Autowired
+    private IPlanSuscripcionRepository pR;
 
     @Override
     public List<SuscripcionPorEstadoDTO> cantidadSuscripcionesPorEstado() {
@@ -120,5 +131,33 @@ public class SuscripcionServiceImplement implements ISuscripcionService {
         }
 
         return dto;
+    }
+
+    @Override
+    public Suscripcion vincularPlan(VincularPlanDTO dto) {
+        Optional<Suscripcion> suscripcionOpt = sR.findById(dto.getIdSuscripcion());
+        Optional<Usuario> usuarioOpt = uR.findById(dto.getIdUsuario());
+        Optional<PlanSuscripcion> planOpt = pR.findById(dto.getIdPlan());
+
+        if (suscripcionOpt.isEmpty()) {
+            return null;
+        }
+
+        if (usuarioOpt.isEmpty()) {
+            return null;
+        }
+
+        if (planOpt.isEmpty()) {
+            return null;
+        }
+
+        Suscripcion suscripcion = suscripcionOpt.get();
+
+        if (!suscripcion.getUsuario().getId().equals(dto.getIdUsuario())) {
+            return null;
+        }
+
+        suscripcion.setPlanSuscripcion(planOpt.get());
+        return sR.save(suscripcion);
     }
 }
