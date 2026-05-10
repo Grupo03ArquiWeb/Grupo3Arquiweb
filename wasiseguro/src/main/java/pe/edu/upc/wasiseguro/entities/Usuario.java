@@ -59,7 +59,7 @@ public class Usuario {
 
     public Usuario() {}
 
-    public Usuario(UUID id, String nombre, String apellido, String email, String telefono, String passwordHash, String fotoPerfil, boolean emailVerificado, Rol rol, Usuario contactoConfianza, boolean activo, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
+    public Usuario(UUID id, String nombre, String apellido, String email, String telefono, String passwordHash, String fotoPerfil, boolean emailVerificado, Rol rol, Usuario contactoConfianza, boolean activo, OffsetDateTime createdAt, OffsetDateTime updatedAt, String idioma, String frecuenciaAlertas, LocalDateTime silenciadoHasta) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -73,6 +73,9 @@ public class Usuario {
         this.activo = activo;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.idioma = idioma;
+        this.frecuenciaAlertas = frecuenciaAlertas;
+        this.silenciadoHasta = silenciadoHasta;
     }
 
     public UUID getId() {

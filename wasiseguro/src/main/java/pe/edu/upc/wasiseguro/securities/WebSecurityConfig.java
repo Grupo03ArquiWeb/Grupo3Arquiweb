@@ -61,13 +61,59 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
 
-                        .requestMatchers("/login", "/api/rol/**", "/api/usuario/crear", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html","/error").permitAll()
+                        .requestMatchers("/login", "/api/usuario/crear", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html","/error").permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/rol/listar",
+                                "/api/rol/buscarnombre",
+                                "/api/rol/buscarporactivo"
+                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        .requestMatchers(HttpMethod.POST,   "/api/rol/crear").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PUT,    "/api/rol/actualizar/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/rol/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/api/rol/usuariosporol").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PUT,
+                                "/api/usuario/actualizar/**"
+                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        .requestMatchers(HttpMethod.PATCH,
+                                "/api/usuario/*/contacto-confianza"
+                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/usuario/*/contacto-confianza"
+                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/usuario/listar",
+                                "/api/usuario/buscarnombre",
+                                "/api/usuario/buscarporrol",
+                                "/api/usuario/buscarpordominio"
+                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/usuario/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/api/usuario/inactivos").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/EventoPanico/crear"
+                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/EventoPanico/buscarporusuario"
+                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/EventoPanico/listar",
+                                "/api/EventoPanico/buscarporatendido"
+                        ).hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PATCH,
+                                "/api/EventoPanico/*/atender"
+                        ).hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PUT,
+                                "/api/EventoPanico/actualizar/**"
+                        ).hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,
+                                "/api/EventoPanico/**"
+                        ).hasAuthority("ROLE_ADMIN")
+
+
                         .requestMatchers(HttpMethod.DELETE, "/api/incidentes/eliminar/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/alertas/eliminar/**").hasAuthority("ROLE_ADMIN")
 
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/usuario/crear").permitAll()
-                        .requestMatchers("/api/rol/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 
 
                         .requestMatchers(HttpMethod.DELETE, "/api/incidentes/eliminar/**").hasAuthority("ROLE_ADMIN")

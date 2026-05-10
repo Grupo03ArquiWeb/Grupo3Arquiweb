@@ -25,6 +25,7 @@ public class EventoPanicoController {
     @Autowired
     private IUsuarioRepository userR;
 
+    // US47 - Listar todos (solo ADMIN)
     @GetMapping("listar")
     public ResponseEntity<List<EventoPanicoListDTO>> listar(){
         ModelMapper m= new ModelMapper();
@@ -33,6 +34,7 @@ public class EventoPanicoController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(listaUsers);
     }
+    // US47 - Crear evento de pánico
     @PostMapping("/crear")
     public ResponseEntity<?> registrar(@RequestBody EventoPanicoListDTO dto){
 
@@ -44,6 +46,7 @@ public class EventoPanicoController {
                     .body("Usuario no válido");
         }
         c.setUsuario(userOpt.get());
+        c.setAtendido(false);
         EventoPanico cur= epS.insert(c);
         EventoPanicoListDTO responseDTO=m.map(cur, EventoPanicoListDTO.class);
         responseDTO.setIdUsuario(cur.getUsuario().getId());
@@ -108,5 +111,17 @@ public class EventoPanicoController {
                 })
                 .collect(Collectors.toList());
         return ResponseEntity.ok(resultado);
+    }
+    // US47 - Marcar evento como atendido (solo ADMIN)
+    @PatchMapping("/{id}/atender")
+    public ResponseEntity<String> atender(@PathVariable UUID id) {
+        Optional<EventoPanico> existente = epS.listId(id);
+        if (existente.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Evento no encontrado");
+        }
+        EventoPanico evento = existente.get();
+        evento.setAtendido(true);
+        epS.update(evento);
+        return ResponseEntity.ok("Evento marcado como atendido");
     }
 }
