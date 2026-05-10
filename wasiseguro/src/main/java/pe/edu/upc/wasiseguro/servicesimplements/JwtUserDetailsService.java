@@ -33,6 +33,12 @@ public class JwtUserDetailsService implements UserDetailsService {
 
         roles.add(new SimpleGrantedAuthority("ROLE_" + user.getRol().getNombre().toUpperCase()));
 
+        System.out.println("ROL BD: " + user.getRol().getNombre());
+
+        roles.forEach(r ->
+                System.out.println("AUTHORITY: " + r.getAuthority())
+        );
+
         return new User(
                 user.getEmail(),
                 user.getPasswordHash(),
