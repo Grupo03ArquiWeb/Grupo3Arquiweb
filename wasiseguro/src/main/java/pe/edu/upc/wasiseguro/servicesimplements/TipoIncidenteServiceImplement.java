@@ -2,6 +2,7 @@ package pe.edu.upc.wasiseguro.servicesimplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.wasiseguro.dtos.TipoIncidentePorEstadoDTO;
 import pe.edu.upc.wasiseguro.entities.TipoIncidente;
 import pe.edu.upc.wasiseguro.repositories.ITipoIncidenteRepository;
 import pe.edu.upc.wasiseguro.servicesinterfaces.ITipoIncidenteService;
@@ -21,8 +22,8 @@ public class TipoIncidenteServiceImplement implements ITipoIncidenteService {
     }
 
     @Override
-    public TipoIncidente insert(TipoIncidente ti) {
-        return tR.save(ti);
+    public TipoIncidente insert(TipoIncidente t) {
+        return tR.save(t);
     }
 
     @Override
@@ -31,8 +32,8 @@ public class TipoIncidenteServiceImplement implements ITipoIncidenteService {
     }
 
     @Override
-    public void update(TipoIncidente ti) {
-        tR.save(ti);
+    public void update(TipoIncidente t) {
+        tR.save(t);
     }
 
     @Override
@@ -48,5 +49,10 @@ public class TipoIncidenteServiceImplement implements ITipoIncidenteService {
     @Override
     public List<TipoIncidente> listarActivos() {
         return tR.findByActivoTrue();
+    }
+
+    @Override
+    public List<TipoIncidentePorEstadoDTO> cantidadPorEstado() {
+        return tR.cantidadPorEstado();
     }
 }

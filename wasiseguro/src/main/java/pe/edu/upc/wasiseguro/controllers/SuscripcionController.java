@@ -11,6 +11,7 @@ import pe.edu.upc.wasiseguro.dtos.SuscripcionPorPlanDTO;
 import pe.edu.upc.wasiseguro.entities.PlanSuscripcion;
 import pe.edu.upc.wasiseguro.entities.Suscripcion;
 import pe.edu.upc.wasiseguro.entities.Usuario;
+import pe.edu.upc.wasiseguro.dtos.VincularPlanDTO;
 import pe.edu.upc.wasiseguro.repositories.IPlanSuscripcionRepository;
 import pe.edu.upc.wasiseguro.repositories.IUsuarioRepository;
 import pe.edu.upc.wasiseguro.servicesinterfaces.ISuscripcionService;
@@ -177,5 +178,47 @@ public class SuscripcionController {
         }
 
         return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping("/vincular-plan")
+    public ResponseEntity<?> vincularPlan(@RequestBody VincularPlanDTO dto) {
+        Optional<Suscripcion> suscripcionOpt = sS.listId(dto.getIdSuscripcion());
+
+        if (suscripcionOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Suscripcion no encontrada");
+        }
+
+        Optional<Usuario> usuarioOpt = uR.findById(dto.getIdUsuario());
+        if (usuarioOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+        }
+
+        Optional<PlanSuscripcion> planOpt = pR.findById(dto.getIdPlan());
+        if (planOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PlanSuscripcion no encontrado");
+        }
+
+        Suscripcion suscripcion = suscripcionOpt.get();
+
+        if (!suscripcion.getUsuario().getId().equals(dto.getIdUsuario())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("La suscripcion no pertenece al usuario enviado");
+        }
+
+        suscripcion.setPlanSuscripcion(planOpt.get());
+        sS.update(suscripcion);
+
+        SuscripcionDTO responseDTO = new SuscripcionDTO();
+        responseDTO.setId(suscripcion.getId());
+        responseDTO.setIdUsuario(suscripcion.getUsuario().getId());
+        responseDTO.setNombreUsuario(suscripcion.getUsuario().getNombre());
+        responseDTO.setIdPlan(suscripcion.getPlanSuscripcion().getId());
+        responseDTO.setPlanNombre(suscripcion.getPlanSuscripcion().getNombre());
+        responseDTO.setPrecioMensual(suscripcion.getPlanSuscripcion().getPrecioMensual());
+        responseDTO.setFechaInicio(suscripcion.getFechaInicio());
+        responseDTO.setFechaFin(suscripcion.getFechaFin());
+        responseDTO.setEstado(suscripcion.getEstado());
+
+        return ResponseEntity.ok(responseDTO);
     }
 }

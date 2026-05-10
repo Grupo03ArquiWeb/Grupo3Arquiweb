@@ -3,6 +3,7 @@ package pe.edu.upc.wasiseguro.servicesinterfaces;
 import pe.edu.upc.wasiseguro.dtos.SuscripcionPorEstadoDTO;
 import pe.edu.upc.wasiseguro.dtos.SuscripcionPorPlanDTO;
 import pe.edu.upc.wasiseguro.entities.Suscripcion;
+import pe.edu.upc.wasiseguro.dtos.VincularPlanDTO;
 import java.time.LocalDate;
 import java.util.UUID;
 import pe.edu.upc.wasiseguro.dtos.SuscripcionVigenciaDTO;
@@ -17,7 +18,7 @@ public interface ISuscripcionService {
     public void update(Suscripcion s);
     public void delete(int id);
     public SuscripcionVigenciaDTO validarVigencia(int id);
-
+    public Suscripcion vincularPlan(VincularPlanDTO dto);
 
     public List<SuscripcionPorEstadoDTO> cantidadSuscripcionesPorEstado();
     public List<SuscripcionPorPlanDTO> cantidadSuscripcionesPorPlan();

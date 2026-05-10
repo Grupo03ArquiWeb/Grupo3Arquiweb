@@ -10,24 +10,17 @@ public class TipoIncidente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "nombre", length = 80, nullable = false, unique = true)
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
+
+    @Column(name = "descripcion", length = 250)
+    private String descripcion;
 
     @Column(name = "icono_url")
     private String iconoUrl;
 
-    @Column(name = "activo", nullable = false)
+    @Column(name = "activo")
     private boolean activo;
-
-    public TipoIncidente() {
-    }
-
-    public TipoIncidente(int id, String nombre, String iconoUrl, boolean activo) {
-        this.id = id;
-        this.nombre = nombre;
-        this.iconoUrl = iconoUrl;
-        this.activo = activo;
-    }
 
     public int getId() {
         return id;
@@ -43,6 +36,14 @@ public class TipoIncidente {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public String getIconoUrl() {

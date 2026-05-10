@@ -3,6 +3,7 @@ package pe.edu.upc.wasiseguro.dtos;
 public class TipoIncidenteDTO {
     private int id;
     private String nombre;
+    private String descripcion;
     private String iconoUrl;
     private boolean activo;
 
@@ -20,6 +21,14 @@ public class TipoIncidenteDTO {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public String getIconoUrl() {
