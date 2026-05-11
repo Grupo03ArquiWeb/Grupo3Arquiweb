@@ -6,7 +6,7 @@ public class UsuarioUpdateDTO {
     private String email;
     private String telefono;
     private int idRol;
-    private int fotoPerfil;
+    private String fotoPerfil;
     private String idioma;
 
 
@@ -46,11 +46,11 @@ public class UsuarioUpdateDTO {
         return idRol;
     }
 
-    public int getFotoPerfil() {
+    public String getFotoPerfil() {
         return fotoPerfil;
     }
 
-    public void setFotoPerfil(int fotoPerfil) {
+    public void setFotoPerfil(String fotoPerfil) {
         this.fotoPerfil = fotoPerfil;
     }
 
