@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pe.edu.upc.wasiseguro.entities.Usuario;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,11 +26,12 @@ public interface IUsuarioRepository extends JpaRepository<Usuario, UUID> {
     List<Usuario> buscarUsuariosPorDominioEmail(@Param("dominioEmail") String dominioEmail);
 
     // Query
-    @Query("""
-        SELECT u FROM Usuario u
-        WHERE u.activo = true
-          AND u.updatedAt < CURRENT_TIMESTAMP - :dias * 1 DAY
-        ORDER BY u.updatedAt ASC
-    """)
+    @Query(value = """
+    SELECT *
+    FROM usuario u
+    WHERE u.activo = true
+      AND u.updated_at < NOW() - (:dias * INTERVAL '1 day')
+    ORDER BY u.updated_at ASC
+""", nativeQuery = true)
     List<Usuario> buscarUsuariosInactivos(@Param("dias") int dias);
 }
