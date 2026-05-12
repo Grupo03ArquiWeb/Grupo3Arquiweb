@@ -41,7 +41,14 @@ public class UsuarioController {
     public ResponseEntity<List<UsuarioListDTO>> listar(){
         ModelMapper m= new ModelMapper();
         List<UsuarioListDTO>listaUsers=userS.list().stream()
-                .map(y->m.map(y, UsuarioListDTO.class))
+                .map(y->{
+                    UsuarioListDTO dto = m.map(y, UsuarioListDTO.class);
+                    dto.setIdRol(y.getRol().getId());
+                    if(y.getContactoConfianza()!=null){
+                        dto.setContactoConfianza(y.getContactoConfianza().getId());
+                    }
+                    return dto;
+                })
                 .collect(Collectors.toList());
         return ResponseEntity.ok(listaUsers);
     }
