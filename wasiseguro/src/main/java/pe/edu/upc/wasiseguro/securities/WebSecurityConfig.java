@@ -110,14 +110,10 @@ public class WebSecurityConfig {
 
 
                         .requestMatchers(HttpMethod.DELETE, "/api/incidentes/eliminar/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/alertas/eliminar/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/alertas/**").hasAuthority("ROLE_ADMIN")
 
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/usuario/crear").permitAll()
-
-
-                        .requestMatchers(HttpMethod.DELETE, "/api/incidentes/eliminar/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/alertas/eliminar/**").hasAuthority("ROLE_ADMIN")
 
                         .requestMatchers(
                                 "/api/incidentes/crear",

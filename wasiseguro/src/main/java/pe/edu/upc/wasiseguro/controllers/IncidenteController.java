@@ -4,9 +4,11 @@ import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.wasiseguro.dtos.IncidenteCantidadDTO;
 import pe.edu.upc.wasiseguro.dtos.IncidenteDTO;
+import pe.edu.upc.wasiseguro.dtos.IncidenteRankingDTO;
 import pe.edu.upc.wasiseguro.entities.Incidente;
 import pe.edu.upc.wasiseguro.entities.Usuario;
 import pe.edu.upc.wasiseguro.repositories.IUsuarioRepository;
@@ -27,6 +29,7 @@ public class IncidenteController {
     @Autowired
     private IUsuarioRepository uR;
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     @PostMapping("/crear")
     public void registrar(@Valid @RequestBody IncidenteDTO dto) {
         ModelMapper m = new ModelMapper();
@@ -42,6 +45,7 @@ public class IncidenteController {
         }).collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/eliminar/{id}")
     public void eliminar(@PathVariable("id") UUID id) {
         iS.delete(id);
@@ -63,16 +67,21 @@ public class IncidenteController {
         }).collect(Collectors.toList());
     }
 
+    // Reporte US49: Cantidades por Tipo y Estado
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/reporte-cantidades")
     public List<IncidenteCantidadDTO> obtenerReporte() {
         return iS.reporteCantidades();
     }
 
+    // Reporte US43: Ranking de Usuarios Pro (5 datos)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/reporte-usuarios")
-    public List<IncidenteCantidadDTO> reportePorUsuarios() {
+    public List<IncidenteRankingDTO> reportePorUsuarios() {
         return iS.reportePorUsuario();
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     @PutMapping("/modificar")
     public void modificar(@Valid @RequestBody IncidenteDTO dto, Authentication authentication) {
         String emailLogueado = authentication.getName();
@@ -81,22 +90,25 @@ public class IncidenteController {
         iS.updateOwned(i, emailLogueado);
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     @DeleteMapping("/usuario/eliminar/{id}")
     public void eliminarPropio(@PathVariable("id") UUID id, Authentication authentication) {
         String emailLogueado = authentication.getName();
         iS.deleteOwned(id, emailLogueado);
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     @PatchMapping("/votar/{id}/{esPositivo}")
     public void votar(@PathVariable("id") UUID id, @PathVariable("esPositivo") boolean esPositivo, Authentication auth) {
         String emailVotante = auth.getName();
         iS.votar(id, emailVotante, esPositivo);
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     @PostMapping("/{id}/comentar")
     public ResponseEntity<String> publicarComentario(@PathVariable UUID id, @RequestParam String texto, @RequestParam String email) {
         iS.agregarComentario(id, texto, email);
-        return ResponseEntity.ok("✅ ¡Comentario publicado! Gracias por cuidar a la comunidad.");
+        return ResponseEntity.ok("✅ ¡Comentario publicado!");
     }
 
     @GetMapping("/{id}/comentarios")
@@ -108,10 +120,8 @@ public class IncidenteController {
     public ResponseEntity<String> obtenerMensaje(@PathVariable UUID idUsuario, @RequestParam String zona) {
         Usuario user = uR.findById(idUsuario).orElseThrow();
         if (!iS.verificarSiEnviarAlerta(user)) {
-            return ResponseEntity.ok("INFO: La alerta no se envió por tu configuración de frecuencia o silencio. (CAC3)");
+            return ResponseEntity.ok("INFO: La alerta no se envió por tu configuración de frecuencia o silencio.");
         }
-
         return ResponseEntity.ok(iS.obtenerMensajeTraducido(user, zona));
     }
-
 }

@@ -1,5 +1,6 @@
 package pe.edu.upc.wasiseguro.servicesinterfaces;
 
+import pe.edu.upc.wasiseguro.dtos.AlertaDTO;
 import pe.edu.upc.wasiseguro.entities.Alerta;
 import java.util.List;
 import java.util.UUID;
