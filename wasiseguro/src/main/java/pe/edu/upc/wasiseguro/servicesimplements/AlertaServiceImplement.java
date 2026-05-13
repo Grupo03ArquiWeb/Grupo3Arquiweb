@@ -2,6 +2,7 @@ package pe.edu.upc.wasiseguro.servicesimplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.wasiseguro.dtos.AlertaDTO;
 import pe.edu.upc.wasiseguro.entities.Alerta;
 import pe.edu.upc.wasiseguro.repositories.IAlertaRepository;
 import pe.edu.upc.wasiseguro.servicesinterfaces.IAlertaService;
@@ -15,12 +16,20 @@ public class AlertaServiceImplement implements IAlertaService {
 
     @Override
     public void insert(Alerta alerta) { aR.save(alerta); }
+
     @Override
     public List<Alerta> list() { return aR.findAll(); }
+
     @Override
     public void delete(UUID idAlerta) { aR.deleteById(idAlerta); }
+
     @Override
-    public List<Alerta> buscarNoLeidas(UUID idUsuario) { return aR.findByUsuarioIdAndLeidaFalse(idUsuario); }
+    public List<Alerta> buscarNoLeidas(UUID idUsuario) {
+        return aR.findByUsuarioIdAndLeidaFalse(idUsuario);
+    }
+
     @Override
-    public List<Alerta> buscarVigentes() { return aR.buscarAlertasVigentes(); }
+    public List<Alerta> buscarVigentes() {
+        return aR.buscarAlertasVigentes();
+    }
 }
