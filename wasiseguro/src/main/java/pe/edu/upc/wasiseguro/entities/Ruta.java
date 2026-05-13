@@ -1,10 +1,11 @@
 package pe.edu.upc.wasiseguro.entities;
 
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "ruta")
@@ -43,10 +44,11 @@ public class Ruta {
     @Column(name = "duracion_min")
     private BigDecimal duracionMin;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "nivel_riesgo")
     private NivelRiesgo nivelRiesgo;
 
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "geojson_trayecto", columnDefinition = "jsonb")
     private String geojsonTrayecto;
 
@@ -56,10 +58,16 @@ public class Ruta {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @Column(name = "es_favorita")
+    private boolean esFavorita = false;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "indicaciones", columnDefinition = "jsonb")
+    private java.util.List<String> indicaciones;
     public Ruta() {
     }
 
-    public Ruta(UUID id, Usuario usuario, double origenLat, double origenLng, double destinoLat, double destinoLng, String nombreOrigen, String nombreDestino, BigDecimal distanciaKm, BigDecimal duracionMin, NivelRiesgo nivelRiesgo, String geojsonTrayecto, boolean esPublica, LocalDateTime createdAt) {
+    public Ruta(UUID id, Usuario usuario, double origenLat, double origenLng, double destinoLat, double destinoLng, String nombreOrigen, String nombreDestino, BigDecimal distanciaKm, BigDecimal duracionMin, NivelRiesgo nivelRiesgo, String geojsonTrayecto, boolean esPublica, LocalDateTime createdAt, boolean esFavorita) {
         this.id = id;
         this.usuario = usuario;
         this.origenLat = origenLat;
@@ -74,6 +82,7 @@ public class Ruta {
         this.geojsonTrayecto = geojsonTrayecto;
         this.esPublica = esPublica;
         this.createdAt = createdAt;
+        this.esFavorita = esFavorita;
     }
 
     public UUID getId() {
@@ -186,5 +195,21 @@ public class Ruta {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public boolean isEsFavorita() {
+        return esFavorita;
+    }
+
+    public void setEsFavorita(boolean esFavorita) {
+        this.esFavorita = esFavorita;
+    }
+
+    public java.util.List<String> getIndicaciones() {
+        return indicaciones;
+    }
+
+    public void setIndicaciones(java.util.List<String> indicaciones) {
+        this.indicaciones = indicaciones;
     }
 }

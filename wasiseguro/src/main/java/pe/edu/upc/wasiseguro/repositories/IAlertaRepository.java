@@ -11,9 +11,7 @@ import java.util.UUID;
 
 @Repository
 public interface IAlertaRepository extends JpaRepository<Alerta, UUID> {
-
-    @Query("SELECT a FROM Alerta a WHERE a.usuario.id = :idUsuario AND a.leida = false")
-    List<Alerta> buscarNoLeidasPorUsuario(@Param("idUsuario") UUID idUsuario);
+    List<Alerta> findByUsuarioIdAndLeidaFalse(UUID idUsuario);
 
     @Query("SELECT a FROM Alerta a WHERE a.activa = true AND a.expiraEn > CURRENT_TIMESTAMP")
     List<Alerta> buscarAlertasVigentes();

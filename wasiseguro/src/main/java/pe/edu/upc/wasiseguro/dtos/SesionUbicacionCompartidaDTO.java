@@ -1,13 +1,12 @@
 package pe.edu.upc.wasiseguro.dtos;
 
-import pe.edu.upc.wasiseguro.entities.Usuario;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class SesionUbicacionCompartidaDTO {
+
     private UUID id;
-    private Usuario usuario;
+    private UUID idUsuario;
     private boolean activa;
     private LocalDateTime iniciadaEn;
     private LocalDateTime finalizadaEn;
@@ -20,12 +19,12 @@ public class SesionUbicacionCompartidaDTO {
         this.id = id;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public UUID getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setIdUsuario(UUID idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public boolean isActiva() {

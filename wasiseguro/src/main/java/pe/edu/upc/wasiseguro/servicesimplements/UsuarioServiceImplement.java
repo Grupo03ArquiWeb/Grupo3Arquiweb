@@ -40,12 +40,25 @@ public class UsuarioServiceImplement implements IUsuarioService {
         userR.deleteById(id);
     }
 
+    // Filtros
     @Override
-    public List<Usuario> findByNombre(String nombre) { return userR.findByNombreContainingIgnoreCase(nombre); }
+    public List<Usuario> findByNombre(String nombre) {
+        return userR.findByNombreContainingIgnoreCase(nombre);
+    }
 
     @Override
-    public List<Usuario> buscarPorRol(String nombreRol) { return userR.buscarUsuariosPorRol(nombreRol); }
+    public List<Usuario> buscarPorRol(String nombreRol) {
+        return userR.buscarUsuariosPorRol(nombreRol);
+    }
 
     @Override
-    public List<Usuario> buscarPorDominio(String dominio) { return userR.buscarUsuariosPorDominioEmail(dominio); }
+    public List<Usuario> buscarPorDominio(String dominio) {
+        return userR.buscarUsuariosPorDominioEmail(dominio);
+    }
+
+    // Query
+    @Override
+    public List<Usuario> buscarUsuariosInactivos(int dias) {
+        return userR.buscarUsuariosInactivos(dias);
+    }
 }

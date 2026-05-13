@@ -4,7 +4,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.wasiseguro.dtos.UsuarioCreateDTO;
@@ -16,6 +15,7 @@ import pe.edu.upc.wasiseguro.repositories.IRolRepository;
 import pe.edu.upc.wasiseguro.repositories.IUsuarioRepository;
 import pe.edu.upc.wasiseguro.servicesinterfaces.IUsuarioService;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -38,14 +38,21 @@ public class UsuarioController {
     private PasswordEncoder passwordEncoder;
 
     @GetMapping("listar")
-
     public ResponseEntity<List<UsuarioListDTO>> listar(){
         ModelMapper m= new ModelMapper();
         List<UsuarioListDTO>listaUsers=userS.list().stream()
-                .map(y->m.map(y, UsuarioListDTO.class))
+                .map(y->{
+                    UsuarioListDTO dto = m.map(y, UsuarioListDTO.class);
+                    dto.setIdRol(y.getRol().getId());
+                    if(y.getContactoConfianza()!=null){
+                        dto.setContactoConfianza(y.getContactoConfianza().getId());
+                    }
+                    return dto;
+                })
                 .collect(Collectors.toList());
         return ResponseEntity.ok(listaUsers);
     }
+    // US01 - Registro básico por correo
     @PostMapping("/crear")
     public ResponseEntity<?> registrar(@RequestBody UsuarioCreateDTO dto){
         if (userR.existsByEmail(dto.getEmail())) {
@@ -77,6 +84,7 @@ public class UsuarioController {
         response.setIdRol(saved.getRol().getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+    // US06 - Actualizar datos básicos + foto de perfil
     @PutMapping("/actualizar/{id}")
     public ResponseEntity<String> actualizar(@PathVariable UUID id, @RequestBody UsuarioUpdateDTO dto)  {
         Optional<Usuario> existente = userS.listId(id);
@@ -85,6 +93,11 @@ public class UsuarioController {
                     .body("Usuario no encontrado");
         }
         Usuario user = existente.get();
+
+        if (!user.getEmail().equalsIgnoreCase(dto.getEmail()) && userR.existsByEmail(dto.getEmail())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("El email ya está registrado en otro usuario");
+        }
         user.setNombre(dto.getNombre());
         user.setApellido(dto.getApellido());
         user.setEmail(dto.getEmail());
@@ -109,6 +122,7 @@ public class UsuarioController {
                     .body("Usuario no encontrado");
         }
     }
+    //Filtro 1
     @GetMapping("/buscarnombre")
     public List<UsuarioListDTO> buscarNombre(@RequestParam String n) {
         return userS.findByNombre(n).stream().map(y -> {
@@ -116,7 +130,7 @@ public class UsuarioController {
             return m.map(y, UsuarioListDTO.class);
         }).collect(Collectors.toList());
     }
-
+    //Filtro 2
     @GetMapping("/buscarporrol")
     public List<UsuarioListDTO> buscarPorRol(@RequestParam String r) {
         return userS.buscarPorRol(r).stream().map(y -> {
@@ -124,13 +138,88 @@ public class UsuarioController {
             return m.map(y, UsuarioListDTO.class);
         }).collect(Collectors.toList());
     }
-
+    //Filtro 3
     @GetMapping("/buscarpordominio")
     public List<UsuarioListDTO> buscarPorDominio(@RequestParam String d) {
         return userS.buscarPorDominio(d).stream().map(y -> {
             ModelMapper m = new ModelMapper();
             return m.map(y, UsuarioListDTO.class);
         }).collect(Collectors.toList());
+    }
+    // US48 - Usuarios inactivos (solo ADMIN)
+    @GetMapping("/inactivos")
+    public ResponseEntity<List<UsuarioListDTO>> buscarInactivos(@RequestParam int dias) {
+        ModelMapper m = new ModelMapper();
+        List<UsuarioListDTO> resultado = userS.buscarUsuariosInactivos(dias).stream()
+                .map(y -> m.map(y, UsuarioListDTO.class))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(resultado);
+    }
+
+    @PatchMapping("/{id}/cambiar-idioma")
+    public ResponseEntity<String> cambiarIdioma(@PathVariable UUID id, @RequestParam String nuevoIdioma) {
+        Optional<Usuario> userOpt = userS.listId(id);
+        if (userOpt.isPresent()) {
+            Usuario user = userOpt.get();
+            user.setIdioma(nuevoIdioma);
+            userS.update(user);
+            return ResponseEntity.ok("Idioma actualizado a: " + nuevoIdioma);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+    }
+
+    @PatchMapping("/{id}/configurar-alertas")
+    public ResponseEntity<String> configurarAlertas(
+            @PathVariable UUID id,
+            @io.swagger.v3.oas.annotations.Parameter(description = "Opciones: INSTANTE, HORA, DIARIO")
+            @RequestParam String frecuencia,
+            @RequestParam int minutosSilencio) {
+        Usuario u = userR.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        u.setFrecuenciaAlertas(frecuencia.toUpperCase());
+        u.setSilenciadoHasta(java.time.LocalDateTime.now().plusMinutes(minutosSilencio));
+        userR.save(u);
+
+        return ResponseEntity.ok("✅ Preferencias actualizadas.");
+    }
+    // US46 - Asignar contacto de confianza
+    @PatchMapping("/{id}/contacto-confianza")
+    public ResponseEntity<String> asignarContactoConfianza(
+            @PathVariable UUID id,
+            @RequestParam UUID idContacto) {
+
+        if (id.equals(idContacto)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Un usuario no puede ser su propio contacto de confianza");
+        }
+        Optional<Usuario> usuarioOpt = userS.listId(id);
+        if (usuarioOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+        }
+        Optional<Usuario> contactoOpt = userS.listId(idContacto);
+        if (contactoOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Contacto no encontrado");
+        }
+        Usuario usuario = usuarioOpt.get();
+        usuario.setContactoConfianza(contactoOpt.get());
+        usuario.setUpdatedAt(OffsetDateTime.now());
+        userS.update(usuario);
+        return ResponseEntity.ok("Contacto de confianza asignado correctamente");
+    }
+
+    // US46 - Consultar contacto de confianza
+    @GetMapping("/{id}/contacto-confianza")
+    public ResponseEntity<?> obtenerContactoConfianza(@PathVariable UUID id) {
+        Optional<Usuario> usuarioOpt = userS.listId(id);
+        if (usuarioOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+        }
+        Usuario contacto = usuarioOpt.get().getContactoConfianza();
+        if (contacto == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("El usuario no tiene contacto de confianza asignado");
+        }
+        ModelMapper m = new ModelMapper();
+        return ResponseEntity.ok(m.map(contacto, UsuarioListDTO.class));
     }
 
 }

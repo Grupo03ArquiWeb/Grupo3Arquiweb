@@ -1,8 +1,11 @@
 package pe.edu.upc.wasiseguro.entities;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "usuario")
@@ -21,6 +24,7 @@ public class Usuario {
     @Column(name = "telefono", length = 20)
     private String telefono;
     @Column(name = "password_hash", nullable = false)
+    @JsonIgnore
     private String passwordHash;
     @Column(name = "foto_perfil_url")
     private String fotoPerfil;
@@ -30,6 +34,7 @@ public class Usuario {
     @JoinColumn(name = "id_rol", nullable = false)
     private Rol rol;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "es_contacto_confianza")
     private Usuario contactoConfianza;
@@ -43,9 +48,18 @@ public class Usuario {
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt = OffsetDateTime.now();
 
+    @Column(name = "idioma", length = 5, nullable = false)
+    private String idioma = "es";
+
+    @Column(name = "frecuencia_alertas", length = 20)
+    private String frecuenciaAlertas = "INSTANTE";
+
+    @Column(name = "silenciado_hasta")
+    private LocalDateTime silenciadoHasta;
+
     public Usuario() {}
 
-    public Usuario(UUID id, String nombre, String apellido, String email, String telefono, String passwordHash, String fotoPerfil, boolean emailVerificado, Rol rol, Usuario contactoConfianza, boolean activo, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
+    public Usuario(UUID id, String nombre, String apellido, String email, String telefono, String passwordHash, String fotoPerfil, boolean emailVerificado, Rol rol, Usuario contactoConfianza, boolean activo, OffsetDateTime createdAt, OffsetDateTime updatedAt, String idioma, String frecuenciaAlertas, LocalDateTime silenciadoHasta) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -59,6 +73,9 @@ public class Usuario {
         this.activo = activo;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.idioma = idioma;
+        this.frecuenciaAlertas = frecuenciaAlertas;
+        this.silenciadoHasta = silenciadoHasta;
     }
 
     public UUID getId() {
@@ -164,4 +181,16 @@ public class Usuario {
     public void setUpdatedAt(OffsetDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public String getIdioma() {
+        return idioma;
+    }
+
+    public void setIdioma(String idioma) {
+        this.idioma = idioma;
+    }
+    public String getFrecuenciaAlertas() { return frecuenciaAlertas; }
+    public void setFrecuenciaAlertas(String frecuenciaAlertas) { this.frecuenciaAlertas = frecuenciaAlertas; }
+    public LocalDateTime getSilenciadoHasta() { return silenciadoHasta; }
+    public void setSilenciadoHasta(LocalDateTime silenciadoHasta) { this.silenciadoHasta = silenciadoHasta; }
 }

@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import pe.edu.upc.wasiseguro.entities.SesionUbicacionCompartida;
 
+import java.util.UUID;
+
 @Repository
-public interface ISesionUbicacionCompartidaRepository extends JpaRepository<SesionUbicacionCompartida,Integer> {
+public interface ISesionUbicacionCompartidaRepository extends JpaRepository<SesionUbicacionCompartida, UUID> {
 }

@@ -25,8 +25,16 @@ public class ZonaFavorita {
     @Column(name = "longitud", nullable = false)
     private double longitud;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "radio_metros", nullable = false)
+    private double radio = 500.0;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 
     public ZonaFavorita() {
     }
@@ -87,4 +95,7 @@ public class ZonaFavorita {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    public double getRadio() { return radio; }
+    public void setRadio(double radio) { this.radio = radio; }
 }
