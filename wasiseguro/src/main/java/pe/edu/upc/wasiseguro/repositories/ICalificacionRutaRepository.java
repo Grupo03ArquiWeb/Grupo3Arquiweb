@@ -9,8 +9,12 @@ import java.util.List;
 
 @Repository
 public interface ICalificacionRutaRepository extends JpaRepository<CalificacionRuta, Integer> {
-    @Query("SELECT r.nombreDestino as nombreDestino, AVG(c.puntaje) as promedioSeguridad " +
+
+    // Toma de decisiones: Análisis estadístico de seguridad percibida por ruta (5 datos)
+    @Query("SELECT new pe.edu.upc.wasiseguro.dtos.RutaSeguridadDTO(" +
+            "r.nombreDestino, AVG(c.puntaje), COUNT(c.id), MAX(c.puntaje), MIN(c.puntaje)) " +
             "FROM CalificacionRuta c JOIN c.ruta r " +
-            "GROUP BY r.nombreDestino")
+            "GROUP BY r.nombreDestino " +
+            "ORDER BY AVG(c.puntaje) DESC")
     List<RutaSeguridadDTO> getPromedioSeguridadPorRuta();
 }

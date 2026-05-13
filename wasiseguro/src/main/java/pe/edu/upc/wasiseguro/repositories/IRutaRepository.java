@@ -12,14 +12,21 @@ import java.util.UUID;
 
 @Repository
 public interface IRutaRepository extends JpaRepository<Ruta, UUID> {
+
     List<RutasFavoritasDTO> findByEsFavoritaTrue();
 
     List<Ruta> findByUsuarioId(UUID idUsuario);
-    List<RutaSugeridaDTO> findTop2ByDestinoLatAndDestinoLng(double lat, double lng);
+
+    @Query("SELECT new pe.edu.upc.wasiseguro.dtos.RutaSugeridaDTO(r.id, r.nombreOrigen, r.nombreDestino, r.geojsonTrayecto, true, 90.0) " +
+            "FROM Ruta r " +
+            "WHERE r.destinoLat = :lat AND r.destinoLng = :lng " +
+            "ORDER BY r.distanciaKm ASC LIMIT 2")
+    List<RutaSugeridaDTO> findTop2ByDestinoLatAndDestinoLng(@Param("lat") double lat, @Param("lng") double lng);
 
     List<Ruta> findByDestinoLatAndDestinoLng(double lat, double lng);
-    @Query("SELECT r.id as id, r.nombreOrigen as nombreOrigen, r.nombreDestino as nombreDestino, " +
-            "r.geojsonTrayecto as geojsonTrayecto, true as esSegura, 95.0 as seguridadScore " +
+
+    // Toma de decisiones: Sugerencia de rutas que no tienen nivel de riesgo crítico (US Sugerencias)
+    @Query("SELECT new pe.edu.upc.wasiseguro.dtos.RutaSugeridaDTO(r.id, r.nombreOrigen, r.nombreDestino, r.geojsonTrayecto, true, 95.0) " +
             "FROM Ruta r WHERE r.nivelRiesgo.idNivelRiesgo != 3")
     List<RutaSugeridaDTO> sugerirRutasSeguras();
 }
