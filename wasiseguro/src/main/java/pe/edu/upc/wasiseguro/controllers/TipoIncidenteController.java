@@ -4,11 +4,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.wasiseguro.dtos.TipoIncidenteDTO;
 import pe.edu.upc.wasiseguro.entities.TipoIncidente;
 import pe.edu.upc.wasiseguro.servicesinterfaces.ITipoIncidenteService;
 import pe.edu.upc.wasiseguro.dtos.TipoIncidentePorEstadoDTO;
+import pe.edu.upc.wasiseguro.dtos.TipoIncidenteEstadisticasDTO;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,6 +31,7 @@ public class TipoIncidenteController {
         return ResponseEntity.ok(lista);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/registrar")
     public ResponseEntity<?> registrar(@RequestBody TipoIncidenteDTO dto) {
         ModelMapper m = new ModelMapper();
@@ -38,6 +41,7 @@ public class TipoIncidenteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/actualizar")
     public ResponseEntity<String> actualizar(@RequestBody TipoIncidenteDTO dto) {
         Optional<TipoIncidente> existente = tS.listId(dto.getId());
@@ -57,6 +61,7 @@ public class TipoIncidenteController {
         return ResponseEntity.ok("TipoIncidente actualizado correctamente");
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<String> eliminar(@PathVariable int id) {
         Optional<TipoIncidente> tipo = tS.listId(id);
@@ -91,6 +96,25 @@ public class TipoIncidenteController {
     @GetMapping("/cantidad-por-estado")
     public ResponseEntity<List<TipoIncidentePorEstadoDTO>> cantidadPorEstado() {
         return ResponseEntity.ok(tS.cantidadPorEstado());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> listarPorId(@PathVariable int id) {
+        Optional<TipoIncidente> tipoOpt = tS.listId(id);
+
+        if (tipoOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("TipoIncidente no encontrado");
+        }
+
+        ModelMapper m = new ModelMapper();
+        TipoIncidenteDTO dto = m.map(tipoOpt.get(), TipoIncidenteDTO.class);
+        return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/estadisticas")
+    public ResponseEntity<List<TipoIncidenteEstadisticasDTO>> estadisticasIncidentes() {
+        return ResponseEntity.ok(tS.estadisticasIncidentes());
     }
 
 }

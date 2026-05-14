@@ -2,6 +2,7 @@ package pe.edu.upc.wasiseguro.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.wasiseguro.dtos.PlanSuscripcionDTO;
 import pe.edu.upc.wasiseguro.entities.PlanSuscripcion;
@@ -17,6 +18,7 @@ public class PlanSuscripcionController {
     @Autowired
     private IPlanSuscripcionService pS;
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/registrar")
     public void registrar(@RequestBody PlanSuscripcionDTO dto) {
         ModelMapper m = new ModelMapper();
@@ -41,6 +43,7 @@ public class PlanSuscripcionController {
         return m.map(pS.listarId(id), PlanSuscripcionDTO.class);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/actualizar")
     public void actualizar(@RequestBody PlanSuscripcionDTO dto) {
         ModelMapper m = new ModelMapper();
@@ -48,6 +51,7 @@ public class PlanSuscripcionController {
         pS.actualizar(p);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/eliminar/{id}")
     public void eliminar(@PathVariable("id") int id) {
         pS.eliminar(id);

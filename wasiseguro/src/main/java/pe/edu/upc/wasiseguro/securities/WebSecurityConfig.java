@@ -61,7 +61,15 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
 
-                        .requestMatchers("/login", "/api/usuario/crear", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html","/error").permitAll()
+                        .requestMatchers(
+                                "/login",
+                                "/api/usuario/crear",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/error",
+                                "/api/suscripciones/estadisticas/plan"
+                        ).permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/api/rol/listar",
                                 "/api/rol/buscarnombre",
@@ -149,6 +157,7 @@ public class WebSecurityConfig {
 
                         .requestMatchers(HttpMethod.POST, "/api/suscripciones/vincular-plan").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()
+
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(AbstractHttpConfigurer::disable)
