@@ -60,15 +60,14 @@ public class WebSecurityConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
-
+                        //no requiere token rutas
                         .requestMatchers(
                                 "/login",
                                 "/api/usuario/crear",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
-                                "/error",
-                                "/api/suscripciones/estadisticas/plan"
+                                "/error"
                         ).permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/api/rol/listar",

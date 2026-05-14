@@ -1,7 +1,7 @@
 package pe.edu.upc.wasiseguro.dtos;
 
 import java.math.BigDecimal;
-
+//query estadistica por plan
 public class SuscripcionEstadisticaPlanDTO {
     private String nombrePlan;
     private Long cantidadSuscripciones;

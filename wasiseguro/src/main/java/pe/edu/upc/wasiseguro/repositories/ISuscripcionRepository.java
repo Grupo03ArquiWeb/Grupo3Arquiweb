@@ -21,10 +21,10 @@ public interface ISuscripcionRepository extends JpaRepository<Suscripcion, Integ
     List<Object[]> estadisticasPorEstado();
 
 
+    //query decision plann
     @Query("SELECT p.nombre, COUNT(s), MAX(p.precioMensual), MAX(p.precioAnual), " +
             "SUM(p.precioMensual), CASE WHEN MAX(CASE WHEN p.activo = true THEN 1 ELSE 0 END) = 1 THEN true ELSE false END " +
             "FROM Suscripcion s JOIN s.planSuscripcion p " +
             "GROUP BY p.nombre ")
     List<Object[]> estadisticasPorPlan();
-
 }

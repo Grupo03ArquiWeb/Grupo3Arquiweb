@@ -74,6 +74,7 @@ public class SuscripcionServiceImplement implements ISuscripcionService {
         }).collect(Collectors.toList());
     }
 
+//SuscripcionEstadisticaPlanDTO pri
     @Override
     public List<SuscripcionEstadisticaPlanDTO> estadisticasPorPlan() {
         List<Object[]> resultados = sR.estadisticasPorPlan();

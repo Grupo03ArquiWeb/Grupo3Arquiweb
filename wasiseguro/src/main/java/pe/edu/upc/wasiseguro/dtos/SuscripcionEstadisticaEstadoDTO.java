@@ -1,7 +1,7 @@
 package pe.edu.upc.wasiseguro.dtos;
 
 import java.time.LocalDate;
-
+//query estadistica por estado
 public class SuscripcionEstadisticaEstadoDTO {
     private String estado;
     private Long cantidadSuscripciones;
