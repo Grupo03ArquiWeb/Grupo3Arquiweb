@@ -66,7 +66,7 @@ public class WebSecurityConfig {
                                 "/api/rol/listar",
                                 "/api/rol/buscarnombre",
                                 "/api/rol/buscarporactivo"
-                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERADOR")
                         .requestMatchers(HttpMethod.POST,   "/api/rol/crear").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PUT,    "/api/rol/actualizar/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/rol/**").hasAuthority("ROLE_ADMIN")
@@ -76,31 +76,28 @@ public class WebSecurityConfig {
                         ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
                         .requestMatchers(HttpMethod.PATCH,
                                 "/api/usuario/*/contacto-confianza"
-                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        ).hasAnyAuthority("ROLE_ADMIN","ROLE_MODERADOR", "ROLE_USER")
                         .requestMatchers(HttpMethod.GET,
                                 "/api/usuario/*/contacto-confianza"
-                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERADOR")
                         .requestMatchers(HttpMethod.GET,
                                 "/api/usuario/listar",
                                 "/api/usuario/buscarnombre",
                                 "/api/usuario/buscarporrol",
                                 "/api/usuario/buscarpordominio"
-                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERADOR")
                         .requestMatchers(HttpMethod.DELETE, "/api/usuario/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.GET,    "/api/usuario/inactivos").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET,    "/api/usuario/inactivos").hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERADOR")
                         .requestMatchers(HttpMethod.POST,
                                 "/api/EventoPanico/crear"
-                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        ).hasAnyAuthority("ROLE_ADMIN","ROLE_MODERADOR", "ROLE_USER")
                         .requestMatchers(HttpMethod.GET,
                                 "/api/EventoPanico/buscarporusuario"
-                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        ).hasAnyAuthority("ROLE_ADMIN","ROLE_MODERADOR")
                         .requestMatchers(HttpMethod.GET,
                                 "/api/EventoPanico/listar",
                                 "/api/EventoPanico/buscarporatendido"
-                        ).hasAuthority("ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.PATCH,
-                                "/api/EventoPanico/*/atender"
-                        ).hasAuthority("ROLE_ADMIN")
+                        ).hasAnyAuthority("ROLE_ADMIN","ROLE_MODERADOR")
                         .requestMatchers(HttpMethod.PUT,
                                 "/api/EventoPanico/actualizar/**"
                         ).hasAuthority("ROLE_ADMIN")

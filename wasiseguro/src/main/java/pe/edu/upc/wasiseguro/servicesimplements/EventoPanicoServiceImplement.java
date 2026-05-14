@@ -2,13 +2,13 @@ package pe.edu.upc.wasiseguro.servicesimplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.wasiseguro.dtos.EventoRecienteDTO;
+import pe.edu.upc.wasiseguro.dtos.ResumenEventoPanicoDTO;
 import pe.edu.upc.wasiseguro.entities.EventoPanico;
 import pe.edu.upc.wasiseguro.repositories.IEventoPanicoRepository;
 import pe.edu.upc.wasiseguro.servicesinterfaces.IEventoPanicoService;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class EventoPanicoServiceImplement implements IEventoPanicoService {
@@ -51,4 +51,15 @@ public class EventoPanicoServiceImplement implements IEventoPanicoService {
     public List<EventoPanico> buscarPorUsuario(UUID idUsuario) {
         return epR.findByUsuarioId(idUsuario);
     }
+
+    @Override
+    public List<ResumenEventoPanicoDTO> resumenEventosPorUsuario() {
+        return epR.resumenEventosPorUsuario();
+    }
+
+    @Override
+    public List<EventoRecienteDTO> eventosRecientesConDatosUsuario(int limite) {
+        return epR.eventosRecientesConDatosUsuario(limite);
+    }
+
 }
