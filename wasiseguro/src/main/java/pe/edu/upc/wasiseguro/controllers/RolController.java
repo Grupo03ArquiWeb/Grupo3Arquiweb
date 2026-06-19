@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/rol")
+    @RequestMapping("/api/rol")
 public class RolController {
     @Autowired
     private IRolService rolS;
@@ -55,6 +55,20 @@ public class RolController {
         rol.setActivo(dto.isActivo());
         rolS.update(rol);
         return ResponseEntity.ok("Rol actualizado correctamente");
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> buscarPorId(@PathVariable int id) {
+        ModelMapper m = new ModelMapper();
+        Optional<Rol> vid = rolS.listId(id);
+
+        if (vid.isPresent()) {
+            RolListDTO dto = m.map(vid.get(), RolListDTO.class);
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No encontrado");
+        }
     }
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
