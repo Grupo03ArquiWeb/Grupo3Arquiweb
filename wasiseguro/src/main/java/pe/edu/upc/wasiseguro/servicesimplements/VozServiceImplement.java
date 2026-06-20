@@ -1,8 +1,8 @@
 package pe.edu.upc.wasiseguro.servicesimplements;
 
 import org.springframework.stereotype.Service;
-import pe.edu.upc.api17732.dtos.VozResponseDTO;
-import pe.edu.upc.api17732.servicesinterfaces.IVozService;
+import pe.edu.upc.wasiseguro.dtos.VozResponseDTO;
+import pe.edu.upc.wasiseguro.servicesinterfaces.IVozService;
 
 @Service
 public class VozServiceImplement implements IVozService {

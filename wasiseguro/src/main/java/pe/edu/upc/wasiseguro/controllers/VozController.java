@@ -3,9 +3,9 @@ package pe.edu.upc.wasiseguro.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.upc.api17732.dtos.VozRequestDTO;
-import pe.edu.upc.api17732.dtos.VozResponseDTO;
-import pe.edu.upc.api17732.servicesinterfaces.IVozService;
+import pe.edu.upc.wasiseguro.dtos.VozRequestDTO;
+import pe.edu.upc.wasiseguro.dtos.VozResponseDTO;
+import pe.edu.upc.wasiseguro.servicesinterfaces.IVozService;
 
 @RestController
 @RequestMapping("/api/voz")
