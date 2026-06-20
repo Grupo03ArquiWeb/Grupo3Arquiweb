@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.wasiseguro.dtos.RolListDTO;
 import pe.edu.upc.wasiseguro.dtos.RolUpdateDTO;
@@ -17,11 +18,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/rol")
+    @RequestMapping("/api/rol")
 public class RolController {
     @Autowired
     private IRolService rolS;
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MODERADOR')")
     @GetMapping("listar")
     public ResponseEntity<List<RolListDTO>> listar(){
         ModelMapper m= new ModelMapper();
@@ -30,6 +32,7 @@ public class RolController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(listarRoles);
     }
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/crear")
     public ResponseEntity<?> registrar(@RequestBody RolUpdateDTO dto){
         ModelMapper m=new ModelMapper();
@@ -38,6 +41,7 @@ public class RolController {
         RolUpdateDTO responseDTO=m.map(cur, RolUpdateDTO.class);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/actualizar/{id}")
     public ResponseEntity<String> actualizar(@PathVariable int id, @RequestBody RolUpdateDTO dto)  {
         Optional<Rol> existente = rolS.listId(id);
@@ -52,6 +56,21 @@ public class RolController {
         rolS.update(rol);
         return ResponseEntity.ok("Rol actualizado correctamente");
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> buscarPorId(@PathVariable int id) {
+        ModelMapper m = new ModelMapper();
+        Optional<Rol> vid = rolS.listId(id);
+
+        if (vid.isPresent()) {
+            RolListDTO dto = m.map(vid.get(), RolListDTO.class);
+            return ResponseEntity.ok(dto);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No encontrado");
+        }
+    }
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminar(@PathVariable int id) {
         Optional<Rol> user = rolS.listId(id);
@@ -64,6 +83,7 @@ public class RolController {
         }
     }
     // Filtro 1
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MODERADOR')")
     @GetMapping("/buscarnombre")
     public ResponseEntity<List<RolListDTO>> buscarPorNombre(@RequestParam String n) {
         ModelMapper m = new ModelMapper();
@@ -74,6 +94,7 @@ public class RolController {
     }
 
     // Filtro 2
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MODERADOR')")
     @GetMapping("/buscarporactivo")
     public ResponseEntity<List<RolListDTO>> buscarPorActivo(@RequestParam boolean activo) {
         ModelMapper m = new ModelMapper();
@@ -84,6 +105,7 @@ public class RolController {
     }
 
     // Query
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/usuariosporol")
     public ResponseEntity<List<Map<String, Object>>> usuariosPorRol() {
         return ResponseEntity.ok(rolS.contarUsuariosActivosPorRol());

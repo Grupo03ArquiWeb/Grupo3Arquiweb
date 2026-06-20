@@ -1,5 +1,7 @@
 package pe.edu.upc.wasiseguro.servicesinterfaces;
 
+import pe.edu.upc.wasiseguro.dtos.EventoRecienteDTO;
+import pe.edu.upc.wasiseguro.dtos.ResumenEventoPanicoDTO;
 import pe.edu.upc.wasiseguro.entities.EventoPanico;
 
 import java.util.List;
@@ -16,4 +18,9 @@ public interface IEventoPanicoService {
     // Filtros
     List<EventoPanico> buscarPorAtendido(boolean atendido);
     List<EventoPanico> buscarPorUsuario(UUID idUsuario);
+
+    // Toma de decisiones
+    List<ResumenEventoPanicoDTO> resumenEventosPorUsuario();
+    List<EventoRecienteDTO> eventosRecientesConDatosUsuario(int limite);
+
 }

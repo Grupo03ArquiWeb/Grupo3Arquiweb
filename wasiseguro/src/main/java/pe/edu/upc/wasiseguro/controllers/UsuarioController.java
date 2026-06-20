@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.wasiseguro.dtos.UsuarioCreateDTO;
@@ -37,6 +38,7 @@ public class UsuarioController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("listar")
     public ResponseEntity<List<UsuarioListDTO>> listar(){
         ModelMapper m= new ModelMapper();
@@ -85,6 +87,7 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     // US06 - Actualizar datos básicos + foto de perfil
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MODERADOR', 'ROLE_USER')")
     @PutMapping("/actualizar/{id}")
     public ResponseEntity<String> actualizar(@PathVariable UUID id, @RequestBody UsuarioUpdateDTO dto)  {
         Optional<Usuario> existente = userS.listId(id);
@@ -111,6 +114,7 @@ public class UsuarioController {
         userS.update(user);
         return ResponseEntity.ok("Usuario actualizado correctamente");
     }
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminar(@PathVariable UUID id) {
         Optional<Usuario> user = userS.listId(id);
@@ -123,6 +127,7 @@ public class UsuarioController {
         }
     }
     //Filtro 1
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MODERADOR')")
     @GetMapping("/buscarnombre")
     public List<UsuarioListDTO> buscarNombre(@RequestParam String n) {
         return userS.findByNombre(n).stream().map(y -> {
@@ -131,6 +136,7 @@ public class UsuarioController {
         }).collect(Collectors.toList());
     }
     //Filtro 2
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MODERADOR')")
     @GetMapping("/buscarporrol")
     public List<UsuarioListDTO> buscarPorRol(@RequestParam String r) {
         return userS.buscarPorRol(r).stream().map(y -> {
@@ -139,6 +145,7 @@ public class UsuarioController {
         }).collect(Collectors.toList());
     }
     //Filtro 3
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MODERADOR')")
     @GetMapping("/buscarpordominio")
     public List<UsuarioListDTO> buscarPorDominio(@RequestParam String d) {
         return userS.buscarPorDominio(d).stream().map(y -> {
@@ -146,7 +153,8 @@ public class UsuarioController {
             return m.map(y, UsuarioListDTO.class);
         }).collect(Collectors.toList());
     }
-    // US48 - Usuarios inactivos (solo ADMIN)
+    // US48 - Usuarios inactivos
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MODERADOR')")
     @GetMapping("/inactivos")
     public ResponseEntity<List<UsuarioListDTO>> buscarInactivos(@RequestParam int dias) {
         ModelMapper m = new ModelMapper();
@@ -156,6 +164,7 @@ public class UsuarioController {
         return ResponseEntity.ok(resultado);
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MODERADOR', 'ROLE_USER')")
     @PatchMapping("/{id}/cambiar-idioma")
     public ResponseEntity<String> cambiarIdioma(@PathVariable UUID id, @RequestParam String nuevoIdioma) {
         Optional<Usuario> userOpt = userS.listId(id);
@@ -168,6 +177,7 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MODERADOR', 'ROLE_USER')")
     @PatchMapping("/{id}/configurar-alertas")
     public ResponseEntity<String> configurarAlertas(
             @PathVariable UUID id,
@@ -181,7 +191,7 @@ public class UsuarioController {
 
         return ResponseEntity.ok("✅ Preferencias actualizadas.");
     }
-    // US46 - Asignar contacto de confianza
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MODERADOR', 'ROLE_USER')")
     @PatchMapping("/{id}/contacto-confianza")
     public ResponseEntity<String> asignarContactoConfianza(
             @PathVariable UUID id,
@@ -206,7 +216,7 @@ public class UsuarioController {
         return ResponseEntity.ok("Contacto de confianza asignado correctamente");
     }
 
-    // US46 - Consultar contacto de confianza
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MODERADOR')")
     @GetMapping("/{id}/contacto-confianza")
     public ResponseEntity<?> obtenerContactoConfianza(@PathVariable UUID id) {
         Optional<Usuario> usuarioOpt = userS.listId(id);

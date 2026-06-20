@@ -1,6 +1,7 @@
 package pe.edu.upc.wasiseguro.servicesinterfaces;
 
 import pe.edu.upc.wasiseguro.dtos.IncidenteCantidadDTO;
+import pe.edu.upc.wasiseguro.dtos.IncidenteRankingDTO;
 import pe.edu.upc.wasiseguro.entities.Incidente;
 import pe.edu.upc.wasiseguro.entities.Usuario;
 
@@ -15,7 +16,7 @@ public interface IIncidenteService {
     List<Incidente> buscarPorTipo(String nombreTipo);
     List<Incidente> buscarPopulares(int minVotos);
     List<IncidenteCantidadDTO> reporteCantidades();
-    List<IncidenteCantidadDTO> reportePorUsuario();
+    List<IncidenteRankingDTO> reportePorUsuario();
     void deleteOwned(UUID idIncidente, String emailLogueado);
     void updateOwned(Incidente incidente, String emailLogueado);
     Incidente findById(UUID id);

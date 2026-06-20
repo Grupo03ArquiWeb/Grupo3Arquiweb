@@ -5,16 +5,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.context.MessageSource;
 import pe.edu.upc.wasiseguro.dtos.IncidenteCantidadDTO;
+import pe.edu.upc.wasiseguro.dtos.IncidenteRankingDTO;
 import pe.edu.upc.wasiseguro.entities.Incidente;
 import pe.edu.upc.wasiseguro.entities.Usuario;
 import pe.edu.upc.wasiseguro.repositories.IIncidenteRepository;
 import pe.edu.upc.wasiseguro.repositories.IUsuarioRepository;
 import pe.edu.upc.wasiseguro.servicesinterfaces.IIncidenteService;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class IncidenteServiceImplement implements IIncidenteService {
@@ -41,13 +40,8 @@ public class IncidenteServiceImplement implements IIncidenteService {
     public List<IncidenteCantidadDTO> reporteCantidades() { return iR.countIncidentesByType(); }
 
     @Override
-    public List<IncidenteCantidadDTO> reportePorUsuario() {
-        List<Incidente> todos = iR.findAll();
-        return todos.stream()
-                .collect(Collectors.groupingBy(i -> i.getUsuario().getNombre(), Collectors.counting()))
-                .entrySet().stream()
-                .map(entry -> new IncidenteCantidadDTO(entry.getKey(), "Ranking de Participación", entry.getValue()))
-                .collect(Collectors.toList());
+    public List<IncidenteRankingDTO> reportePorUsuario() {
+        return iR.obtenerRankingUsuarios();
     }
 
     @Override

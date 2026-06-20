@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="wasiseguro (2)" />
         <module name="wasiseguro" />
         <module name="wasiseguro (1)" />
       </profile>
@@ -15,6 +16,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="wasiseguro" options="-parameters" />
       <module name="wasiseguro (1)" options="-parameters" />
+      <module name="wasiseguro (2)" options="-parameters" />
     </option>
   </component>
 </project>
