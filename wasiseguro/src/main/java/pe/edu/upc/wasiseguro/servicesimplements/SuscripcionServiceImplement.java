@@ -2,24 +2,17 @@ package pe.edu.upc.wasiseguro.servicesimplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pe.edu.upc.wasiseguro.dtos.SuscripcionPorEstadoDTO;
-import pe.edu.upc.wasiseguro.dtos.SuscripcionPorPlanDTO;
+import pe.edu.upc.wasiseguro.dtos.SuscripcionEstadisticaPlanDTO;
+import pe.edu.upc.wasiseguro.dtos.SuscripcionEstadisticaEstadoDTO;
 import pe.edu.upc.wasiseguro.entities.Suscripcion;
 import pe.edu.upc.wasiseguro.repositories.ISuscripcionRepository;
 import pe.edu.upc.wasiseguro.servicesinterfaces.ISuscripcionService;
-import java.time.LocalDate;
-import java.util.UUID;
-import java.util.ArrayList;
-import pe.edu.upc.wasiseguro.dtos.SuscripcionVigenciaDTO;
-import java.time.LocalDate;
-import pe.edu.upc.wasiseguro.dtos.VincularPlanDTO;
-import pe.edu.upc.wasiseguro.entities.PlanSuscripcion;
-import pe.edu.upc.wasiseguro.entities.Usuario;
-import pe.edu.upc.wasiseguro.repositories.IPlanSuscripcionRepository;
-import pe.edu.upc.wasiseguro.repositories.IUsuarioRepository;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SuscripcionServiceImplement implements ISuscripcionService {
@@ -52,112 +45,48 @@ public class SuscripcionServiceImplement implements ISuscripcionService {
         sR.deleteById(id);
     }
 
-    @Autowired
-    private IUsuarioRepository uR;
-
-    @Autowired
-    private IPlanSuscripcionRepository pR;
-
     @Override
-    public List<SuscripcionPorEstadoDTO> cantidadSuscripcionesPorEstado() {
-        return sR.cantidadSuscripcionesPorEstado();
+    public List<Suscripcion> filtrarPorEstado(String estado) {
+        return sR.findAll().stream()
+                .filter(s -> s.getEstado().equalsIgnoreCase(estado))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<SuscripcionPorPlanDTO> cantidadSuscripcionesPorPlan() {
-        return sR.cantidadSuscripcionesPorPlan();
+    public List<Suscripcion> filtrarPorRangoFechas(LocalDate fechaInicio, LocalDate fechaFin) {
+        return sR.findAll().stream()
+                .filter(s -> !s.getFechaInicio().isBefore(fechaInicio) && !s.getFechaInicio().isAfter(fechaFin))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Suscripcion> filtrar(UUID idUsuario, Integer idPlan, String estado, LocalDate fechaInicio, LocalDate fechaFin) {
-        List<Suscripcion> lista = sR.findAll();
-        List<Suscripcion> listaFiltrada = new ArrayList<>();
-
-        for (Suscripcion s : lista) {
-            boolean agregar = true;
-
-            if (idUsuario != null && !s.getUsuario().getId().equals(idUsuario)) {
-                agregar = false;
-            }
-
-            if (idPlan != null && s.getPlanSuscripcion().getId() != idPlan) {
-                agregar = false;
-            }
-
-            if (estado != null && !s.getEstado().equalsIgnoreCase(estado)) {
-                agregar = false;
-            }
-
-            if (fechaInicio != null && s.getFechaInicio().isBefore(fechaInicio)) {
-                agregar = false;
-            }
-
-            if (fechaFin != null && s.getFechaFin().isAfter(fechaFin)) {
-                agregar = false;
-            }
-
-            if (agregar) {
-                listaFiltrada.add(s);
-            }
-        }
-
-        return listaFiltrada;
+    public List<SuscripcionEstadisticaEstadoDTO> estadisticasPorEstado() {
+        List<Object[]> resultados = sR.estadisticasPorEstado();
+        return resultados.stream().map(row -> {
+            SuscripcionEstadisticaEstadoDTO dto = new SuscripcionEstadisticaEstadoDTO();
+            dto.setEstado((String) row[0]);
+            dto.setCantidadSuscripciones((Long) row[1]);
+            dto.setNombrePlanConMasSuscripciones((String) row[2]);
+            dto.setPorcentaje((double) dto.getCantidadSuscripciones() * 100.0 / sR.count());
+            dto.setFechaInicioReciente((LocalDate) row[3]);
+            dto.setFechaFinReciente((LocalDate) row[4]);
+            return dto;
+        }).collect(Collectors.toList());
     }
 
+//SuscripcionEstadisticaPlanDTO pri
     @Override
-    public SuscripcionVigenciaDTO validarVigencia(int id) {
-        Optional<Suscripcion> suscripcionOpt = sR.findById(id);
-
-        if (suscripcionOpt.isEmpty()) {
-            return null;
-        }
-
-        Suscripcion s = suscripcionOpt.get();
-        SuscripcionVigenciaDTO dto = new SuscripcionVigenciaDTO();
-
-        dto.setId(s.getId());
-        dto.setNombreUsuario(s.getUsuario().getNombre());
-        dto.setPlanNombre(s.getPlanSuscripcion().getNombre());
-        dto.setFechaInicio(s.getFechaInicio());
-        dto.setFechaFin(s.getFechaFin());
-        dto.setEstadoRegistrado(s.getEstado());
-
-        LocalDate hoy = LocalDate.now();
-
-        if (hoy.isAfter(s.getFechaFin())) {
-            dto.setVigencia("vencida");
-        } else {
-            dto.setVigencia("activa");
-        }
-
-        return dto;
-    }
-
-    @Override
-    public Suscripcion vincularPlan(VincularPlanDTO dto) {
-        Optional<Suscripcion> suscripcionOpt = sR.findById(dto.getIdSuscripcion());
-        Optional<Usuario> usuarioOpt = uR.findById(dto.getIdUsuario());
-        Optional<PlanSuscripcion> planOpt = pR.findById(dto.getIdPlan());
-
-        if (suscripcionOpt.isEmpty()) {
-            return null;
-        }
-
-        if (usuarioOpt.isEmpty()) {
-            return null;
-        }
-
-        if (planOpt.isEmpty()) {
-            return null;
-        }
-
-        Suscripcion suscripcion = suscripcionOpt.get();
-
-        if (!suscripcion.getUsuario().getId().equals(dto.getIdUsuario())) {
-            return null;
-        }
-
-        suscripcion.setPlanSuscripcion(planOpt.get());
-        return sR.save(suscripcion);
+    public List<SuscripcionEstadisticaPlanDTO> estadisticasPorPlan() {
+        List<Object[]> resultados = sR.estadisticasPorPlan();
+        return resultados.stream().map(row -> {
+            SuscripcionEstadisticaPlanDTO dto = new SuscripcionEstadisticaPlanDTO();
+            dto.setNombrePlan((String) row[0]);
+            dto.setCantidadSuscripciones((Long) row[1]);
+            dto.setPrecioMensual((BigDecimal) row[2]);
+            dto.setPrecioAnual((BigDecimal) row[3]);
+            dto.setTotalIngresosMensuales((BigDecimal) row[4]);
+            dto.setPlanActivo((Boolean) row[5]);
+            return dto;
+        }).collect(Collectors.toList());
     }
 }

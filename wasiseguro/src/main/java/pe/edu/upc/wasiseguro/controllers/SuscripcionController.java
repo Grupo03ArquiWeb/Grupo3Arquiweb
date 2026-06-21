@@ -3,23 +3,20 @@ package pe.edu.upc.wasiseguro.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.wasiseguro.dtos.SuscripcionCreateDTO;
 import pe.edu.upc.wasiseguro.dtos.SuscripcionDTO;
-import pe.edu.upc.wasiseguro.dtos.SuscripcionPorEstadoDTO;
-import pe.edu.upc.wasiseguro.dtos.SuscripcionPorPlanDTO;
+import pe.edu.upc.wasiseguro.dtos.SuscripcionEstadisticaPlanDTO;
+import pe.edu.upc.wasiseguro.dtos.SuscripcionEstadisticaEstadoDTO;
 import pe.edu.upc.wasiseguro.entities.PlanSuscripcion;
 import pe.edu.upc.wasiseguro.entities.Suscripcion;
 import pe.edu.upc.wasiseguro.entities.Usuario;
-import pe.edu.upc.wasiseguro.dtos.VincularPlanDTO;
 import pe.edu.upc.wasiseguro.repositories.IPlanSuscripcionRepository;
 import pe.edu.upc.wasiseguro.repositories.IUsuarioRepository;
 import pe.edu.upc.wasiseguro.servicesinterfaces.ISuscripcionService;
-import org.modelmapper.ModelMapper;
-import java.time.LocalDate;
-import java.util.UUID;
-import pe.edu.upc.wasiseguro.dtos.SuscripcionVigenciaDTO;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,6 +34,7 @@ public class SuscripcionController {
     @Autowired
     private IPlanSuscripcionRepository pR;
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/registrar")
     public ResponseEntity<?> registrar(@RequestBody SuscripcionCreateDTO dto) {
         Optional<Usuario> usuarioOpt = uR.findById(dto.getIdUsuario());
@@ -73,6 +71,7 @@ public class SuscripcionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/actualizar/{id}")
     public ResponseEntity<?> actualizar(@PathVariable int id, @RequestBody SuscripcionCreateDTO dto) {
         Optional<Suscripcion> suscripcionOpt = sS.listId(id);
@@ -102,6 +101,7 @@ public class SuscripcionController {
         return ResponseEntity.ok("Suscripcion actualizada correctamente");
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<String> eliminar(@PathVariable int id) {
         Optional<Suscripcion> suscripcionOpt = sS.listId(id);
@@ -133,92 +133,83 @@ public class SuscripcionController {
         return ResponseEntity.ok(lista);
     }
 
-    @GetMapping("/cantidad-por-estado")
-    public ResponseEntity<List<SuscripcionPorEstadoDTO>> cantidadPorEstado() {
-        return ResponseEntity.ok(sS.cantidadSuscripcionesPorEstado());
-    }
-
-    @GetMapping("/cantidad-por-plan")
-    public ResponseEntity<List<SuscripcionPorPlanDTO>> cantidadPorPlan() {
-        return ResponseEntity.ok(sS.cantidadSuscripcionesPorPlan());
-    }
-
-    @GetMapping("/filtrar")
-    public ResponseEntity<List<SuscripcionDTO>> filtrar(
-            @RequestParam(required = false) UUID idUsuario,
-            @RequestParam(required = false) Integer idPlan,
-            @RequestParam(required = false) String estado,
-            @RequestParam(required = false) LocalDate fechaInicio,
-            @RequestParam(required = false) LocalDate fechaFin
-    ) {
-        ModelMapper m = new ModelMapper();
-
-        List<SuscripcionDTO> lista = sS.filtrar(idUsuario, idPlan, estado, fechaInicio, fechaFin)
-                .stream()
-                .map(s -> {
-                    SuscripcionDTO dto = m.map(s, SuscripcionDTO.class);
-                    dto.setIdUsuario(s.getUsuario().getId());
-                    dto.setNombreUsuario(s.getUsuario().getNombre());
-                    dto.setIdPlan(s.getPlanSuscripcion().getId());
-                    dto.setPlanNombre(s.getPlanSuscripcion().getNombre());
-                    dto.setPrecioMensual(s.getPlanSuscripcion().getPrecioMensual());
-                    return dto;
-                })
-                .collect(Collectors.toList());
+    @GetMapping("/filtrar/estado/{estado}")
+    public ResponseEntity<List<SuscripcionDTO>> filtrarPorEstado(@PathVariable String estado) {
+        List<SuscripcionDTO> lista = sS.filtrarPorEstado(estado).stream().map(s -> {
+            SuscripcionDTO dto = new SuscripcionDTO();
+            dto.setId(s.getId());
+            dto.setIdUsuario(s.getUsuario().getId());
+            dto.setNombreUsuario(s.getUsuario().getNombre());
+            dto.setIdPlan(s.getPlanSuscripcion().getId());
+            dto.setPlanNombre(s.getPlanSuscripcion().getNombre());
+            dto.setPrecioMensual(s.getPlanSuscripcion().getPrecioMensual());
+            dto.setFechaInicio(s.getFechaInicio());
+            dto.setFechaFin(s.getFechaFin());
+            dto.setEstado(s.getEstado());
+            return dto;
+        }).collect(Collectors.toList());
 
         return ResponseEntity.ok(lista);
     }
 
-    @GetMapping("/validar-vigencia/{id}")
-    public ResponseEntity<?> validarVigencia(@PathVariable int id) {
-        SuscripcionVigenciaDTO dto = sS.validarVigencia(id);
+    @GetMapping("/filtrar/fechas")
+    public ResponseEntity<?> filtrarPorRangoFechas(
+            @RequestParam LocalDate fechaInicio,
+            @RequestParam LocalDate fechaFin) {
 
-        if (dto == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Suscripcion no encontrada");
+        if (fechaInicio.isAfter(fechaFin)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("La fecha de inicio no puede ser mayor que la fecha fin");
         }
 
-        return ResponseEntity.ok(dto);
+        List<SuscripcionDTO> lista = sS.filtrarPorRangoFechas(fechaInicio, fechaFin).stream().map(s -> {
+            SuscripcionDTO dto = new SuscripcionDTO();
+            dto.setId(s.getId());
+            dto.setIdUsuario(s.getUsuario().getId());
+            dto.setNombreUsuario(s.getUsuario().getNombre());
+            dto.setIdPlan(s.getPlanSuscripcion().getId());
+            dto.setPlanNombre(s.getPlanSuscripcion().getNombre());
+            dto.setPrecioMensual(s.getPlanSuscripcion().getPrecioMensual());
+            dto.setFechaInicio(s.getFechaInicio());
+            dto.setFechaFin(s.getFechaFin());
+            dto.setEstado(s.getEstado());
+            return dto;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(lista);
     }
 
-    @PostMapping("/vincular-plan")
-    public ResponseEntity<?> vincularPlan(@RequestBody VincularPlanDTO dto) {
-        Optional<Suscripcion> suscripcionOpt = sS.listId(dto.getIdSuscripcion());
+    @GetMapping("/{id}")
+    public ResponseEntity<?> buscarPorId(@PathVariable int id) {
+        Optional<Suscripcion> suscripcionOpt = sS.listId(id);
 
         if (suscripcionOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Suscripcion no encontrada");
         }
 
-        Optional<Usuario> usuarioOpt = uR.findById(dto.getIdUsuario());
-        if (usuarioOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
-        }
+        Suscripcion s = suscripcionOpt.get();
 
-        Optional<PlanSuscripcion> planOpt = pR.findById(dto.getIdPlan());
-        if (planOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PlanSuscripcion no encontrado");
-        }
+        SuscripcionDTO dto = new SuscripcionDTO();
+        dto.setId(s.getId());
+        dto.setIdUsuario(s.getUsuario().getId());
+        dto.setNombreUsuario(s.getUsuario().getNombre());
+        dto.setIdPlan(s.getPlanSuscripcion().getId());
+        dto.setPlanNombre(s.getPlanSuscripcion().getNombre());
+        dto.setPrecioMensual(s.getPlanSuscripcion().getPrecioMensual());
+        dto.setFechaInicio(s.getFechaInicio());
+        dto.setFechaFin(s.getFechaFin());
+        dto.setEstado(s.getEstado());
 
-        Suscripcion suscripcion = suscripcionOpt.get();
+        return ResponseEntity.ok(dto);
+    }
 
-        if (!suscripcion.getUsuario().getId().equals(dto.getIdUsuario())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("La suscripcion no pertenece al usuario enviado");
-        }
+    @GetMapping("/estadisticas/estado")
+    public ResponseEntity<List<SuscripcionEstadisticaEstadoDTO>> estadisticasPorEstado() {
+        return ResponseEntity.ok(sS.estadisticasPorEstado());
+    }
 
-        suscripcion.setPlanSuscripcion(planOpt.get());
-        sS.update(suscripcion);
-
-        SuscripcionDTO responseDTO = new SuscripcionDTO();
-        responseDTO.setId(suscripcion.getId());
-        responseDTO.setIdUsuario(suscripcion.getUsuario().getId());
-        responseDTO.setNombreUsuario(suscripcion.getUsuario().getNombre());
-        responseDTO.setIdPlan(suscripcion.getPlanSuscripcion().getId());
-        responseDTO.setPlanNombre(suscripcion.getPlanSuscripcion().getNombre());
-        responseDTO.setPrecioMensual(suscripcion.getPlanSuscripcion().getPrecioMensual());
-        responseDTO.setFechaInicio(suscripcion.getFechaInicio());
-        responseDTO.setFechaFin(suscripcion.getFechaFin());
-        responseDTO.setEstado(suscripcion.getEstado());
-
-        return ResponseEntity.ok(responseDTO);
+    @GetMapping("/estadisticas/plan")
+    public ResponseEntity<List<SuscripcionEstadisticaPlanDTO>> estadisticasPorPlan() {
+        return ResponseEntity.ok(sS.estadisticasPorPlan());
     }
 }
