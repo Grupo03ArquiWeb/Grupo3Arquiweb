@@ -179,6 +179,30 @@ public class SuscripcionController {
         return ResponseEntity.ok(lista);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> buscarPorId(@PathVariable int id) {
+        Optional<Suscripcion> suscripcionOpt = sS.listId(id);
+
+        if (suscripcionOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Suscripcion no encontrada");
+        }
+
+        Suscripcion s = suscripcionOpt.get();
+
+        SuscripcionDTO dto = new SuscripcionDTO();
+        dto.setId(s.getId());
+        dto.setIdUsuario(s.getUsuario().getId());
+        dto.setNombreUsuario(s.getUsuario().getNombre());
+        dto.setIdPlan(s.getPlanSuscripcion().getId());
+        dto.setPlanNombre(s.getPlanSuscripcion().getNombre());
+        dto.setPrecioMensual(s.getPlanSuscripcion().getPrecioMensual());
+        dto.setFechaInicio(s.getFechaInicio());
+        dto.setFechaFin(s.getFechaFin());
+        dto.setEstado(s.getEstado());
+
+        return ResponseEntity.ok(dto);
+    }
+
     @GetMapping("/estadisticas/estado")
     public ResponseEntity<List<SuscripcionEstadisticaEstadoDTO>> estadisticasPorEstado() {
         return ResponseEntity.ok(sS.estadisticasPorEstado());
