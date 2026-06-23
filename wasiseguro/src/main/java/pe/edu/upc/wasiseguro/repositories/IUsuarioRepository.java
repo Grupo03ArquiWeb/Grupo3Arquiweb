@@ -13,6 +13,7 @@ import java.util.UUID;
 @Repository
 public interface IUsuarioRepository extends JpaRepository<Usuario, UUID> {
 
+//Usuario findByEmail(String email); sirve para facebook tmb
     // Filtros
     Usuario findByEmail(String email);
     boolean existsByEmail(String email);

@@ -18,4 +18,6 @@ public interface IUsuarioService {
     List<Usuario> buscarPorDominio(String dominio);
     // Query
     List<Usuario> buscarUsuariosInactivos(int dias);
+    //facebook api
+    Usuario buscarPorEmail(String email);
 }

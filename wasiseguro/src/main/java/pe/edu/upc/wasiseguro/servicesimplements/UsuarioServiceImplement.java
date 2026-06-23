@@ -61,4 +61,10 @@ public class UsuarioServiceImplement implements IUsuarioService {
     public List<Usuario> buscarUsuariosInactivos(int dias) {
         return userR.buscarUsuariosInactivos(dias);
     }
+
+    //facebook api
+    @Override
+    public Usuario buscarPorEmail(String email) {
+        return userR.findByEmail(email);
+    }
 }

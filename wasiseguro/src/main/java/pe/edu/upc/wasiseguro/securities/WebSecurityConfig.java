@@ -63,6 +63,7 @@ public class WebSecurityConfig {
                         //no requiere token rutas
                         .requestMatchers(
                                 "/login",
+                                "/facebook",
                                 "/api/usuario/crear",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",

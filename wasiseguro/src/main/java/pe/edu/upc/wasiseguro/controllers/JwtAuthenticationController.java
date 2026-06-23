@@ -15,7 +15,8 @@ import pe.edu.upc.wasiseguro.dtos.JwtRequestDTO;
 import pe.edu.upc.wasiseguro.dtos.JwtResponseDTO;
 import pe.edu.upc.wasiseguro.securities.JwtTokenUtil;
 import pe.edu.upc.wasiseguro.servicesimplements.JwtUserDetailsService;
-
+import pe.edu.upc.wasiseguro.dtos.FacebookTokenDTO; // <-- Importante
+import pe.edu.upc.wasiseguro.servicesinterfaces.IFacebookService; // <-- Importante
 @RestController
 @CrossOrigin
 public class JwtAuthenticationController {
@@ -28,12 +29,24 @@ public class JwtAuthenticationController {
     private JwtUserDetailsService userDetailsService;
 
 
+    // Inyectamos el nuevo servicio de Facebook
+    @Autowired
+    private IFacebookService facebookService;
+
     @PostMapping("/login")
     public ResponseEntity<JwtResponseDTO> login(@RequestBody JwtRequestDTO req) throws Exception {
         authenticate(req.getEmail(), req.getPassword());
         final UserDetails userDetails = userDetailsService.loadUserByUsername(req.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponseDTO(token));
+    }
+
+    // NUEVO ENDPOINT PARA FACEBOOK
+    @PostMapping("/facebook")
+    public ResponseEntity<JwtResponseDTO> facebookLogin(@RequestBody FacebookTokenDTO tokenDTO) {
+        // El servicio de Facebook valida el token de Meta y devuelve un JWT propio de WasiSeguro
+        String jwt = facebookService.loginWithFacebook(tokenDTO.getToken());
+        return ResponseEntity.ok(new JwtResponseDTO(jwt));
     }
 
     private void authenticate(String username, String password) throws Exception {
