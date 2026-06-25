@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.upc.wasiseguro.dtos.RolListDTO;
 import pe.edu.upc.wasiseguro.dtos.UsuarioCreateDTO;
 import pe.edu.upc.wasiseguro.dtos.UsuarioListDTO;
 import pe.edu.upc.wasiseguro.dtos.UsuarioUpdateDTO;
@@ -105,6 +106,8 @@ public class UsuarioController {
         user.setApellido(dto.getApellido());
         user.setEmail(dto.getEmail());
         user.setTelefono(dto.getTelefono());
+        user.setFotoPerfil(dto.getFotoPerfil());
+        user.setIdioma(dto.getIdioma());
         Optional<Rol> rolOpt = rolR.findById(dto.getIdRol());
         if (rolOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -125,6 +128,29 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Usuario no encontrado");
         }
+    }
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MODERADOR')")
+    @GetMapping("/{id}")
+    public ResponseEntity<?> buscarPorId(@PathVariable UUID id) {
+        Optional<Usuario> usr = userS.listId(id);
+
+        if (usr.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No encontrado");
+        }
+
+        ModelMapper m = new ModelMapper();
+        Usuario usuario = usr.get();
+
+        UsuarioListDTO dto = m.map(usuario, UsuarioListDTO.class);
+
+        dto.setIdRol(usuario.getRol().getId());
+
+        if (usuario.getContactoConfianza() != null) {
+            dto.setContactoConfianza(usuario.getContactoConfianza().getId());
+        }
+
+        return ResponseEntity.ok(dto);
     }
     //Filtro 1
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MODERADOR')")
