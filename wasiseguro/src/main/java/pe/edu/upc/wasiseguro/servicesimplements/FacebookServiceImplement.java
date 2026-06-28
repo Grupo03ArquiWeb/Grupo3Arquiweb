@@ -68,7 +68,7 @@ public class FacebookServiceImplement implements IFacebookService {
                 // Si tú ya te registraste como Fabian con Facebook, tu usuario ya existe en la base de datos con el rol 3.
                 // Para probar este cambio, debes borrar tu usuario de la tabla de usuarios en tu base de datos (o usar un correo nuevo para
                 // registrarte por primera vez) y así verás que ahora el sistema te asigna el rol 1. LO DEJO COMO ROL 3 POR AHORA usuario
-                Rol rolBasico = rolRepository.findById(3).orElse(null);
+                Rol rolBasico = rolRepository.findById(1).orElse(null);
                 usuario.setRol(rolBasico);
 
                 usuarioService.insert(usuario);
