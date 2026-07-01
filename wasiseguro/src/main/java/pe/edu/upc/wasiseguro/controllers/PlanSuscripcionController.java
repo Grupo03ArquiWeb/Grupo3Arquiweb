@@ -29,6 +29,7 @@ public class PlanSuscripcionController {
         pS.insertar(p);
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MODERADOR')")
     @GetMapping("/listar")
     public List<PlanSuscripcionDTO> listar() {
         return pS.listar().stream().map(x -> {
@@ -37,13 +38,14 @@ public class PlanSuscripcionController {
         }).collect(Collectors.toList());
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MODERADOR')")
     @GetMapping("/{id}")
     public PlanSuscripcionDTO listarId(@PathVariable("id") int id) {
         ModelMapper m = new ModelMapper();
         return m.map(pS.listarId(id), PlanSuscripcionDTO.class);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MODERADOR')")
     @PutMapping("/actualizar")
     public void actualizar(@RequestBody PlanSuscripcionDTO dto) {
         ModelMapper m = new ModelMapper();

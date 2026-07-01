@@ -71,7 +71,7 @@ public class SuscripcionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MODERADOR')")
     @PutMapping("/actualizar/{id}")
     public ResponseEntity<?> actualizar(@PathVariable int id, @RequestBody SuscripcionCreateDTO dto) {
         Optional<Suscripcion> suscripcionOpt = sS.listId(id);
@@ -114,6 +114,7 @@ public class SuscripcionController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MODERADOR')")
     @GetMapping("/listar")
     public ResponseEntity<List<SuscripcionDTO>> listar() {
         List<SuscripcionDTO> lista = sS.list().stream().map(s -> {
@@ -133,6 +134,7 @@ public class SuscripcionController {
         return ResponseEntity.ok(lista);
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MODERADOR')")
     @GetMapping("/filtrar/estado/{estado}")
     public ResponseEntity<List<SuscripcionDTO>> filtrarPorEstado(@PathVariable String estado) {
         List<SuscripcionDTO> lista = sS.filtrarPorEstado(estado).stream().map(s -> {
@@ -152,6 +154,7 @@ public class SuscripcionController {
         return ResponseEntity.ok(lista);
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MODERADOR')")
     @GetMapping("/filtrar/fechas")
     public ResponseEntity<?> filtrarPorRangoFechas(
             @RequestParam LocalDate fechaInicio,
@@ -179,6 +182,7 @@ public class SuscripcionController {
         return ResponseEntity.ok(lista);
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MODERADOR')")
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable int id) {
         Optional<Suscripcion> suscripcionOpt = sS.listId(id);
@@ -203,11 +207,13 @@ public class SuscripcionController {
         return ResponseEntity.ok(dto);
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MODERADOR')")
     @GetMapping("/estadisticas/estado")
     public ResponseEntity<List<SuscripcionEstadisticaEstadoDTO>> estadisticasPorEstado() {
         return ResponseEntity.ok(sS.estadisticasPorEstado());
     }
 
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MODERADOR')")
     @GetMapping("/estadisticas/plan")
     public ResponseEntity<List<SuscripcionEstadisticaPlanDTO>> estadisticasPorPlan() {
         return ResponseEntity.ok(sS.estadisticasPorPlan());
