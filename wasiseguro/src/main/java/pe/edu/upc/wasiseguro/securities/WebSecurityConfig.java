@@ -74,6 +74,10 @@ public class WebSecurityConfig {
                                 "/api/rol/buscarnombre",
                                 "/api/rol/buscarporactivo"
                         ).hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERADOR")
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/usuario/estadisticas/estado",
+                                "/api/usuario/estadisticas/idioma"
+                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERADOR")
                         .requestMatchers(HttpMethod.POST, "/api/rol/crear").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/rol/actualizar/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/rol/**").hasAuthority("ROLE_ADMIN")

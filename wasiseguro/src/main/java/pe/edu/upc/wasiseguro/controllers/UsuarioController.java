@@ -7,10 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.upc.wasiseguro.dtos.RolListDTO;
-import pe.edu.upc.wasiseguro.dtos.UsuarioCreateDTO;
-import pe.edu.upc.wasiseguro.dtos.UsuarioListDTO;
-import pe.edu.upc.wasiseguro.dtos.UsuarioUpdateDTO;
+import pe.edu.upc.wasiseguro.dtos.*;
 import pe.edu.upc.wasiseguro.entities.Rol;
 import pe.edu.upc.wasiseguro.entities.Usuario;
 import pe.edu.upc.wasiseguro.repositories.IRolRepository;
@@ -152,6 +149,18 @@ public class UsuarioController {
 
         return ResponseEntity.ok(dto);
     }
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MODERADOR')")
+    @GetMapping("/estadisticas/estado")
+    public ResponseEntity<List<UsuarioEstadisticaEstadoDTO>> estadisticasPorEstado() {
+        return ResponseEntity.ok(userS.estadisticasPorEstado());
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MODERADOR')")
+    @GetMapping("/estadisticas/idioma")
+    public ResponseEntity<List<UsuarioEstadisticaIdiomaDTO>> estadisticasPorIdioma() {
+        return ResponseEntity.ok(userS.estadisticasPorIdioma());
+    }
+
     //Filtro 1
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MODERADOR')")
     @GetMapping("/buscarnombre")
