@@ -34,4 +34,11 @@ public interface IUsuarioRepository extends JpaRepository<Usuario, UUID> {
     ORDER BY u.updated_at ASC
 """, nativeQuery = true)
     List<Usuario> buscarUsuariosInactivos(@Param("dias") int dias);
+
+    @Query("SELECT CASE WHEN u.activo = true THEN 'Activo' ELSE 'Inactivo' END, COUNT(u) " +
+            "FROM Usuario u GROUP BY u.activo")
+    List<Object[]> estadisticasPorEstado();
+
+    @Query("SELECT u.idioma, COUNT(u) FROM Usuario u GROUP BY u.idioma")
+    List<Object[]> estadisticasPorIdioma();
 }

@@ -2,6 +2,8 @@ package pe.edu.upc.wasiseguro.servicesimplements;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pe.edu.upc.wasiseguro.dtos.UsuarioEstadisticaEstadoDTO;
+import pe.edu.upc.wasiseguro.dtos.UsuarioEstadisticaIdiomaDTO;
 import pe.edu.upc.wasiseguro.entities.Usuario;
 import pe.edu.upc.wasiseguro.repositories.IUsuarioRepository;
 import pe.edu.upc.wasiseguro.servicesinterfaces.IUsuarioService;
@@ -9,6 +11,7 @@ import pe.edu.upc.wasiseguro.servicesinterfaces.IUsuarioService;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioServiceImplement implements IUsuarioService {
@@ -66,5 +69,19 @@ public class UsuarioServiceImplement implements IUsuarioService {
     @Override
     public Usuario buscarPorEmail(String email) {
         return userR.findByEmail(email);
+    }
+
+    @Override
+    public List<UsuarioEstadisticaEstadoDTO> estadisticasPorEstado() {
+        return userR.estadisticasPorEstado().stream()
+                .map(row -> new UsuarioEstadisticaEstadoDTO((String) row[0], (Long) row[1]))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UsuarioEstadisticaIdiomaDTO> estadisticasPorIdioma() {
+        return userR.estadisticasPorIdioma().stream()
+                .map(row -> new UsuarioEstadisticaIdiomaDTO((String) row[0], (Long) row[1]))
+                .collect(Collectors.toList());
     }
 }

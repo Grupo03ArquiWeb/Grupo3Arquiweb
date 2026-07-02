@@ -1,5 +1,7 @@
 package pe.edu.upc.wasiseguro.servicesinterfaces;
 
+import pe.edu.upc.wasiseguro.dtos.UsuarioEstadisticaEstadoDTO;
+import pe.edu.upc.wasiseguro.dtos.UsuarioEstadisticaIdiomaDTO;
 import pe.edu.upc.wasiseguro.entities.Usuario;
 
 import java.util.List;
@@ -20,4 +22,7 @@ public interface IUsuarioService {
     List<Usuario> buscarUsuariosInactivos(int dias);
     //facebook api
     Usuario buscarPorEmail(String email);
+
+    List<UsuarioEstadisticaEstadoDTO> estadisticasPorEstado();
+    List<UsuarioEstadisticaIdiomaDTO> estadisticasPorIdioma();
 }
