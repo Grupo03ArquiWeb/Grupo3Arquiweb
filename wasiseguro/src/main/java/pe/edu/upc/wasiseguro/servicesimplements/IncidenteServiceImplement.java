@@ -25,24 +25,36 @@ public class IncidenteServiceImplement implements IIncidenteService {
     private MessageSource messageSource;
 
     @Override
-    public void insert(Incidente incidente) { iR.save(incidente); }
+    public void insert(Incidente incidente) {
+        if (incidente.getEstado() == null || incidente.getEstado().isEmpty()) {
+            incidente.setEstado("PENDIENTE");
+        }
+        if (incidente.getFechaOcurrido() == null) {
+            incidente.setFechaOcurrido(java.time.OffsetDateTime.now());
+        }
+        iR.save(incidente);
+    }
+
     @Override
     public List<Incidente> list() { return iR.findAllByOrderByFechaOcurridoDesc(); }
+
     @Override
     public void delete(UUID idIncidente) { iR.deleteById(idIncidente); }
+
     @Override
     public List<Incidente> buscarPorEstado(String estado) { return iR.findByEstado(estado); }
+
     @Override
     public List<Incidente> buscarPorTipo(String nombreTipo) { return iR.findByTipoIncidenteNombre(nombreTipo); }
+
     @Override
     public List<Incidente> buscarPopulares(int minVotos) { return iR.findByVotosValidoGreaterThan(minVotos); }
+
     @Override
     public List<IncidenteCantidadDTO> reporteCantidades() { return iR.countIncidentesByType(); }
 
     @Override
-    public List<IncidenteRankingDTO> reportePorUsuario() {
-        return iR.obtenerRankingUsuarios();
-    }
+    public List<IncidenteRankingDTO> reportePorUsuario() { return iR.obtenerRankingUsuarios(); }
 
     @Override
     public Incidente findById(UUID id) { return iR.findById(id).orElse(new Incidente()); }
@@ -60,6 +72,9 @@ public class IncidenteServiceImplement implements IIncidenteService {
         if (original != null && original.getUsuario().getEmail().equals(emailLogueado)) {
             original.setDescripcion(incidente.getDescripcion());
             original.setFotoUrl(incidente.getFotoUrl());
+            original.setEstado(incidente.getEstado());
+            original.setLatitud(incidente.getLatitud());
+            original.setLongitud(incidente.getLongitud());
             iR.save(original);
         }
     }
@@ -72,7 +87,8 @@ public class IncidenteServiceImplement implements IIncidenteService {
             inc.getUsuariosVotantes().add(emailVotante);
             if (esPositivo) inc.setVotosValido(inc.getVotosValido() + 1);
             else inc.setVotosInvalido(inc.getVotosInvalido() + 1);
-            if (inc.getVotosInvalido() >= 3) inc.setEstado("FALSO / VERIFICAR");
+
+            if (inc.getVotosInvalido() >= 3) inc.setEstado("PENDIENTE");
             iR.save(inc);
         }
     }

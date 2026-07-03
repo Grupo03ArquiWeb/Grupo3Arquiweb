@@ -31,18 +31,43 @@ public class IncidenteController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     @PostMapping("/crear")
-    public void registrar(@Valid @RequestBody IncidenteDTO dto) {
+    public void registrar(@Valid @RequestBody IncidenteDTO dto, Authentication authentication) {
+        Usuario u = uR.findByEmail(authentication.getName());
         ModelMapper m = new ModelMapper();
         Incidente i = m.map(dto, Incidente.class);
+        i.setUsuario(u);
         iS.insert(i);
     }
 
     @GetMapping("/listar")
     public List<IncidenteDTO> listar() {
+        ModelMapper m = new ModelMapper();
         return iS.list().stream().map(y -> {
-            ModelMapper m = new ModelMapper();
-            return m.map(y, IncidenteDTO.class);
+            IncidenteDTO dto = m.map(y, IncidenteDTO.class);
+            if (y.getUsuario() != null) {
+                dto.setNombreUsuario(y.getUsuario().getNombre() + " " + y.getUsuario().getApellido());
+                dto.setEmailUsuario(y.getUsuario().getEmail());
+            }
+            if (y.getTipoIncidente() != null) {
+                dto.setTipoIncidenteNombre(y.getTipoIncidente().getNombre());
+            }
+            return dto;
         }).collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}")
+    public IncidenteDTO listarPorId(@PathVariable("id") UUID id) {
+        ModelMapper m = new ModelMapper();
+        Incidente i = iS.findById(id);
+        IncidenteDTO dto = m.map(i, IncidenteDTO.class);
+        if (i.getUsuario() != null) {
+            dto.setNombreUsuario(i.getUsuario().getNombre() + " " + i.getUsuario().getApellido());
+            dto.setEmailUsuario(i.getUsuario().getEmail());
+        }
+        if (i.getTipoIncidente() != null) {
+            dto.setTipoIncidenteNombre(i.getTipoIncidente().getNombre());
+        }
+        return dto;
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -53,28 +78,36 @@ public class IncidenteController {
 
     @GetMapping("/buscarestado")
     public List<IncidenteDTO> buscarPorEstado(@RequestParam String e) {
+        ModelMapper m = new ModelMapper();
         return iS.buscarPorEstado(e).stream().map(y -> {
-            ModelMapper m = new ModelMapper();
-            return m.map(y, IncidenteDTO.class);
+            IncidenteDTO dto = m.map(y, IncidenteDTO.class);
+            if (y.getUsuario() != null) {
+                dto.setNombreUsuario(y.getUsuario().getNombre() + " " + y.getUsuario().getApellido());
+                dto.setEmailUsuario(y.getUsuario().getEmail());
+            }
+            return dto;
         }).collect(Collectors.toList());
     }
 
     @GetMapping("/buscartipo")
     public List<IncidenteDTO> buscarPorTipo(@RequestParam String t) {
+        ModelMapper m = new ModelMapper();
         return iS.buscarPorTipo(t).stream().map(y -> {
-            ModelMapper m = new ModelMapper();
-            return m.map(y, IncidenteDTO.class);
+            IncidenteDTO dto = m.map(y, IncidenteDTO.class);
+            if (y.getUsuario() != null) {
+                dto.setNombreUsuario(y.getUsuario().getNombre() + " " + y.getUsuario().getApellido());
+                dto.setEmailUsuario(y.getUsuario().getEmail());
+            }
+            return dto;
         }).collect(Collectors.toList());
     }
 
-    // Reporte US49: Cantidades por Tipo y Estado
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/reporte-cantidades")
     public List<IncidenteCantidadDTO> obtenerReporte() {
         return iS.reporteCantidades();
     }
 
-    // Reporte US43: Ranking de Usuarios Pro (5 datos)
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/reporte-usuarios")
     public List<IncidenteRankingDTO> reportePorUsuarios() {
