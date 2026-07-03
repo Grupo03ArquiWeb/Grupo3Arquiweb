@@ -19,7 +19,7 @@ public interface ITipoIncidenteRepository extends JpaRepository<TipoIncidente, I
     List<TipoIncidentePorEstadoDTO> cantidadPorEstado();
 
     @Query("SELECT t.nombre, t.descripcion, COUNT(i), " +
-            "SUM(CASE WHEN i.estado = 'resuelto' THEN 1 ELSE 0 END), " +
+            "SUM(CASE WHEN i.estado = 'ACTIVO' THEN 1 ELSE 0 END), " +
             "SUM(CASE WHEN i.estado = 'pendiente' THEN 1 ELSE 0 END) " +
             "FROM TipoIncidente t LEFT JOIN Incidente i ON t.id = i.tipoIncidente.id " +
             "GROUP BY t.id, t.nombre, t.descripcion ORDER BY COUNT(i) DESC")

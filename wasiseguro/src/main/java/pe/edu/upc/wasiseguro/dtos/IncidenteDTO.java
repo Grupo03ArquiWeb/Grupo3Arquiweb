@@ -22,6 +22,13 @@ public class IncidenteDTO {
     private Double longitud;
     private String fotoUrl;
     private OffsetDateTime fechaOcurrido;
+    private String estado;
+    private int votosValido;
+    private int votosInvalido;
+    private boolean esAnonimo;
+    private String nombreUsuario;
+    private String tipoIncidenteNombre;
+    private String emailUsuario;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public String getFechaFormateada() {
@@ -30,11 +37,6 @@ public class IncidenteDTO {
                 .withZone(java.time.ZoneId.of("America/Lima"));
         return this.fechaOcurrido.format(formatter);
     }
-
-    private String estado;
-    private int votosValido;
-    private int votosInvalido;
-    private boolean esAnonimo;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     public String getAutorVisible() {
@@ -70,4 +72,10 @@ public class IncidenteDTO {
     public void setVotosInvalido(int votosInvalido) { this.votosInvalido = votosInvalido; }
     public boolean isEsAnonimo() { return esAnonimo; }
     public void setEsAnonimo(boolean esAnonimo) { this.esAnonimo = esAnonimo; }
+    public String getNombreUsuario() { return nombreUsuario; }
+    public void setNombreUsuario(String nombreUsuario) { this.nombreUsuario = nombreUsuario; }
+    public String getTipoIncidenteNombre() { return tipoIncidenteNombre; }
+    public void setTipoIncidenteNombre(String tipoIncidenteNombre) { this.tipoIncidenteNombre = tipoIncidenteNombre; }
+    public String getEmailUsuario() { return emailUsuario; }
+    public void setEmailUsuario(String emailUsuario) { this.emailUsuario = emailUsuario; }
 }
