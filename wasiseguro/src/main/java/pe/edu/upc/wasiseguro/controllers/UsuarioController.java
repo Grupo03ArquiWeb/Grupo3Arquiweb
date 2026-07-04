@@ -36,8 +36,8 @@ public class UsuarioController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("listar")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MODERADOR')")
     public ResponseEntity<List<UsuarioListDTO>> listar(){
         ModelMapper m= new ModelMapper();
         List<UsuarioListDTO>listaUsers=userS.list().stream()
@@ -54,6 +54,7 @@ public class UsuarioController {
     }
     // US01 - Registro básico por correo
     @PostMapping("/crear")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> registrar(@RequestBody UsuarioCreateDTO dto){
         if (userR.existsByEmail(dto.getEmail())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -85,7 +86,7 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     // US06 - Actualizar datos básicos + foto de perfil
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MODERADOR', 'ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/actualizar/{id}")
     public ResponseEntity<String> actualizar(@PathVariable UUID id, @RequestBody UsuarioUpdateDTO dto)  {
         Optional<Usuario> existente = userS.listId(id);

@@ -85,7 +85,7 @@ public class WebSecurityConfig {
 
                         .requestMatchers(HttpMethod.PUT,
                                 "/api/usuario/actualizar/**"
-                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_USER")
+                        ).hasAnyAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PATCH,
                                 "/api/usuario/*/contacto-confianza"
                         ).hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERADOR", "ROLE_USER")
