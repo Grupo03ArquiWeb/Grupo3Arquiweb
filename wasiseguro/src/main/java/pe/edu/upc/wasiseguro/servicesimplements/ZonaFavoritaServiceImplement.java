@@ -19,6 +19,11 @@ public class ZonaFavoritaServiceImplement implements IZonaFavoritaService {
     }
 
     @Override
+    public void update(ZonaFavorita zonaFavorita) {
+        zR.save(zonaFavorita);
+    }
+
+    @Override
     public List<ZonaFavorita> list() {
         return zR.findAll();
     }

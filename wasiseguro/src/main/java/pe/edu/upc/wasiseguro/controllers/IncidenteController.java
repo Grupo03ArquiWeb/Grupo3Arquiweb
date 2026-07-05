@@ -10,8 +10,10 @@ import pe.edu.upc.wasiseguro.dtos.IncidenteCantidadDTO;
 import pe.edu.upc.wasiseguro.dtos.IncidenteDTO;
 import pe.edu.upc.wasiseguro.dtos.IncidenteRankingDTO;
 import pe.edu.upc.wasiseguro.entities.Incidente;
+import pe.edu.upc.wasiseguro.entities.TipoIncidente;
 import pe.edu.upc.wasiseguro.entities.Usuario;
 import pe.edu.upc.wasiseguro.repositories.IUsuarioRepository;
+import pe.edu.upc.wasiseguro.repositories.ITipoIncidenteRepository;
 import pe.edu.upc.wasiseguro.servicesinterfaces.IIncidenteService;
 import org.springframework.security.core.Authentication;
 
@@ -28,6 +30,9 @@ public class IncidenteController {
 
     @Autowired
     private IUsuarioRepository uR;
+
+    @Autowired
+    private ITipoIncidenteRepository tiR;
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     @PostMapping("/crear")
@@ -118,8 +123,19 @@ public class IncidenteController {
     @PutMapping("/modificar")
     public void modificar(@Valid @RequestBody IncidenteDTO dto, Authentication authentication) {
         String emailLogueado = authentication.getName();
-        ModelMapper m = new ModelMapper();
-        Incidente i = m.map(dto, Incidente.class);
+        Incidente i = iS.findById(dto.getId());
+
+        i.setDescripcion(dto.getDescripcion());
+        i.setLatitud(dto.getLatitud());
+        i.setLongitud(dto.getLongitud());
+        i.setEstado(dto.getEstado());
+
+        if (dto.getIdTipo() > 0) {
+            TipoIncidente tipoReal = tiR.findById(dto.getIdTipo())
+                    .orElseThrow(() -> new RuntimeException("Tipo de incidente no encontrado"));
+            i.setTipoIncidente(tipoReal);
+        }
+
         iS.updateOwned(i, emailLogueado);
     }
 
@@ -156,5 +172,18 @@ public class IncidenteController {
             return ResponseEntity.ok("INFO: La alerta no se envió por tu configuración de frecuencia o silencio.");
         }
         return ResponseEntity.ok(iS.obtenerMensajeTraducido(user, zona));
+    }
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @DeleteMapping("/{id}/comentar/{index}")
+    public ResponseEntity<String> borrarComentario(@PathVariable UUID id, @PathVariable int index) {
+        iS.eliminarComentario(id, index);
+        return ResponseEntity.ok("✅ Comentario eliminado");
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @DeleteMapping("/{id}/comentarios/limpiar")
+    public ResponseEntity<String> limpiarComentarios(@PathVariable UUID id) {
+        iS.limpiarComentarios(id);
+        return ResponseEntity.ok("✅ Todos los comentarios eliminados");
     }
 }
