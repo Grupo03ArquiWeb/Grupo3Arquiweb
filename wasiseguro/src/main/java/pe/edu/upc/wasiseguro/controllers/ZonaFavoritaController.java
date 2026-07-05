@@ -2,6 +2,7 @@ package pe.edu.upc.wasiseguro.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.wasiseguro.dtos.ZonaFavoritaDTO;
 import pe.edu.upc.wasiseguro.entities.ZonaFavorita;
@@ -18,16 +19,23 @@ public class ZonaFavoritaController {
     @Autowired
     private IZonaFavoritaService zS;
 
+    @Autowired
+    private pe.edu.upc.wasiseguro.repositories.IUsuarioRepository uR;
+
     @PostMapping
     public void registrar(@RequestBody ZonaFavoritaDTO dto) {
+        if (dto.getIdUsuario() == null) {
+            throw new RuntimeException("El ID de usuario no puede ser nulo");
+        }
+
         ModelMapper m = new ModelMapper();
         ZonaFavorita z = m.map(dto, ZonaFavorita.class);
+        Usuario u = uR.findById(dto.getIdUsuario()).orElseThrow(() -> new RuntimeException("Usuario no encontrado con ID: " + dto.getIdUsuario()));
+        z.setUsuario(u);
+
         if (z.getCreatedAt() == null) {
             z.setCreatedAt(java.time.LocalDateTime.now());
         }
-        pe.edu.upc.wasiseguro.entities.Usuario u = new pe.edu.upc.wasiseguro.entities.Usuario();
-        u.setId(dto.getIdUsuario());
-        z.setUsuario(u);
         zS.insert(z);
     }
 
@@ -45,14 +53,16 @@ public class ZonaFavoritaController {
 
     @PutMapping
     public void modificar(@RequestBody ZonaFavoritaDTO dto) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Usuario u = uR.findByEmail(email);
+
         ModelMapper m = new ModelMapper();
         ZonaFavorita z = m.map(dto, ZonaFavorita.class);
 
-        Usuario u = new Usuario();
-        u.setId(dto.getIdUsuario());
         z.setUsuario(u);
 
-        zS.insert(z);
+        zS.update(z);
     }
 
     @DeleteMapping("/{id}")

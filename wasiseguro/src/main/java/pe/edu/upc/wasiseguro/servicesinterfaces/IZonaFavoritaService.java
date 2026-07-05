@@ -5,6 +5,7 @@ import java.util.List;
 
 public interface IZonaFavoritaService {
     public void insert(ZonaFavorita zonaFavorita);
-    public List<ZonaFavorita> list();
+    public void update(ZonaFavorita zonaFavorita);
     public void delete(int id);
+    public List<ZonaFavorita> list();
 }

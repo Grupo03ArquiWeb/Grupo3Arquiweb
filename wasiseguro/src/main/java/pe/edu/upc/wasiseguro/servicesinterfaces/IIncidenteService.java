@@ -25,4 +25,6 @@ public interface IIncidenteService {
     List<Incidente.ComentarioEmbeddable> listarComentarios(UUID idIncidente);
     String obtenerMensajeTraducido(Usuario usuario, String ubicacion);
     boolean verificarSiEnviarAlerta(Usuario usuario);
+    void eliminarComentario(UUID idIncidente, int index);
+    void limpiarComentarios(UUID idIncidente);
 }

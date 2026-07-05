@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.context.SecurityContextHolder;
 import pe.edu.upc.wasiseguro.dtos.IncidenteCantidadDTO;
 import pe.edu.upc.wasiseguro.dtos.IncidenteRankingDTO;
 import pe.edu.upc.wasiseguro.entities.Incidente;
@@ -62,20 +63,34 @@ public class IncidenteServiceImplement implements IIncidenteService {
     @Override
     public void deleteOwned(UUID idIncidente, String emailLogueado) {
         Incidente i = iR.findById(idIncidente).orElseThrow(() -> new RuntimeException("Error"));
-        if (i.getUsuario().getEmail().equals(emailLogueado)) { iR.deleteById(idIncidente); }
-        else { throw new RuntimeException("Seguridad"); }
+        boolean isAdmin = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (isAdmin || i.getUsuario().getEmail().equals(emailLogueado)) {
+            iR.deleteById(idIncidente);
+        } else {
+            throw new RuntimeException("Seguridad");
+        }
     }
 
     @Override
     public void updateOwned(Incidente incidente, String emailLogueado) {
         Incidente original = iR.findById(incidente.getId()).orElse(null);
-        if (original != null && original.getUsuario().getEmail().equals(emailLogueado)) {
-            original.setDescripcion(incidente.getDescripcion());
-            original.setFotoUrl(incidente.getFotoUrl());
-            original.setEstado(incidente.getEstado());
-            original.setLatitud(incidente.getLatitud());
-            original.setLongitud(incidente.getLongitud());
-            iR.save(original);
+        if (original != null) {
+            boolean isAdmin = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+            if (isAdmin || original.getUsuario().getEmail().equals(emailLogueado)) {
+                original.setDescripcion(incidente.getDescripcion());
+                original.setFotoUrl(incidente.getFotoUrl());
+                original.setEstado(incidente.getEstado());
+                original.setLatitud(incidente.getLatitud());
+                original.setLongitud(incidente.getLongitud());
+
+                if (incidente.getTipoIncidente() != null) {
+                    original.setTipoIncidente(incidente.getTipoIncidente());
+                }
+
+                iR.save(original);
+            }
         }
     }
 
@@ -94,16 +109,44 @@ public class IncidenteServiceImplement implements IIncidenteService {
     }
 
     @Override
-    public void agregarComentario(UUID idIncidente, String texto, String emailAutor) {
+    public void limpiarComentarios(UUID idIncidente) {
         Incidente inc = iR.findById(idIncidente).orElseThrow(() -> new RuntimeException("Error"));
-        Usuario user = uR.findByEmail(emailAutor);
-        inc.getComentarios().add(new Incidente.ComentarioEmbeddable(texto, user.getNombre()));
+        inc.getComentarios().clear();
         iR.save(inc);
     }
 
     @Override
+    @Transactional
+    public void agregarComentario(UUID idIncidente, String texto, String emailParam) {
+        Incidente inc = iR.findById(idIncidente).orElseThrow(() -> new RuntimeException("Error"));
+        String emailReal = SecurityContextHolder.getContext().getAuthentication().getName();
+        String nombreFinal;
+
+        if ("anonimo@wasi.com".equalsIgnoreCase(emailParam)) {
+            nombreFinal = "Anónimo";
+        } else {
+            Usuario user = uR.findByEmail(emailReal);
+            nombreFinal = (user != null) ? (user.getNombre() + " " + user.getApellido()) : "Usuario";
+        }
+
+        inc.getComentarios().add(new Incidente.ComentarioEmbeddable(texto, nombreFinal));
+        iR.save(inc);
+        iR.flush();
+    }
+
+    @Transactional
+    @Override
     public List<Incidente.ComentarioEmbeddable> listarComentarios(UUID idIncidente) {
         return iR.findById(idIncidente).orElseThrow(() -> new RuntimeException("Error")).getComentarios();
+    }
+
+    @Override
+    public void eliminarComentario(UUID idIncidente, int index) {
+        Incidente inc = iR.findById(idIncidente).orElseThrow(() -> new RuntimeException("Error"));
+        if (index >= 0 && index < inc.getComentarios().size()) {
+            inc.getComentarios().remove(index);
+            iR.save(inc);
+        }
     }
 
     @Override
