@@ -22,7 +22,7 @@ public class NivelRiesgoController {
     @Autowired
     private INivelRiesgoService nS;
 
-    @GetMapping
+    @GetMapping("/listar")
     public ResponseEntity<List<NivelRiesgoListDTO>> listar() {
         ModelMapper m = new ModelMapper();
 

@@ -1,38 +1,49 @@
 package pe.edu.upc.wasiseguro.entities;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "ZonaRiesgo")
+@Table(name = "zona_riesgo")
 public class ZonaRiesgo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_zona_riesgo")
     private int idZonaRiesgo;
-    @Column(name = "nombreZonaRiesgo", length = 20, nullable = false)
+
+    @Column(name = "nombre_zona_riesgo", length = 20, nullable = false)
     private String nombreZonaRiesgo;
-    @Column(name = "descripcionZonaRiesgo", length = 20, nullable = false)
+
+    @Column(name = "descripcion_zona_riesgo", length = 20, nullable = false)
     private String descripcionZonaRiesgo;
+
     @ManyToOne
-    @JoinColumn(name = "idNivelRiesgo", nullable = false)
+    @JoinColumn(name = "id_nivel_riesgo", nullable = false)
     private NivelRiesgo nivelRiesgo;
-    @Column(name = "geomZonaRiesgo", length = 20, nullable = false)
+
+    @Column(name = "geom_zona_riesgo", length = 20, nullable = false)
     private String geomZonaRiesgo;
-    @Column(name = "riesgoporHora", length = 20, nullable = false)
+
+    @Column(name = "riesgopor_hora", length = 20, nullable = false)
     private String riesgoporHora;
-    @Column(name = "acttvidadZonaRiesgo", nullable = false)
+
+    @Column(name = "actividad_zona_riesgo", nullable = false)
     private boolean activoZonaRiesgo;
-    @Column(name = "createdZonaRiesgo", nullable = false)
+
+    @Column(name = "created_zona_riesgo", nullable = false)
     private LocalDate createdAtZonaRiesgo = LocalDate.now();
 
-    @Column(name = "updateZonaRiesgo",  nullable = false)
+    @Column(name = "update_zona_riesgo", nullable = false)
     private LocalDate updateAtZonaRiesgo;
 
     public ZonaRiesgo() {
     }
 
-    public ZonaRiesgo(int idZonaRiesgo, String nombreZonaRiesgo, String descripcionZonaRiesgo, NivelRiesgo nivelRiesgo, String geomZonaRiesgo, String riesgoporHora, boolean activoZonaRiesgo, LocalDate createdAtZonaRiesgo, LocalDate updateAtZonaRiesgo) {
+    public ZonaRiesgo(int idZonaRiesgo, String nombreZonaRiesgo, String descripcionZonaRiesgo,
+                      NivelRiesgo nivelRiesgo, String geomZonaRiesgo, String riesgoporHora,
+                      boolean activoZonaRiesgo, LocalDate createdAtZonaRiesgo,
+                      LocalDate updateAtZonaRiesgo) {
         this.idZonaRiesgo = idZonaRiesgo;
         this.nombreZonaRiesgo = nombreZonaRiesgo;
         this.descripcionZonaRiesgo = descripcionZonaRiesgo;
